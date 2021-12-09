@@ -15,11 +15,11 @@ const Request = sequelzie.define('request', {
     references: { model: 'points', key: 'point_id' }
   },
   req_by: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' }
   },
   req_to: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' }
   },
   approved: {

@@ -26,6 +26,34 @@ const Organization = require('./models/Organization');
 const Permission = require('./models/Permission');
 const Request = require('./models/Request');
 
+// Add Dummy Data -- Uncomment to add mock data
+// (async () => {
+//   await User.bulkCreate([
+//     {
+//       s_id: 200123008,
+//       f_name: 'Ankush',
+//       l_name: 'Patanwal',
+//       branch: 'MnC'
+//     },
+//     {
+//       s_id: 190101090,
+//       f_name: 'Swapnil',
+//       l_name: 'Srivastava',
+//       branch: 'CSE'
+//     }
+//   ]);
+
+//   await Organization.create({
+//     name: 'Coding Club',
+//     head_id: 190101090
+//   });
+
+//   await Admin.create({
+//     s_id: 190101090,
+//     org_id: 100
+//   });
+// })();
+
 // Routes
 app.get('/', async (req, res) => {
   res.end(fs.readFileSync('./views/index.html'));

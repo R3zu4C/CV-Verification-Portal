@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 
 const User = sequelize.define('user', {
   s_id: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true
   },

@@ -13,7 +13,7 @@ const Point = sequelize.define('point', {
     allowNull: false,
   },
   s_id: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     allowNull: false,
     references: { model: 'users', key: 's_id'}
   },
@@ -26,12 +26,12 @@ const Point = sequelize.define('point', {
     references: { model: 'organizations', key: 'org_id'}
   },
   added_by: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' },
     allowNull: true
   },
   approved_by: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' }
   },
   start_date: {

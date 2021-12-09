@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 
 const Admin = sequelize.define('admin', {
   s_id: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     allowNull: false,
     primaryKey: true,
     references: { model: 'users', key: 's_id'}
@@ -14,7 +14,7 @@ const Admin = sequelize.define('admin', {
     references: { model: 'organizations', key: 'org_id' }
   },
   super_id: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'admins', key: 's_id' }
   }
 }, {

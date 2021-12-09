@@ -8,7 +8,7 @@ const Proof = sequelize.define('proof', {
     autoIncrement: true
   },
   point_id: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'points', key: 'point_id' }
   },
   value: {

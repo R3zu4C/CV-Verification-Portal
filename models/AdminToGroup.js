@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 
 const AdminToGroup = sequelize.define('group_to_perm', {
   s_id: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     primaryKey: true,
     references: { model: 'admin', key: 's_id' }
   },

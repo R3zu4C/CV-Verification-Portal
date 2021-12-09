@@ -11,7 +11,7 @@ const Organization = sequelize.define('organization', {
     type: DataTypes.STRING,
   },
   head_id: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' }
   }
 }, {

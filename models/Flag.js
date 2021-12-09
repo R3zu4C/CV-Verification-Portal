@@ -8,12 +8,12 @@ const Flag = sequelize.define('flag', {
     references: { model: 'points', key: 'point_id' }
   },
   flagged_by: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     primaryKey: true,
     references: { model: 'users', key: 's_id' }
   },
   approved_by: {
-    type: DataTypes.BIGINT(9),
+    type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' }
   }
 }, {
