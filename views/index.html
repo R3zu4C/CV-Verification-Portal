@@ -1,0 +1,99 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV Portal</title>
+  </head>
+  <body>
+    <h1>Add a point</h1>
+
+    <form id='addPoint'>
+      <label for="desc">Description:</label>
+      <input type="text" id="desc" name="desc" value=""><br>
+      <label for="s_id">Roll No.:</label>
+      <input type="text" id="s_id" name="s_id" value=""><br>
+      <label for="category">Category:</label>
+      <select id="category" name="category">
+        <option value="Project">Project</option>
+        <option value="Experience">Experience</option>
+        <option value="Achievement">Achievement</option>
+        <option value="Extra-Curricular">Extra-Curricular</option>
+      </select><br>
+      <label for="org_id">Organization:</label>
+      <input type="text" id="org_id" name="org_id" value="" placeholder="org_id"><br>
+      <label for="added_by">Added by:</label>
+      <input type="text" id="added_by" name="added_by" value=""><br>
+    </form>
+
+    File: <input type="file" id="f" />
+    <button id="btnUpload">Read & Upload</button>
+    <div id="divOutput"></div>
+
+    <button id="pointSubmit">Request</button>
+
+    <script>
+      const btnUpload = document.getElementById("btnUpload");
+      const divOutput = document.getElementById("divOutput");
+      const f = document.getElementById("f");
+      let proof = "";
+
+      btnUpload.addEventListener("click", () => {
+        const fileReader = new FileReader();
+        const theFile = f.files[0];
+        fileReader.onload = async (ev) => {
+          const CHUNK_SIZE = 5000;
+          const chunkCount = ev.target.result.byteLength / CHUNK_SIZE;
+
+          console.log("Read successfully");
+          const fileName = Math.random() * 1000 + theFile.name;
+          proof = fileName;
+          for (let chunkId = 0; chunkId < chunkCount + 1; chunkId++) {
+            const chunk = ev.target.result.slice(
+              chunkId * CHUNK_SIZE,
+              chunkId * CHUNK_SIZE + CHUNK_SIZE
+            );
+            await fetch("http://localhost:3000/upload", {
+              method: "POST",
+              headers: {
+                "content-type": "application/octet-stream",
+                "content-length": chunk.length,
+                "file-name": fileName,
+              },
+              body: chunk,
+            });
+            divOutput.textContent =
+              Math.round((chunkId * 100) / chunkCount, 0) + "%";
+          }
+          console.log(ev.target.result.byteLength);
+        };
+        fileReader.readAsArrayBuffer(theFile);
+      });
+
+      const btnSubmit = document.getElementById('pointSubmit');
+      const pointForm = document.getElementById('addPoint');
+
+      btnSubmit.addEventListener('click', async () => {
+        const point = {
+          desc: pointForm.desc.value,
+          s_id:  pointForm.s_id.value,
+          category: pointForm.category.value,
+          org_id: pointForm.org_id.value,
+          added_by: pointForm.added_by.value,
+          proof: proof
+        };
+        console.log(point);
+        const options = {
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify(point)
+        };
+        await fetch("http://localhost:3000/addPoint", options);
+      })
+
+
+    </script>
+  </body>
+</html>

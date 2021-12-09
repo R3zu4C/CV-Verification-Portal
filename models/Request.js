@@ -21,6 +21,10 @@ const Request = sequelzie.define('request', {
   req_to: {
     type: DataTypes.BIGINT(9),
     references: { model: 'users', key: 's_id' }
+  },
+  approved: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   }
 }, {
   initialAutoIncrement: 100,

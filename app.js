@@ -1,6 +1,7 @@
 // Imports
 const express = require('express');
-require('dotenv').config()
+const fs = require("fs");
+require('dotenv').config();
 
 // Create an Express Application
 const app = express();
@@ -27,17 +28,18 @@ const Request = require('./models/Request');
 
 // Routes
 app.get('/', async (req, res) => {
-  const points = await Point.findAll();
-  res.send("All Points: " + JSON.stringify(points));
+  res.end(fs.readFileSync('./views/index.html'));
 });
 app.post('/addPoint', async (req, res) => {
   try {
+    console.log(req.body);
     const p = await Point.create({
       desc: req.body.desc,
-      s_id: req.body.s_id,
+      s_id: parseInt(req.body.s_id),
       category: req.body.category,
-      org_id: req.body.org_id,
-      added_by: req.body.added_by
+      org_id: parseInt(req.body.org_id),
+      added_by: parseInt(req.body.added_by),
+      proof: req.body.proof
     });
     if(p) {
       res.send(p);
@@ -62,6 +64,14 @@ app.post('/addPoint', async (req, res) => {
     res.status(400).send('Error in inserting new record');
   }
 });
+app.post('/upload', async (req, res) => {
+  const fileName = req.headers["file-name"];
+  req.on("data", chunk => {
+    fs.appendFileSync('./uploads/' + fileName, chunk)
+    console.log(`received chunk! ${chunk.length}`)
+  })
+  res.end("uploaded!")
+})
 
 // Start the server
 const server = app.listen(3000, () => {
