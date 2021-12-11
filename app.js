@@ -25,6 +25,7 @@ const GroupToPerm = require('./models/GroupToPerm');
 const Organization = require('./models/Organization');
 const Permission = require('./models/Permission');
 const Request = require('./models/Request');
+const Notification = require('./models/Notification');
 
 // Add Dummy Data -- Uncomment to add mock data
 // (async () => {
@@ -52,13 +53,16 @@ const Request = require('./models/Request');
 //     s_id: 190101090,
 //     org_id: 100
 //   });
+//   console.log("Mock data added successfully.");
 // })();
 
 // Routes
+// Home route
 app.get('/', async (req, res) => {
   res.end(fs.readFileSync('./views/index.html'));
 });
-app.post('/addPoint', async (req, res) => {
+// Adding a Point thru POST request
+app.post('/point', async (req, res) => {
   try {
     console.log(req.body);
     const p = await Point.create({
@@ -84,7 +88,7 @@ app.post('/addPoint', async (req, res) => {
         req_by: p.added_by,
         req_to: req_to[0].head_id
       });
-      console.log("Requset added to database successfully.");
+      console.log("Request added to database successfully.");
       console.log(JSON.stringify(request));
     }
   } catch (error) {
@@ -92,14 +96,26 @@ app.post('/addPoint', async (req, res) => {
     res.status(400).send('Error in inserting new record');
   }
 });
+// Getting a list of all the Organizations and their org_id
+app.get('/orgs', async (req, res) => {
+  const orgs = await Organization.findAll();
+  res.send(orgs);
+})
+// Proof uploading service
 app.post('/upload', async (req, res) => {
+  
   const fileName = req.headers["file-name"];
+  const s_id = req.headers["s_id"];
+  var dir = `./uploads/${s_id}`;
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir, { recursive: true });
+  }
   req.on("data", chunk => {
-    fs.appendFileSync('./uploads/' + fileName, chunk)
+    fs.appendFileSync(`./uploads/${s_id}/${fileName}`, chunk)
     console.log(`received chunk! ${chunk.length}`)
   })
   res.end("uploaded!")
-})
+});
 
 // Start the server
 const server = app.listen(3000, () => {

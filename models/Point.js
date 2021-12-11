@@ -35,10 +35,10 @@ const Point = sequelize.define('point', {
     references: { model: 'users', key: 's_id' }
   },
   start_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.DATEONLY
   },
   end_date: {
-    type: DataTypes.DATE
+    type: DataTypes.DATEONLY
   },
   proof: {
     type: DataTypes.STRING(255)
