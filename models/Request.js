@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelzie = require('../config/connection');
+const sequelzie = require('../database/connection');
 
 const Request = sequelzie.define('request', {
   req_id: {

@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const sequelize = require('../database/connection');
 
 const Proof = sequelize.define('proof', {
   proof_id: {

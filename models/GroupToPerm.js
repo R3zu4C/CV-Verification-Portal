@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const sequelize = require('../database/connection');
 
 const GroupToPerm = sequelize.define('group_to_perm', {
   group_id: {

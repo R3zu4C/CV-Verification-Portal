@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const sequelize = require('../database/connection');
 
 const Group = sequelize.define('group', {
   group_id: {
