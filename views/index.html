@@ -29,7 +29,7 @@
       <input type="text" id="added_by" name="added_by" value=""><br>
     </form>
 
-    File: <input type="file" id="f" accept="application/pdf" onchange="return fileValidation()" />
+    File: <input type="file" id="f" accept=".pdf,.doc,.docx" onchange="return fileValidation()" />
     <button id="btnUpload">Read & Upload</button>
     <div id="divOutput"></div>
 
@@ -50,7 +50,6 @@
         const orgs = await res.json();
         const selectOrg = document.getElementById('org_id');
         orgs.forEach(org => {
-          console.log(org);
           let newOption = document.createElement("option");
           newOption.value = org.org_id;
           let newOptionValue = document.createTextNode(org.name); 
@@ -63,7 +62,7 @@
         const filePath = f.value;
         const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
         if(!allowedExtensions.exec(filePath)) {
-          alert('invalid file type');
+          alert('Please select a pdf or docx file');
           f.value = '';
           return false;
         }

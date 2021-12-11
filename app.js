@@ -27,34 +27,69 @@ const Permission = require('./models/Permission');
 const Request = require('./models/Request');
 const Notification = require('./models/Notification');
 
-// Add Dummy Data -- Uncomment to add mock data
-// (async () => {
-//   await User.bulkCreate([
-//     {
-//       s_id: 200123008,
-//       f_name: 'Ankush',
-//       l_name: 'Patanwal',
-//       branch: 'MnC'
-//     },
-//     {
-//       s_id: 190101090,
-//       f_name: 'Swapnil',
-//       l_name: 'Srivastava',
-//       branch: 'CSE'
-//     }
-//   ]);
+// Add Dummy Data
+const addMockData = async () => {
+  await User.bulkCreate([
+    {
+      s_id: 200123008,
+      f_name: 'Ankush',
+      l_name: 'Patanwal',
+      branch: 'MnC'
+    },
+    {
+      s_id: 190101090,
+      f_name: 'Swapnil',
+      l_name: 'Srivastava',
+      branch: 'CSE'
+    }
+  ]);
 
-//   await Organization.create({
-//     name: 'Coding Club',
-//     head_id: 190101090
-//   });
+  await Organization.create({
+    name: 'Coding Club',
+    head_id: 190101090
+  });
 
-//   await Admin.create({
-//     s_id: 190101090,
-//     org_id: 100
-//   });
-//   console.log("Mock data added successfully.");
-// })();
+  await Admin.create({
+    s_id: 190101090,
+    org_id: 100
+  });
+  console.log("Mock data added successfully.");
+};
+// -- Uncomment to add mock data -- 
+// addMockData();
+
+// Add all users to DB from csv
+const fastcsv = require('fast-csv');
+const addAllUsers = (file) => {
+  let stream = fs.createReadStream(file);
+  let csvData = [];
+  let csvStream = fastcsv
+    .parse()
+    .on('data', (data) => {
+      if(data[2].match(/^\d{9}$/)){
+        csvData.push(data);
+      }
+    })
+    .on('end', () => {
+      csvData.shift();
+      csvData.forEach(async (data) => {
+        try {
+          await User.create({
+            s_id: data[2],
+            name: data[1],
+            mail: data[3],
+            branch: data[8],
+            program: data[7]
+          })
+        } catch (err) {
+          console.log(err);
+        }
+      });
+    });
+  stream.pipe(csvStream);
+};
+// -- Uncomment to add all users --
+// addAllUsers(filename);
 
 // Routes
 // Home route
@@ -103,7 +138,6 @@ app.get('/orgs', async (req, res) => {
 })
 // Proof uploading service
 app.post('/upload', async (req, res) => {
-  
   const fileName = req.headers["file-name"];
   const s_id = req.headers["s_id"];
   var dir = `./uploads/${s_id}`;
@@ -111,10 +145,8 @@ app.post('/upload', async (req, res) => {
     fs.mkdirSync(dir, { recursive: true });
   }
   req.on("data", chunk => {
-    fs.appendFileSync(`./uploads/${s_id}/${fileName}`, chunk)
-    console.log(`received chunk! ${chunk.length}`)
+    fs.appendFileSync(`./uploads/${s_id}/${fileName}`, chunk);
   })
-  res.end("uploaded!")
 });
 
 // Start the server

@@ -7,17 +7,19 @@ const User = sequelize.define('user', {
     allowNull: false,
     primaryKey: true
   },
-  f_name: {
+  name: {
     type: DataTypes.STRING(50),
     allowNull: false
   },
-  l_name: {
-    type: DataTypes.STRING(50),
-    allowNull: false
+  mail: {
+    type: DataTypes.STRING(50)
   },
   branch: {
     type: DataTypes.STRING(50),
     allowNull: false
+  },
+  program: {
+    type: DataTypes.STRING(50)
   }
 }, {
   tableName: 'users'
