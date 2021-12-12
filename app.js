@@ -14,16 +14,6 @@ app.use(express.json());
 
 // DB Connection
 const sequelize = require('./database/connection');
-// require("./database/tableCreation.js");
-
-
-const { addMockData, addAllUsers } = require("./data_initialization/userLoader");
-
-// -- Uncomment to add mock data --
-setTimeout(addMockData, 5000);
-
-// -- Uncomment to add all users --
-// addAllUsers(filename);
 
 // Routes
 app.use('/', allRoute)

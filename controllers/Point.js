@@ -1,6 +1,7 @@
 const Point = require('../models/Point');
 const Organization = require('../models/Organization');
 const Request = require('../models/Request');
+const fs = require("fs");
 
 module.exports.addPoint = async (req, res) => {
     try {
@@ -45,6 +46,6 @@ module.exports.uploadProof = async (req, res) => {
         fs.mkdirSync(dir, { recursive: true });
     }
     req.on("data", chunk => {
-        fs.appendFileSync(`./uploads/${s_id}/${fileName}`, chunk);
+        fs.appendFileSync(`${dir}/${fileName}`, chunk);
     })
 }

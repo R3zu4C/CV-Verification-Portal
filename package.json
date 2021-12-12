@@ -12,7 +12,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm app",
-    "dev": "nodemon app"
+    "dev": "nodemon app",
+    "dev:mock": "node ./scripts/addMockData",
+    "dev:users": "node ./scripts/addAllUsers",
+    "dev:tables": "node ./scripts/defineModels"
   },
   "author": "",
   "license": "ISC",
