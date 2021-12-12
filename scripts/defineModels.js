@@ -9,7 +9,6 @@ const defineModels = async () => {
   await require('../models/Organization');
   await require('../models/Permission');
   await require('../models/Notification');
-  await require('../models/GroupToPerm');
   await require('../models/AdminToGroup');
   await require('../models/Request');
 
