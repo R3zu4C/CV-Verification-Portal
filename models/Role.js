@@ -1,8 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
 
-const Group = sequelize.define('group', {
-  group_id: {
+const Role = sequelize.define('role', {
+  role_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true
@@ -12,7 +12,7 @@ const Group = sequelize.define('group', {
   }
 }, {
   initialAutoIncrement: 100,
-  tableName: 'groups'
+  tableName: 'roles'
 });
 
-module.exports = Group;
+module.exports = Role;

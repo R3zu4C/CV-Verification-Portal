@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
 
-const AdminToGroup = sequelize.define('group_to_perm', {
+const AdminToRole = sequelize.define('admin_to_role', {
   s_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -12,13 +12,13 @@ const AdminToGroup = sequelize.define('group_to_perm', {
     primaryKey: true,
     references: { model: 'organizations', key: 'org_id' }
   },
-  group_id: {
+  role_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    references: { model: 'groups', key: 'group_id' }
+    references: { model: 'roles', key: 'role_id' }
   }
 }, {
-  tableName: 'admin_to_group'
+  tableName: 'admin_to_role'
 });
 
-module.exports = AdminToGroup;
+module.exports = AdminToRole;

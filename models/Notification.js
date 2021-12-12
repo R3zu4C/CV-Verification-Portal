@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelzie = require('../database/connection');
 
-const Request = sequelzie.define('request', {
+const Notification = sequelzie.define('notification', {
   notif_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -29,4 +29,4 @@ const Request = sequelzie.define('request', {
   tableName: 'notifications'
 });
 
-module.exports = Request;
+module.exports = Notification;

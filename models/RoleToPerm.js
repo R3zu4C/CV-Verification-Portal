@@ -1,11 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
 
-const GroupToPerm = sequelize.define('group_to_perm', {
-  group_id: {
+const RoleToPerm = sequelize.define('role_to_perm', {
+  role_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    references: { model: 'groups', key: 'group_id' }
+    references: { model: 'roles', key: 'role_id' }
   },
   perm_id: {
     type: DataTypes.INTEGER,
@@ -13,7 +13,7 @@ const GroupToPerm = sequelize.define('group_to_perm', {
     references: { model: 'permissions', key: 'perm_id' }
   }
 }, {
-  tableName: 'group_to_perm'
+  tableName: 'role_to_perm'
 });
 
-module.exports = GroupToPerm;
+module.exports = RoleToPerm;
