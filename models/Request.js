@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelzie = require('../database/connection');
+const sequelize = require('../database/connection');
 
-const Request = sequelzie.define('request', {
+const Request = sequelize.define('request', {
   req_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

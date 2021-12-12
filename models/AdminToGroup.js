@@ -5,7 +5,7 @@ const AdminToGroup = sequelize.define('group_to_perm', {
   s_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    references: { model: 'admin', key: 's_id' }
+    references: { model: 'admins', key: 's_id' }
   },
   org_id: {
     type: DataTypes.INTEGER,
