@@ -12,8 +12,14 @@ const defineModels = async () => {
   await require('../models/AdminToRole');
   await require('../models/RoleToPerm');
   await require('../models/Request');
-
-  console.log("All tables created successfully");
 };
 
-defineModels();
+(async () => {
+  try {
+    await defineModels();
+    console.log("All tables created successfully.");
+  } catch (error) {
+    console.log(error.message);
+  };
+})()
+

@@ -40,7 +40,7 @@ const Point = sequelize.define('point', {
   end_date: {
     type: DataTypes.DATEONLY
   },
-  proof: {
+  proof_id: {
     type: DataTypes.STRING(255)
   }
 }, {

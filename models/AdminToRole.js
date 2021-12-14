@@ -7,11 +7,6 @@ const AdminToRole = sequelize.define('admin_to_role', {
     primaryKey: true,
     references: { model: 'admins', key: 's_id' }
   },
-  org_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    references: { model: 'organizations', key: 'org_id' }
-  },
   role_id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

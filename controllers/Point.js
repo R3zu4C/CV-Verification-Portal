@@ -47,5 +47,6 @@ module.exports.uploadProof = async (req, res) => {
     }
     req.on("data", chunk => {
         fs.appendFileSync(`${dir}/${fileName}`, chunk);
-    })
+    });
+    res.end("uploaded!");
 }

@@ -12,10 +12,6 @@ const Admin = sequelize.define('admin', {
     type: DataTypes.INTEGER,
     primaryKey: true,
     references: { model: 'organizations', key: 'org_id' }
-  },
-  super_id: {
-    type: DataTypes.INTEGER,
-    references: { model: 'admins', key: 's_id' }
   }
 }, {
   tableName: 'admins'

@@ -11,7 +11,7 @@ const User = sequelize.define('user', {
     type: DataTypes.STRING(50),
     allowNull: false
   },
-  mail: {
+  email: {
     type: DataTypes.STRING(50)
   },
   branch: {

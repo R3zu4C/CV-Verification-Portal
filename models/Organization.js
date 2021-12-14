@@ -10,6 +10,10 @@ const Organization = sequelize.define('organization', {
   name: {
     type: DataTypes.STRING,
   },
+  board_id: {
+    type: DataTypes.INTEGER,
+    references: { model: 'organizations', key: 'org_id' }
+  },
   head_id: {
     type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' }

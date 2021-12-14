@@ -29,7 +29,7 @@
       <input type="text" id="added_by" name="added_by" value=""><br>
     </form>
 
-    File: <input type="file" id="f" accept=".pdf,.doc,.docx" onchange="return fileValidation()" />
+    File: <input type="file" id="f" accept=".pdf,.doc,.docx" onchange="fileValidation()" />
     <button id="btnUpload">Read & Upload</button>
     <div id="divOutput"></div>
 
@@ -64,7 +64,6 @@
         if(!allowedExtensions.exec(filePath)) {
           alert('Please select a pdf or docx file');
           f.value = '';
-          return false;
         }
       }
 
@@ -96,8 +95,7 @@
               },
               body: chunk,
             });
-            divOutput.textContent =
-              Math.round((chunkId * 100) / chunkCount, 0) + "%";
+            divOutput.textContent = Math.round((chunkId * 100) / chunkCount, 0) + "%";
           }
           console.log(ev.target.result.byteLength);
         };
