@@ -17,6 +17,10 @@ const Point = sequelize.define('point', {
     allowNull: false,
     references: { model: 'users', key: 's_id'}
   },
+  title: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
   category: {
     type: DataTypes.STRING(50),
     allowNull: true
@@ -25,22 +29,37 @@ const Point = sequelize.define('point', {
     type: DataTypes.INTEGER,
     references: { model: 'organizations', key: 'org_id'}
   },
-  added_by: {
+
+  added_by: { // non-null if point is added by admin and null if requested by user
     type: DataTypes.INTEGER,
-    references: { model: 'users', key: 's_id' },
+    references: { model: 'admins', key: 's_id' },
     allowNull: true
   },
-  approved_by: {
+  approved_by: { 
     type: DataTypes.INTEGER,
-    references: { model: 'users', key: 's_id' }
+    references: { model: 'admins', key: 's_id' }
   },
+
   start_date: {
     type: DataTypes.DATEONLY
   },
   end_date: {
     type: DataTypes.DATEONLY
   },
-  proof_id: {
+
+  status: { // status can be P(Pending), A(Approved), D(Denied)
+    type: DataTypes.CHAR(1),
+    defaultValue: 'P',
+    allowNull: false,
+  },
+  
+  visibility: { // visibility can be P(Publiv), R(Private)
+    type: DataTypes.CHAR(1),
+    defaultValue: 'P',
+    allowNull: false,
+  },
+
+  proof_link: {
     type: DataTypes.STRING(255)
   }
 }, {

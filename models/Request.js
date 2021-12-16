@@ -20,7 +20,7 @@ const Request = sequelize.define('request', {
   },
   req_to: {
     type: DataTypes.INTEGER,
-    references: { model: 'users', key: 's_id' }
+    references: { model: 'admins', key: 's_id' }
   },
   approved: {
     type: DataTypes.BOOLEAN,

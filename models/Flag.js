@@ -14,7 +14,12 @@ const Flag = sequelize.define('flag', {
   },
   approved_by: {
     type: DataTypes.INTEGER,
-    references: { model: 'users', key: 's_id' }
+    references: { model: 'admins', key: 's_id' }
+  },
+  status: { // status can be P(Pending), A(Approved), D(Denied)
+    type: DataTypes.CHAR(1),
+    defaultValue: 'P',
+    allowNull: false,
   }
 }, {
   tableName: 'flags'
