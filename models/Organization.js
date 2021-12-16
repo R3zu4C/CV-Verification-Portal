@@ -14,10 +14,10 @@ const Organization = sequelize.define('organization', {
     type: DataTypes.INTEGER,
     references: { model: 'organizations', key: 'org_id' }
   },
-  head_id: {
-    type: DataTypes.INTEGER,
-    references: { model: 'users', key: 's_id' }
-  }
+  // head_id: {
+  //   type: DataTypes.INTEGER,
+  //   references: { model: 'users', key: 's_id' }
+  // }
 }, {
   initialAutoIncrement: 100,
   tableName: 'organizations'

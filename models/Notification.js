@@ -7,19 +7,45 @@ const Notification = sequelzie.define('notification', {
     primaryKey: true,
     autoIncrement: true,
   },
-  type: {
-    type: DataTypes.STRING(50)
-  },
   title: {
     type: DataTypes.STRING(255)
   },
   description: {
     type: DataTypes.STRING(255)
   },
-  notif_to: {
+
+
+  user_type: { // user_type can be A(Admin), U(User), G(God Admin)
+    type: DataTypes.CHAR(1),
+    allowNull: false,
+  },
+  notif_to_user: {
     type: DataTypes.INTEGER,
     references: { model: 'users', key: 's_id' }
   },
+  notif_to_admin: {
+    type: DataTypes.INTEGER,
+    references: { model: 'admins', key: 's_id' }
+  },
+  
+
+  type: { // type can be P(Point), R(Request), F(Flag)
+    type: DataTypes.CHAR(1)
+  },
+  flag_id: {
+    type: DataTypes.INTEGER,
+    references: { model: 'flags', key: 'flag_id' }
+  },
+  point_id: {
+    type: DataTypes.INTEGER,
+    references: { model: 'points', key: 'point_id' }
+  },
+  request_id: {
+    type: DataTypes.INTEGER,
+    references: { model: 'requests', key: 'request_id' }
+  },
+
+
   seen: {
     type: DataTypes.BOOLEAN,
     defaultValue: false

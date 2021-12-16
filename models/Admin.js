@@ -7,12 +7,13 @@ const Admin = sequelize.define('admin', {
     allowNull: false,
     primaryKey: true,
     references: { model: 'users', key: 's_id'}
-  },
-  org_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    references: { model: 'organizations', key: 'org_id' }
   }
+  // ,
+  // org_id: {
+  //   type: DataTypes.INTEGER,
+  //   primaryKey: true,
+  //   references: { model: 'organizations', key: 'org_id' }
+  // }
 }, {
   tableName: 'admins'
 });
