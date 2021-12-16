@@ -17,6 +17,9 @@ const Role = sequelize.define('role', {
   org_id: {
     type: DataTypes.INTEGER,
     references: { model: 'organizations', key: 'org_id' }
+  },
+  level: {
+    type: DataTypes.INTEGER
   }
 }, {
   initialAutoIncrement: 100,
