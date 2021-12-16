@@ -13,7 +13,7 @@ const Notification = sequelzie.define('notification', {
   title: {
     type: DataTypes.STRING(255)
   },
-  desc: {
+  description: {
     type: DataTypes.STRING(255)
   },
   notif_to: {

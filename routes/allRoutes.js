@@ -2,6 +2,7 @@ const { fetchAllOrg } = require('../controllers/Organization');
 const { addPoint, uploadProof } = require('../controllers/Point');
 const fs = require("fs");
 const { pointRequest } = require('../controllers/Notifications');
+const { searchPoint } = require('../controllers/Search');
 
 const router = require('express').Router();
 
@@ -16,5 +17,8 @@ router.get('/orgs', fetchAllOrg)
 
 // Proof uploading service
 router.post('/upload', uploadProof);
+
+// Getting Search results
+router.post('/search', searchPoint);
 
 module.exports = router;

@@ -8,8 +8,8 @@ const Point = sequelize.define('point', {
     primaryKey: true,
     autoIncrement: true
   },
-  desc: {
-    type: DataTypes.STRING(255),
+  description: {
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   s_id: {
@@ -45,7 +45,10 @@ const Point = sequelize.define('point', {
   }
 }, {
   initialAutoIncrement: 100,
-  tableName: 'points'
+  tableName: 'points',
+  indexes: [
+    { type: 'FULLTEXT', name: 'desc_idx', fields: ['description'] }
+  ]
 })
 
 module.exports = Point;

@@ -12,7 +12,7 @@ const addAllUsers = async () => {
     let csvStream = fastcsv
       .parse()
       .on("data", (data) => {
-        if (data[2].match(/^\d{9}$/)) {
+        if (data[2].match(/[1][8-9]\d{7}|[2]\d{8}/)) {
           csvData.push(data);
         }
       })
@@ -23,7 +23,7 @@ const addAllUsers = async () => {
             await User.create({
               s_id: data[2],
               name: data[1],
-              mail: data[3],
+              email: data[3],
               branch: data[8],
               program: data[7],
             });

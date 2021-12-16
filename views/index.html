@@ -9,8 +9,8 @@
     <h1>Add a point</h1>
 
     <form id='addPoint'>
-      <label for="desc">Description:</label>
-      <input type="text" id="desc" name="desc" value=""><br>
+      <label for="description">Description:</label>
+      <input type="text" id="description" name="description" value=""><br>
       <label for="s_id">Roll No.:</label>
       <input type="text" id="s_id" name="s_id" value=""><br>
       <label for="category">Category:</label>
@@ -34,12 +34,17 @@
     <div id="divOutput"></div>
 
     <button id="pointSubmit">Request</button>
+    <button id="pointSearch">Search</button>
+
+    <div id="searchResult"></div>
 
     <script>
       const btnUpload = document.getElementById("btnUpload");
       const divOutput = document.getElementById("divOutput");
+      const searchResult = document.getElementById("searchResult");
       const pointForm = document.getElementById('addPoint');
       const btnSubmit = document.getElementById('pointSubmit');
+      const btnSearch = document.getElementById('pointSearch');
       const f         = document.getElementById("f");
 
       window.onload = async() => {
@@ -104,7 +109,7 @@
 
       btnSubmit.addEventListener('click', async () => {
         const point = {
-          desc: pointForm.desc.value,
+          description: pointForm.description.value,
           s_id:  pointForm.s_id.value,
           category: pointForm.category.value,
           org_id: pointForm.org_id.value,
@@ -122,6 +127,29 @@
 
         window.location.reload();
 
+      })
+
+      btnSearch.addEventListener('click', async () => {
+        const point = {
+          description: pointForm.description.value,
+          s_id:  pointForm.s_id.value,
+          category: pointForm.category.value,
+          org_id: pointForm.org_id.value,
+          added_by: pointForm.added_by.value,
+          approved_by: ""
+        };
+
+        const res = await fetch("http://localhost:3000/search", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json"
+          },
+          body: JSON.stringify(point)
+        });
+
+        const search = await res.json();
+
+        searchResult.textContent = JSON.stringify(search);
       })
 
     </script>

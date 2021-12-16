@@ -13,14 +13,14 @@ module.exports.pointRequest = async (req, res, next) => {
 
     const noti_admin = await Notification.create({
       type: "pointRequest",
-      desc: `${user.name} has requested you to add ${req.body.category}`,
+      description: `${user.name} has requested you to add ${req.body.category}`,
       title: `${req.body.category} Request`,
       notif_to: parseInt(req_to.head_id),
     });
 
     const noti_user = await Notification.create({
       type: "pointRequest",
-      desc: `You have requested ${admin.name} to add ${req.body.category}`,
+      description: `You have requested ${admin.name} to add ${req.body.category}`,
       title: `${req.body.category} Request`,
       notif_to: parseInt(req.body.s_id),
     });

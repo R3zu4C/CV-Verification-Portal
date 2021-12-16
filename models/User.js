@@ -14,6 +14,9 @@ const User = sequelize.define('user', {
   email: {
     type: DataTypes.STRING(50)
   },
+  mobile_no: {
+    type: DataTypes.INTEGER
+  },
   branch: {
     type: DataTypes.STRING(50),
     allowNull: false
