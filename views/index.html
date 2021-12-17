@@ -9,6 +9,8 @@
     <h1>Add a point</h1>
 
     <form id='addPoint'>
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" value=""><br>
       <label for="description">Description:</label>
       <input type="text" id="description" name="description" value=""><br>
       <label for="s_id">Roll No.:</label>
@@ -109,6 +111,7 @@
 
       btnSubmit.addEventListener('click', async () => {
         const point = {
+          title: pointForm.title.value,
           description: pointForm.description.value,
           s_id:  pointForm.s_id.value,
           category: pointForm.category.value,
@@ -131,6 +134,7 @@
 
       btnSearch.addEventListener('click', async () => {
         const point = {
+          title: pointForm.title.value,
           description: pointForm.description.value,
           s_id:  pointForm.s_id.value,
           category: pointForm.category.value,
