@@ -2,14 +2,16 @@ const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
 
 const Flag = sequelize.define('flag', {
+  flag_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true
+  },
   point_id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: { model: 'points', key: 'point_id' }
   },
   flagged_by: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     references: { model: 'users', key: 's_id' }
   },
   approved_by: {

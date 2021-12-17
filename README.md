@@ -1,4 +1,4 @@
-# CV Verification Portal (Point addition)
+# CV Verification Portal
 
 In order to run and test the code, follow the below procedure:
 

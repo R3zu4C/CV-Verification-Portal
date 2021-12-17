@@ -15,7 +15,7 @@ const Notification = sequelzie.define('notification', {
   },
   user_type: { // user_type can be A(Admin), U(User), G(God Admin)
     type: DataTypes.CHAR(1),
-    allowNull: false,
+    allowNull: false
   },
   notif_to: {
     type: DataTypes.INTEGER,
@@ -34,7 +34,7 @@ const Notification = sequelzie.define('notification', {
   },
   request_id: {
     type: DataTypes.INTEGER,
-    references: { model: 'requests', key: 'request_id' }
+    references: { model: 'requests', key: 'req_id' }
   },
   seen: {
     type: DataTypes.BOOLEAN,
