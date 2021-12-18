@@ -9,7 +9,7 @@ router.get('/azureadoauth2/callback2',
     passport.authenticate('azure_ad_oauth2', { failureRedirect: '/login' }),
     function (req, res) {
         // Successful authentication, redirect home.
-        
+        req.session.user = req.user;
         res.send(JSON.stringify(req.user));
     });
 

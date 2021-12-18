@@ -15,7 +15,7 @@ passport.use(new AzureAdOAuth2Strategy({
         // User.findOrCreate({ id: waadProfile.upn }, function (err, user) {
         //     done(err, user);
         // });
-        console.log(waadProfile);
+        // console.log(waadProfile);
         // console.log(params);
         // console.log(profile);
         done(null, waadProfile);
