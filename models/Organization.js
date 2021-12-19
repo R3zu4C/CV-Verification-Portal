@@ -15,6 +15,8 @@ const Organization = sequelize.define(
     board_id: {
       type: DataTypes.INTEGER,
       references: { model: "organizations", key: "org_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
   },
   {

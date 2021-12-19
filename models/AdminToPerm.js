@@ -8,11 +8,15 @@ const AdminToPerm = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       references: { model: "admins", key: "s_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     perm_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       references: { model: "permissions", key: "perm_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
   },
   {

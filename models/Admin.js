@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database/connection");
+const User = require("./User");
 
 const Admin = sequelize.define(
   "admin",
@@ -9,6 +10,8 @@ const Admin = sequelize.define(
       allowNull: false,
       primaryKey: true,
       references: { model: "users", key: "s_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
   },
   {

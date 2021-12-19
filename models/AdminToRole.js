@@ -8,11 +8,15 @@ const AdminToRole = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       references: { model: "admins", key: "s_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     role_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       references: { model: "roles", key: "role_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
   },
   {

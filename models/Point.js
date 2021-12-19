@@ -18,6 +18,8 @@ const Point = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: { model: "users", key: "s_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     title: {
       type: DataTypes.STRING(255),
@@ -30,15 +32,21 @@ const Point = sequelize.define(
     org_id: {
       type: DataTypes.INTEGER,
       references: { model: "organizations", key: "org_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     added_by: {
       type: DataTypes.INTEGER,
       references: { model: "users", key: "s_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
       allowNull: true,
     },
     approved_by: {
       type: DataTypes.INTEGER,
       references: { model: "admins", key: "s_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     start_date: {
       type: DataTypes.DATEONLY,

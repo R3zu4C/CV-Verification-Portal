@@ -3,9 +3,9 @@ const redis = require("redis");
 const RedisStore = require("connect-redis")(session);
 
 const redisClient = redis.createClient({
-  host: "redis-16854.c11.us-east-1-3.ec2.cloud.redislabs.com",
+  host: process.env.REDIS_CLIENT_HOST,
   port: 16854,
-  auth_pass: "xSXZXfLNbTj9j9Pv2rSyMC4b0LyWzU6G",
+  auth_pass: process.env.REDIS_OAUTH_PASS,
   no_ready_check: true,
 });
 

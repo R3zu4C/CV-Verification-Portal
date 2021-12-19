@@ -20,6 +20,8 @@ const Role = sequelize.define(
     org_id: {
       type: DataTypes.INTEGER,
       references: { model: "organizations", key: "org_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
   },
   {

@@ -1,12 +1,13 @@
 const AzureAdOAuth2Strategy = require("passport-azure-ad-oauth2").Strategy;
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 passport.use(
   new AzureAdOAuth2Strategy(
     {
-      clientID: "60e0ddff-dae2-47eb-8d4e-05e24635727e",
-      clientSecret: "LlY7Q~oRuSomYAhAMO5ZHCkPnb7Gyw5N-ezAZ",
+      clientID: process.env.OAUTH_CLIENT_ID,
+      clientSecret: process.env.OAUTH_CLIENT_SECRET,
       callbackURL: "http://localhost:3000/auth/azureadoauth2/callback2", // dont you dare change this
       // resource: '00000002-0000-0000-c000-000000000000',
       // tenant: 'iitg.ac.in.onmicrosoft.com'

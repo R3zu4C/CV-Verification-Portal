@@ -23,6 +23,8 @@ const Notification = sequelzie.define(
     notif_to: {
       type: DataTypes.INTEGER,
       references: { model: "users", key: "s_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     type: {
       // type can be P(Point), R(Request), F(Flag)
@@ -31,14 +33,20 @@ const Notification = sequelzie.define(
     flag_id: {
       type: DataTypes.INTEGER,
       references: { model: "flags", key: "flag_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     point_id: {
       type: DataTypes.INTEGER,
       references: { model: "points", key: "point_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     request_id: {
       type: DataTypes.INTEGER,
       references: { model: "requests", key: "req_id" },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     seen: {
       type: DataTypes.BOOLEAN,

@@ -1,10 +1,11 @@
 // Imports
 const express = require("express");
 require("dotenv").config();
-const allRoute = require("./routes/allRoutes");
 const morgan = require("morgan");
 const passport = require("passport");
+const passportSetup = require("./passport");
 
+const allRoute = require("./routes/allRoutes");
 const authRoute = require("./routes/auth");
 
 // Redis initialization
@@ -46,6 +47,6 @@ app.use((req, res, next) => {
 app.use("/", allRoute);
 
 // Start the server
-const server = app.listen(3000, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`Server listening on http://localhost:${server.address().port}`);
 });
