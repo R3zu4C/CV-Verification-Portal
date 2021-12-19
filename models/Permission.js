@@ -1,18 +1,22 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../database/connection');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../database/connection");
 
-const Permission = sequelize.define('permission', {
-  perm_id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
+const Permission = sequelize.define(
+  "permission",
+  {
+    perm_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    name: {
+      type: DataTypes.STRING(50),
+    },
   },
-  name: {
-    type: DataTypes.STRING(50),
+  {
+    initialAutoIncrement: 100,
+    tableName: "permissions",
   }
-}, {
-  initialAutoIncrement: 100,
-  tableName: 'permissions'
-});
+);
 
 module.exports = Permission;
