@@ -12,24 +12,24 @@ const Request = sequelize.define(
     type: {
       type: DataTypes.STRING(50),
     },
-    point_id: {
-      type: DataTypes.INTEGER,
-      references: { model: "points", key: "point_id" },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
-    req_by: {
-      type: DataTypes.INTEGER,
-      references: { model: "users", key: "s_id" },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
-    req_to: {
-      type: DataTypes.INTEGER,
-      references: { model: "admins", key: "s_id" },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
+    // point_id: {
+    //   type: DataTypes.INTEGER,
+    //   references: { model: "points", key: "point_id" },
+    //   onUpdate: 'CASCADE',
+    //   onDelete: 'CASCADE',
+    // },
+    // req_by: {
+    //   type: DataTypes.INTEGER,
+    //   references: { model: "users", key: "s_id" },
+    //   onUpdate: 'CASCADE',
+    //   onDelete: 'CASCADE',
+    // },
+    // req_to: {
+    //   type: DataTypes.INTEGER,
+    //   references: { model: "admins", key: "s_id" },
+    //   onUpdate: 'CASCADE',
+    //   onDelete: 'CASCADE',
+    // },
     approved: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

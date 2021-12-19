@@ -12,12 +12,12 @@ const Organization = sequelize.define(
     name: {
       type: DataTypes.STRING,
     },
-    board_id: {
-      type: DataTypes.INTEGER,
-      references: { model: "organizations", key: "org_id" },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
+    // board_id: {
+    //   type: DataTypes.INTEGER,
+    //   references: { model: "organizations", key: "org_id" },
+    //   onUpdate: 'CASCADE',
+    //   onDelete: 'CASCADE',
+    // },
   },
   {
     initialAutoIncrement: 100,
