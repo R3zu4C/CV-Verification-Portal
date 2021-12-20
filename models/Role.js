@@ -17,12 +17,12 @@ const Role = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    org_id: {
-      type: DataTypes.INTEGER,
-      references: { model: "organizations", key: "org_id" },
-      onUpdate: 'CASCADE',
-      onDelete: 'CASCADE',
-    },
+    // org_id: {
+    //   type: DataTypes.INTEGER,
+    //   references: { model: "organizations", key: "org_id" },
+    //   onUpdate: 'CASCADE',
+    //   onDelete: 'CASCADE',
+    // },
   },
   {
     initialAutoIncrement: 100,

@@ -50,3 +50,5 @@ app.use("/", allRoute);
 const server = app.listen(process.env.PORT, () => {
   console.log(`Server listening on http://localhost:${server.address().port}`);
 });
+
+const relations = require("./models/relations");

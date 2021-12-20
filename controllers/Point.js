@@ -11,10 +11,10 @@ module.exports = {
       const newPoint = {
         title: req.body.title,
         description: req.body.description,
-        s_id: parseInt(req.body.s_id),
+        s_id: req.body.s_id,
         category: req.body.category,
         org_id: parseInt(req.body.org_id),
-        added_by: parseInt(req.body.added_by),
+        added_by: req.body.added_by,
         status: "P",
         visibility: "P",
         proof: req.body.proof,

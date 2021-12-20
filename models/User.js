@@ -8,7 +8,7 @@ const User = sequelize.define(
     s_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
+      unique: true,
     },
     name: {
       type: DataTypes.STRING(50),
@@ -16,6 +16,7 @@ const User = sequelize.define(
     },
     email: {
       type: DataTypes.STRING(50),
+      primaryKey: true,
     },
     mobile_no: {
       type: DataTypes.INTEGER,
