@@ -54,15 +54,15 @@ addMockData = async () => {
     await Admin.bulkCreate([
       {
         admin_id: "s.swapnil@iitg.ac.in",
-        // userEmail: "s.swapnil@iitg.ac.in"
+        userEmail: "s.swapnil@iitg.ac.in"
       },
       {
         admin_id: "a.patanwal@iitg.ac.in",
-        // userEmail: "a.patanwal@iitg.ac.in"
+        userEmail: "a.patanwal@iitg.ac.in"
       },
       {
         admin_id: "aman200123007@iitg.ac.in",
-        // userEmail: "aman200123007@iitg.ac.in"
+        userEmail: "aman200123007@iitg.ac.in"
       }
     ]);
 
@@ -99,12 +99,20 @@ addMockData = async () => {
 
   // await codingClubAdmin.addAdmin(swapnil);
 
-  // Aman.addRole(codingClubAdmin);
-  // Ankush.addRole(goHomeClubAdmin);
-  // swapnil.addRole(codingClubAdmin);
-  // Aman.addRole(goHomeClubAdmin);
+  Aman.addRole(codingClubAdmin);
+  Ankush.addRole(goHomeClubAdmin);
+  swapnil.addRole(codingClubAdmin);
+  Aman.addRole(goHomeClubAdmin);
 
   // console.log("Roles assigned successfully.");
   // console.log(Aman.user.name);
   // console.log(Aman);
 })();
+
+(async () => {
+  let  amanAdmin = await Admin.findByPk("aman200123007@iitg.ac.in", {
+    include: User
+  });
+  // console.log(amanAdmin);
+  console.log(amanAdmin.user);
+  })();
