@@ -5,6 +5,7 @@ const Admin = require("../models/Admin");
 const Organization = require("../models/Organization");
 const sequelize = require("../database/connection");
 const Role = require("../models/Role");
+const relations = require("../models/relations");
 
 // Add Dummy Data
 addMockData = async () => {
@@ -55,15 +56,15 @@ addMockData = async () => {
     await Admin.bulkCreate([
       {
         admin_id: "s.swapnil@iitg.ac.in",
-        // userEmail: "s.swapnil@iitg.ac.in"
+        userEmail: "s.swapnil@iitg.ac.in"
       },
       {
         admin_id: "a.patanwal@iitg.ac.in",
-        // userEmail: "a.patanwal@iitg.ac.in"
+        userEmail: "a.patanwal@iitg.ac.in"
       },
       {
         admin_id: "aman200123007@iitg.ac.in",
-        // userEmail: "aman200123007@iitg.ac.in"
+        userEmail: "aman200123007@iitg.ac.in"
       }
     ]);
 
@@ -108,4 +109,12 @@ addMockData = async () => {
   // console.log("Roles assigned successfully.");
   // console.log(Aman.user.name);
   console.log(Aman);
-})();
+});
+
+(async () => {
+  let  amanAdmin = await Admin.findByPk("aman200123007@iitg.ac.in", {
+    include: User
+  });
+  // console.log(amanAdmin);
+  console.log(amanAdmin.user);
+  })();
