@@ -101,15 +101,15 @@ addMockData = async () => {
 
   // await codingClubAdmin.addAdmin(swapnil);
 
-  // Aman.addRole(codingClubAdmin);
-  // Ankush.addRole(goHomeClubAdmin);
-  // swapnil.addRole(codingClubAdmin);
-  // Aman.addRole(goHomeClubAdmin);
+  Aman.addRole(codingClubAdmin);
+  Ankush.addRole(goHomeClubAdmin);
+  swapnil.addRole(codingClubAdmin);
+  Aman.addRole(goHomeClubAdmin);
 
   // console.log("Roles assigned successfully.");
   // console.log(Aman.user.name);
   console.log(Aman);
-});
+})();
 
 (async () => {
   let  amanAdmin = await Admin.findByPk("aman200123007@iitg.ac.in", {

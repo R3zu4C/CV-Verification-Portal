@@ -70,11 +70,13 @@ Organization.belongsTo(Organization, {
 });
 
 Organization.hasMany(Project_Template, {
-    foreignKey: 'org_tempate_id',
+    foreignKey: 'org_id',
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
 });
-Project_Template.belongsTo(Organization);
+Project_Template.belongsTo(Organization, {
+    foreignKey: 'org_id',
+});
 
 
 Flag.belongsTo(Admin, {
@@ -183,15 +185,19 @@ User.hasMany(Point, {
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
 });
-Point.belongsTo(User);
+Point.belongsTo(User, {
+    foreignKey: "added_by",
+});
 
 Organization.hasMany(Point, {
     as: 'points',
-    foreignKey: 'org_point_id',
+    foreignKey: 'org_id',
     onUpdate: 'CASCADE',
     onDelete: 'CASCADE',
 });
-Point.belongsTo(Organization);
+Point.belongsTo(Organization, {
+    foreignKey: 'org_id',
+});
 
 Admin.hasMany(Point, {
     foreignKey: "approved_by",

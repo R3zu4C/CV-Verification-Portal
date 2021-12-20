@@ -20,10 +20,10 @@ const createPoint = async (pointData) => {
   const point = await Point.create({
     title: pointData.title,
     description: pointData.description,
-    s_id: parseInt(pointData.s_id),
+    s_id: pointData.s_id,
     category: pointData.category,
     org_id: parseInt(pointData.org_id),
-    added_by: parseInt(pointData.added_by),
+    added_by: pointData.added_by,
     status: "P",
     visibility: "P",
     proof: pointData.proof,
@@ -56,7 +56,7 @@ const createPointUserNotif = async (pointData) => {
     type: "P",
     description: `You have requested to add ${pointData.category}`,
     title: `${pointData.category} Request`,
-    notif_to: parseInt(pointData.s_id),
+    notif_to: pointData.s_id,
     user_type: "U",
   });
 };
