@@ -11,85 +11,193 @@ const Project_Template = require("./Template");
 
 
 
-User.hasMany(Point);
-Point.belongsTo(User);
-
-User.hasMany(Request);
-Request.belongsTo(User);
-
-
-
 User.hasOne(Admin, {
     onDelete: "CASCADE",
-    onUpdate: "CASCADE"
+    onUpdate: "CASCADE",
 });
 Admin.belongsTo(User);
 
-Admin.belongsToMany(Permission, { through: "admin_permissions" });
-Permission.belongsToMany(Admin, { through: "admin_permissions" });
+Admin.belongsToMany(Permission, {
+    through: "admin_permissions",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Permission.belongsToMany(Admin, {
+    through: "admin_permissions",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
 
-Admin.belongsToMany(Role, { through: "role_admin" });
-Role.belongsToMany(Admin, { through: "role_admin" });
+Admin.belongsToMany(Role, {
+    through: "role_admin",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Role.belongsToMany(Admin, {
+    through: "role_admin",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
 
-Role.belongsToMany(Permission, { through: "role_permission" });
-Permission.belongsToMany(Role, { through: "role_permission" });
+Role.belongsToMany(Permission, {
+    through: "role_permission",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Permission.belongsToMany(Role, {
+    through: "role_permission",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
 
-Role.hasOne(Organization);
-Organization.belongsTo(Role);
+Role.belongsTo(Organization, {
+    foreignKey: 'org_id',
+});
+Organization.hasMany(Role, {
+    foreignKey: 'org_id',
+    // foreignKey: "org_id",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
 
-Organization.hasOne(Organization, { as: 'parentOrg' });
-Organization.belongsTo(Organization);
+Organization.hasOne(Organization, {
+    foreignKey: 'parent_org_id',
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Organization.belongsTo(Organization, {
+    foreignKey: 'parent_org_id',
+});
 
-Organization.hasMany(Project_Template);
+Organization.hasMany(Project_Template, {
+    foreignKey: 'org_tempate_id',
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
 Project_Template.belongsTo(Organization);
 
 
-Flag.belongsTo(Admin);
+Flag.belongsTo(Admin, {
+    foreignKey: 'approved_by'
+});
 Admin.hasMany(Flag, {
-    foreignKey: "approved_by", 
+    foreignKey: "approved_by",
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
 });
 
-Flag.belongsTo(User);
+Flag.belongsTo(User, {
+    foreignKey: 'flagged_by'
+});
 User.hasMany(Flag, {
-    foreignKey: "flagged_by", 
+    foreignKey: "flagged_by",
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
 });
 
-Flag.belongsTo(Point);
+Flag.belongsTo(Point, {
+    foreignKey: 'point_id'
+});
 Point.hasMany(Flag, {
-    foreignKey: "point_id", 
+    foreignKey: "point_id",
     onDelete: "CASCADE",
     onUpdate: "CASCADE"
 });
 
-// notif_to: {
-//     type: DataTypes.INTEGER,
-//         references: { model: "users", key: "s_id" },
-//     onUpdate: 'CASCADE',
-//         onDelete: 'CASCADE',
-//     },
-// flag_id: {
-//     type: DataTypes.INTEGER,
-//         references: { model: "flags", key: "flag_id" },
-//     onUpdate: 'CASCADE',
-//         onDelete: 'CASCADE',
-//     },
-// point_id: {
-//     type: DataTypes.INTEGER,
-//         references: { model: "points", key: "point_id" },
-//     onUpdate: 'CASCADE',
-//         onDelete: 'CASCADE',
-//     },
-// request_id: {
-//     type: DataTypes.INTEGER,
-//         references: { model: "requests", key: "req_id" },
-//     onUpdate: 'CASCADE',
-//         onDelete: 'CASCADE',
-//     },
 
 
-Notification.belongsTo(User);
-User.hasMany(Notification, {foreignKey: "notif_to"});
+Notification.belongsTo(User, {
+    foreignKey: 'notif_to'
+});
+User.hasMany(Notification, {
+    foreignKey: "notif_to",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+
+Notification.belongsTo(Flag, {
+    foreignKey: 'flag_id'
+});
+Flag.hasMany(Notification, {
+    foreignKey: "flag_id",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+
+Notification.belongsTo(Point, {
+    foreignKey: 'point_id'
+});
+Point.hasMany(Notification, {
+    foreignKey: "point_id",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+
+Notification.belongsTo(Request, {
+    foreignKey: 'request_id'
+});
+Request.hasMany(Notification, {
+    foreignKey: "request_id",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+
+
+
+User.hasMany(Request, {
+    foreignKey: "req_by",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Request.belongsTo(User, {
+    foreignKey: "req_by",
+});
+
+Point.hasMany(Request, {
+    foreignKey: "point_id",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Request.belongsTo(Point, {
+    foreignKey: "point_id",
+});
+
+Admin.hasMany(Request, {
+    foreignKey: "req_to",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Request.belongsTo(Admin, {
+    foreignKey: "req_to",
+});
+
+
+
+User.hasMany(Point, {
+    foreignKey: "s_id",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+User.hasMany(Point, {
+    foreignKey: "added_by",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Point.belongsTo(User);
+
+Organization.hasMany(Point, {
+    as: 'points',
+    foreignKey: 'org_point_id',
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Point.belongsTo(Organization);
+
+Admin.hasMany(Point, {
+    foreignKey: "approved_by",
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+});
+Point.belongsTo(Admin , {
+    foreignKey: "approved_by",
+});
