@@ -1,62 +1,63 @@
-const { DataTypes } = require("sequelize");
-const sequelzie = require("../database/connection");
+'use strict';
+const { Model } = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Notification extends Model {
+    static associate({ User, Flag, Point, Request }) {
+      this.belongsTo(User, {
+        foreignKey: 'notif_to'
+      });
 
-const Notification = sequelzie.define(
-  "notification",
-  {
-    notif_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    title: {
-      type: DataTypes.STRING(255),
-    },
-    description: {
-      type: DataTypes.STRING(255),
-    },
-    user_type: {
-      // user_type can be A(Admin), U(User), G(God Admin)
-      type: DataTypes.CHAR(1),
-      allowNull: false,
-    },
-    // notif_to: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "users", key: "s_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    type: {
-      // type can be P(Point), R(Request), F(Flag)
-      type: DataTypes.CHAR(1),
-    },
-    // flag_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "flags", key: "flag_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    // point_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "points", key: "point_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    // request_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "requests", key: "req_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    seen: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-  },
-  {
-    initialAutoIncrement: 100,
-    tableName: "notifications",
+      this.belongsTo(Flag, {
+        foreignKey: 'flag_id'
+      });
+
+      this.belongsTo(Point, {
+        foreignKey: 'point_id'
+      });
+
+      this.belongsTo(Request, {
+        foreignKey: 'request_id'
+      });
+
+    }
+
+    toJSON() {
+      return { ...this.get(), id: undefined }
+    }
   }
-);
-
-module.exports = Notification;
+  Notification.init(
+    {
+      notif_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      title: {
+        type: DataTypes.STRING(255),
+      },
+      description: {
+        type: DataTypes.STRING(255),
+      },
+      user_type: {
+        // user_type can be A(Admin), U(User), G(God Admin)
+        type: DataTypes.CHAR(1),
+        allowNull: false,
+      },
+      type: {
+        // type can be P(Point), R(Request), F(Flag)
+        type: DataTypes.CHAR(1),
+      },
+      seen: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+    },
+    {
+      sequelize,
+      initialAutoIncrement: 100,
+      tableName: "notifications",
+      modelName: "Notification",
+    }
+  );
+  return Notification;
+};

@@ -5,6 +5,7 @@ const Admin = require("../models/Admin");
 const Organization = require("../models/Organization");
 const sequelize = require("../database/connection");
 const Role = require("../models/Role");
+const relation = require('../models/relations');
 
 // Add Dummy Data
 addMockData = async () => {
@@ -43,12 +44,10 @@ addMockData = async () => {
       {
         name: "Coding Club Admin",
         level: 1,
-        org_id: 100
       },
       {
         name: "Go Home Club Admin",
         level: 1,
-        org_id: 101
       }
     ]);
 
@@ -76,27 +75,27 @@ addMockData = async () => {
 
 (async () => {
   await addMockData();
-  let codingClubAdmin = await Role.findByPk(100);
-  let goHomeClubAdmin = await Role.findByPk(101);
+  // let codingClubAdmin = await Role.findByPk(100);
+  // let goHomeClubAdmin = await Role.findByPk(101);
 
-  let swapnil = await Admin.findByPk("s.swapnil@iitg.ac.in");
-  let Ankush = await Admin.findByPk("a.patanwal@iitg.ac.in");
-  let Aman = await Admin.findByPk("aman200123007@iitg.ac.in", {
-    // include: User
-  }
-  );
+  // let swapnil = await Admin.findByPk("s.swapnil@iitg.ac.in");
+  // let Ankush = await Admin.findByPk("a.patanwal@iitg.ac.in");
+  // let Aman = await Admin.findByPk("aman200123007@iitg.ac.in", {
+  //   // include: User
+  // }
+  // );
 
-  console.log(Aman);
+  // console.log(Aman);
 
-  let amanUser = await User.findByPk(Aman.admin_id);
-  let swapnilUser = await User.findByPk(swapnil.admin_id);
-  let ankushUser = await User.findByPk(Ankush.admin_id);
+  // let amanUser = await User.findByPk(Aman.admin_id);
+  // let swapnilUser = await User.findByPk(swapnil.admin_id);
+  // let ankushUser = await User.findByPk(Ankush.admin_id);
 
   // await amanUser.setAdmin(Aman);
   // await swapnilUser.setAdmin(swapnil);
   // await ankushUser.setAdmin(Ankush);
 
-  await Aman.setUser(amanUser);
+  // await Aman.setUser(amanUser);
 
   // await codingClubAdmin.addAdmin(swapnil);
 
@@ -107,5 +106,5 @@ addMockData = async () => {
 
   // console.log("Roles assigned successfully.");
   // console.log(Aman.user.name);
-  console.log(Aman);
+  // console.log(Aman);
 })();

@@ -1,41 +1,60 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../database/connection");
+'use strict';
+const { Model } = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Flag extends Model {
+    static associate({ Admin, User, Point, Notification }) {
 
-const Flag = sequelize.define(
-  "flag",
-  {
-    flag_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-    },
-    // point_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "points", key: "point_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    // flagged_by: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "users", key: "s_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    // approved_by: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "admins", key: "s_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    status: {
-      // status can be P(Pending), A(Approved), D(Denied)
-      type: DataTypes.CHAR(1),
-      defaultValue: "P",
-      allowNull: false,
-    },
-  },
-  {
-    tableName: "flags",
+      this.belongsTo(Admin, {
+        foreignKey: 'approved_by',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.belongsTo(User, {
+        foreignKey: 'flagged_by',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.belongsTo(Point, {
+        foreignKey: 'point_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.hasMany(Notification, {
+        foreignKey: "flag_id",
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+    }
+
+    toJSON() {
+      return { ...this.get(), id: undefined }
+    }
+
   }
-);
-
-module.exports = Flag;
+  Flag.init(
+    {
+      flag_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      status: {
+        // status can be P(Pending), A(Approved), D(Denied)
+        type: DataTypes.CHAR(1),
+        defaultValue: "P",
+        allowNull: false,
+      },
+    },
+    {
+      sequelize,
+      initialAutoIncrement: 100,
+      tableName: 'flags',
+      modelName: 'Flag',
+    }
+  );
+  return Flag;
+};

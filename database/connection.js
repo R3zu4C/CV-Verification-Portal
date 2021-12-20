@@ -12,13 +12,4 @@ const sequelize = new Sequelize(
   }
 );
 
-(async () => {
-  await sequelize.authenticate();
-  console.log("Connection to the Database has been established successfully.");
-  await sequelize.sync({ alter: true });
-  console.log("All models were synchronized successfully.");
-})().catch((error) => {
-  console.error(error);
-});
-
 module.exports = sequelize;

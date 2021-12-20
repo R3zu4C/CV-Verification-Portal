@@ -1,44 +1,59 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../database/connection");
+'use strict';
+const { Model } = require('sequelize');
+module.exports = (sequelize, DataTypes) => {
+  class Request extends Model {
+    static associate({ Notification, User, Point, Admin }) {
 
-const Request = sequelize.define(
-  "request",
-  {
-    req_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    type: {
-      type: DataTypes.STRING(50),
-    },
-    // point_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "points", key: "point_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    // req_by: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "users", key: "s_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    // req_to: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "admins", key: "s_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-    approved: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-  },
-  {
-    initialAutoIncrement: 100,
-    tableName: "requests",
+      this.hasMany(Notification, {
+        foreignKey: "request_id",
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.belongsTo(User, {
+        foreignKey: "req_by",
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.belongsTo(Point, {
+        foreignKey: "point_id",
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.belongsTo(Admin, {
+        foreignKey: "req_to",
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+    }
+
+    toJSON() {
+      return { ...this.get(), id: undefined }
+    }
   }
-);
-
-module.exports = Request;
+  Request.init(
+    {
+      req_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      type: {
+        type: DataTypes.STRING(50),
+      }, 
+      approved: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+    },
+    {
+      sequelize,
+      modelName: 'Request',
+      initialAutoIncrement: 100,
+      tableName: "requests",
+    }
+  );
+  return Request;
+};

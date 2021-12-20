@@ -1,28 +1,61 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../database/connection");
+'use strict';
+const { Model } = require('sequelize')
+module.exports = (sequelize, DataTypes) => {
+  class Organization extends Model {
 
-const Organization = sequelize.define(
-  "organization",
-  {
-    org_id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-    },
-    // board_id: {
-    //   type: DataTypes.INTEGER,
-    //   references: { model: "organizations", key: "org_id" },
-    //   onUpdate: 'CASCADE',
-    //   onDelete: 'CASCADE',
-    // },
-  },
-  {
-    initialAutoIncrement: 100,
-    tableName: "organizations",
+    static associate({ Role, Organization, Template, Point }) {
+
+      this.hasMany(Role, {
+        foreignKey: 'org_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.hasOne(Organization, {
+        foreignKey: 'parent_org_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.belongsTo(Organization, {
+        foreignKey: 'parent_org_id',
+      });
+
+      this.hasMany(Template, {
+        foreignKey: 'org_tempate_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.hasMany(Point, {
+        as: 'points',
+        foreignKey: 'org_point_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+    }
+
+    toJSON() {
+      return { ...this.get(), id: undefined }
+    }
   }
-);
-
-module.exports = Organization;
+  Organization.init(
+    {
+      org_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+      },
+    },
+    {
+      sequelize,
+      initialAutoIncrement: 100,
+      tableName: "organizations",
+      modelName: 'Organization',
+    }
+  )
+  return Organization
+}

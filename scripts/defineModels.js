@@ -11,7 +11,9 @@ const defineModels = async () => {
   await require('../models/Notification');
   await require('../models/AdminToRole');
   await require('../models/RoleToPerm');
+  await require('../models/Template');
   await require('../models/Request');
+  await require('../models/relations');
 };
 
 (async () => {

@@ -10,6 +10,7 @@ const authRoute = require("./routes/auth");
 
 // Redis initialization
 var { session, RedisStore, redisClient } = require("./database/redis_session");
+const { sequelize } = require("./models");
 
 // Create an Express Application
 const app = express();
@@ -47,8 +48,9 @@ app.use((req, res, next) => {
 app.use("/", allRoute);
 
 // Start the server
-const server = app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, async () => {
+  await sequelize.authenticate();
+  await sequelize.sync({ alter: true });
+  console.log("Database connected.");
   console.log(`Server listening on http://localhost:${server.address().port}`);
 });
-
-const relations = require("./models/relations");
