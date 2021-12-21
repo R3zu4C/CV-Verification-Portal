@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Admin, Flag, Notification, Request, Point }) {
 
       this.hasOne(Admin, {
-        foreignKey: "user_id",
+        foreignKey: "admin_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });

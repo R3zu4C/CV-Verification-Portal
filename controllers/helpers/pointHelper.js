@@ -23,20 +23,22 @@ const createPoint = async (pointData) => {
 };
 
 const createRequest = async (pointData, adminData) => {
+  console.log("here");
   await Request.create({
     type: pointData.category,
     point_id: pointData.point_id,
     req_by: pointData.added_by,
-    req_to: adminData.user_id,
+    req_to: adminData.admin_id,
   });
 };
 
 const createPointAdminNotifs = async (pointData, userData, adminData) => {
+  console.log(adminData);
   await Notification.create({
     type: "R",
     description: `${userData.name} has requested you to add ${pointData.category}`,
     title: `${pointData.category} Request`,
-    notif_to: adminData.user_id,
+    notif_to: adminData,
     user_type: "A",
   });
 };
@@ -67,14 +69,14 @@ module.exports = {
 
     const requestTo = [];
 
-    roles.forEach(async (role) => {
+    for (const role of roles) {
       const admins = await role.getAdmins();
-      admins.forEach(admin => {
-        console.log(admin.user_id);
-        requestTo.push(admin.user_id);
-      });
-    });
+      for (const admin of admins) {
+        requestTo.push(admin);
+      }
+    }
     
+    // console.log(requestTo);
     requestTo.forEach(async (admin) => await createRequest(point, admin));
 
     console.log("Requests added to database successfully.");
@@ -85,19 +87,19 @@ module.exports = {
     const roles = await org.getRoles();
     const user = await User.findOne({ where: { user_id: point.user_id } });
 
-    const requestTo = [];
+    const notifTo = [];
 
-    roles.forEach(async (role) => {
+    for (const role of roles) {
       const admins = await role.getAdmins();
-      admins.forEach(admin => {
-        console.log(admin.user_id);
-        requestTo.push(admin.user_id);
-      });
-    });
+      for (const admin of admins) {
+        notifTo.push(admin);
+      }
+    }
+    
+    // console.log(notifTo);
+    notifTo.forEach(async (admin_id) => await createPointAdminNotifs(point, user, admin_id));
 
-    requestTo.forEach(async (admin) => await createPointAdminNotifs(point, user, admin));
-
-    createPointUserNotif(point);
+    await createPointUserNotif(point);
 
     console.log("Notifications added to database successfully.");
   },

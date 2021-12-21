@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ User, Permission, Role, Flag, Request, Point }) {
 
       this.belongsTo(User, {
-        foreignKey: "user_id",
+        foreignKey: "admin_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "req_to",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+        targetKey: "admin_id",
       });
 
       this.hasMany(Point, {
@@ -52,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Admin.init(
     {
-      admin_id: {
+      _id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,

@@ -45,8 +45,8 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
   ]);
 
   await Admin.bulkCreate([
-    { user_id: "s.swapnil@iitg.ac.in" },
-    { user_id: "a.patanwal@iitg.ac.in" },
+    { admin_id: "s.swapnil@iitg.ac.in" },
+    { admin_id: "a.patanwal@iitg.ac.in" },
   ]);
 
   console.log("Mock data added successfully.");
@@ -54,9 +54,9 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
   const CodingClubRole = await Role.findByPk(100);
   const GoHomeClubRole = await Role.findByPk(101);
 
-  const SwapnilAdmin = await Admin.findOne({ where: { user_id: "s.swapnil@iitg.ac.in" }});
+  const SwapnilAdmin = await Admin.findOne({ where: { admin_id: "s.swapnil@iitg.ac.in" }});
   const SwapnilUser = await User.findByPk("s.swapnil@iitg.ac.in");
-  const AnkushAdmin = await Admin.findOne({ where: { user_id: "a.patanwal@iitg.ac.in"}});
+  const AnkushAdmin = await Admin.findOne({ where: { admin_id: "a.patanwal@iitg.ac.in"}});
   const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
 
   await SwapnilAdmin.setUser(SwapnilUser);

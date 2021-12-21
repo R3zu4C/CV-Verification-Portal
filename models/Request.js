@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "req_to",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+        targetKey: "admin_id",
       });
     }
 
