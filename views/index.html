@@ -6,32 +6,49 @@
     <title>CV Portal</title>
   </head>
   <body>
+    <nav>
+      <a href="/auth/azureadoauth2">Login</a>
+      <a href="/auth/logout">Logout</a>
+    </nav>
+    <p id="user">Hello</p>
     <h1>Add a point</h1>
 
-    <form id='addPoint'>
+    <form id="addPoint">
       <label for="title">Title:</label>
-      <input type="text" id="title" name="title" value=""><br>
+      <input type="text" id="title" name="title" value="" /><br />
       <label for="description">Description:</label>
+<<<<<<< HEAD
       <input type="text" id="description" name="description" value=""><br>
       <label for="s_id">User ID:</label>
       <input type="text" id="user_id" name="user_id" value=""><br>
+=======
+      <input type="text" id="description" name="description" value="" /><br />
+      <label for="s_id">Roll No.:</label>
+      <input type="text" id="s_id" name="s_id" value="" /><br />
+>>>>>>> f9caaf43f0f0770691461bd13d76239e206a052b
       <label for="category">Category:</label>
       <select id="category" name="category">
         <option value="">-- Select --</option>
         <option value="Project">Project</option>
         <option value="Experience">Experience</option>
         <option value="Achievement">Achievement</option>
-        <option value="Extra-Curricular">Extra-Curricular</option>
-      </select><br>
+        <option value="Extra-Curricular">Extra-Curricular</option></select
+      ><br />
       <label for="org_id">Organization:</label>
       <select id="org_id" name="org_id">
-        <option value="">-- Select --</option>
-      </select><br>
+        <option value="">-- Select --</option></select
+      ><br />
       <label for="added_by">Added by:</label>
-      <input type="text" id="added_by" name="added_by" value=""><br>
+      <input type="text" id="added_by" name="added_by" value="" /><br />
     </form>
 
-    File: <input type="file" id="f" accept=".pdf,.doc,.docx" onchange="fileValidation()" />
+    File:
+    <input
+      type="file"
+      id="f"
+      accept=".pdf,.doc,.docx"
+      onchange="fileValidation()"
+    />
     <button id="btnUpload">Read & Upload</button>
     <div id="divOutput"></div>
 
@@ -44,33 +61,49 @@
       const btnUpload = document.getElementById("btnUpload");
       const divOutput = document.getElementById("divOutput");
       const searchResult = document.getElementById("searchResult");
-      const pointForm = document.getElementById('addPoint');
-      const btnSubmit = document.getElementById('pointSubmit');
-      const btnSearch = document.getElementById('pointSearch');
-      const f         = document.getElementById("f");
+      const pointForm = document.getElementById("addPoint");
+      const btnSubmit = document.getElementById("pointSubmit");
+      const btnSearch = document.getElementById("pointSearch");
+      const f = document.getElementById("f");
 
-      window.onload = async() => {
-        const res = await fetch('http://localhost:3000/orgs', {
-          method: 'GET',
-          headers: { "content-type": "application/json" }
+      window.onload = async () => {
+        let userData = await fetch("http://localhost:3000/status", {
+          method: "GET",
+          headers: { "content-type": "application/json" },
+        });
+        let text = "";
+        userData = await userData.json();
+        if (userData !== "NA") {
+          text = `Welcome ${userData.user.email}`;
+          text += ` (${userData.user.name}) , Admin: ${
+            userData.admin ? "True" : "False"
+          } `;
+        } else {
+          text = "User not logged in";
+        }
+        document.getElementById("user").innerHTML = text;
+
+        const res = await fetch("http://localhost:3000/orgs", {
+          method: "GET",
+          headers: { "content-type": "application/json" },
         });
         const orgs = await res.json();
-        const selectOrg = document.getElementById('org_id');
-        orgs.forEach(org => {
+        const selectOrg = document.getElementById("org_id");
+        orgs.forEach((org) => {
           let newOption = document.createElement("option");
           newOption.value = org.org_id;
-          let newOptionValue = document.createTextNode(org.name); 
-          newOption.appendChild(newOptionValue); 
+          let newOptionValue = document.createTextNode(org.name);
+          newOption.appendChild(newOptionValue);
           selectOrg.insertBefore(newOption, selectOrg.lastChildNode);
         });
       };
-      
+
       function fileValidation() {
         const filePath = f.value;
         const allowedExtensions = /(\.pdf|\.doc|\.docx)$/i;
-        if(!allowedExtensions.exec(filePath)) {
-          alert('Please select a pdf or docx file');
-          f.value = '';
+        if (!allowedExtensions.exec(filePath)) {
+          alert("Please select a pdf or docx file");
+          f.value = "";
         }
       }
 
@@ -84,8 +117,10 @@
           const chunkCount = ev.target.result.byteLength / CHUNK_SIZE;
 
           console.log("Read successfully");
-          const fileExtension = (theFile.name).split('.').pop();
-          const fileName = `${Math.floor((Math.random() * 900000000) + 100000000)}.${fileExtension}`;
+          const fileExtension = theFile.name.split(".").pop();
+          const fileName = `${Math.floor(
+            Math.random() * 900000000 + 100000000
+          )}.${fileExtension}`;
           proof = fileName;
           for (let chunkId = 0; chunkId < chunkCount + 1; chunkId++) {
             const chunk = ev.target.result.slice(
@@ -98,18 +133,19 @@
                 "content-type": "application/octet-stream",
                 "content-length": chunk.length,
                 "file-name": fileName,
-                "s_id": pointForm.s_id.value
+                s_id: pointForm.s_id.value,
               },
               body: chunk,
             });
-            divOutput.textContent = Math.round((chunkId * 100) / chunkCount, 0) + "%";
+            divOutput.textContent =
+              Math.round((chunkId * 100) / chunkCount, 0) + "%";
           }
           console.log(ev.target.result.byteLength);
         };
         fileReader.readAsArrayBuffer(theFile);
       });
 
-      btnSubmit.addEventListener('click', async () => {
+      btnSubmit.addEventListener("click", async () => {
         const point = {
           title: pointForm.title.value,
           description: pointForm.description.value,
@@ -123,39 +159,41 @@
         await fetch("http://localhost:3000/point", {
           method: "POST",
           headers: {
-            "content-type": "application/json"
+            "content-type": "application/json",
           },
-          body: JSON.stringify(point)
+          body: JSON.stringify(point),
         });
 
         window.location.reload();
+      });
 
-      })
-
-      btnSearch.addEventListener('click', async () => {
+      btnSearch.addEventListener("click", async () => {
         const point = {
           title: pointForm.title.value,
           description: pointForm.description.value,
+<<<<<<< HEAD
           user_id:  pointForm.user_id.value,
+=======
+          s_id: pointForm.s_id.value,
+>>>>>>> f9caaf43f0f0770691461bd13d76239e206a052b
           category: pointForm.category.value,
           org_id: pointForm.org_id.value,
           added_by: pointForm.added_by.value,
-          approved_by: ""
+          approved_by: "",
         };
 
         const res = await fetch("http://localhost:3000/search", {
           method: "POST",
           headers: {
-            "content-type": "application/json"
+            "content-type": "application/json",
           },
-          body: JSON.stringify(point)
+          body: JSON.stringify(point),
         });
 
         const search = await res.json();
 
         searchResult.textContent = JSON.stringify(search);
-      })
-
+      });
     </script>
   </body>
 </html>

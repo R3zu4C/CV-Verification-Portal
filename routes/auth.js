@@ -4,6 +4,8 @@ const { User, Admin } = require("../models/index")
 
 router.get("/azureadoauth2", passport.authenticate("azure_ad_oauth2"));
 
+router.get('/login', (req, res)=> res.redirect('/auth/azureadoauth2'));
+
 router.get(
   "/azureadoauth2/callback2",
   passport.authenticate("azure_ad_oauth2", { failureRedirect: "/login" }),
@@ -11,21 +13,23 @@ router.get(
     // Successful authentication, redirect home.
     let user_email = req.user.unique_name;
     try {
-      let user = await User.findOne({ where: { email: user_email } });
+      let user = await User.findByPk(user_email);
       if (user) {
         req.session.user = user;
-        let admin = await Admin.findByPk(user.s_id);
+        let admin = await Admin.findOne({ where: {email: user_email } });
+        let permission = {};
         if (admin) {
           req.session.admin = admin;
           console.log(admin);
-          let permission = admin.getPermissions()
+          permission = await admin.getPermissions();
+          req.session.admin.permission = permission;
           console.log(permission);
         }
 
-        res.send(JSON.stringify({ user, admin }));
+        res.send(JSON.stringify({ user, admin, permission }));
       }
       else {
-        res.send("User not found");
+        res.send(JSON.stringify("User not found"));
       }
 
     }
@@ -35,5 +39,11 @@ router.get(
     }
   }
 );
+
+router.get("/logout", (req, res) => {
+  req.session.destroy();
+  req.logout();
+  res.redirect("/");
+});
 
 module.exports = router;
