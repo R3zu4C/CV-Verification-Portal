@@ -38,6 +38,13 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });
+
+      this.hasMany(Request, {
+        foreignKey: "req_to",
+        sourceKey: "admin_id",
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE",
+      });
     }
 
     toJSON() {
