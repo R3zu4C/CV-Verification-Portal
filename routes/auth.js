@@ -11,12 +11,12 @@ router.get(
   passport.authenticate("azure_ad_oauth2", { failureRedirect: "/login" }),
   async (req, res) => {
     // Successful authentication, redirect home.
-    let user_email = req.user.unique_name;
+    const user_email = req.user.unique_name;
     try {
-      let user = await User.findByPk(user_email);
+      const user = await User.findByPk(user_email);
       if (user) {
         req.session.user = user;
-        let admin = await Admin.findOne({ where: {email: user_email } });
+        const admin = await Admin.findOne({ where: {admin_id: user_email } });
         let permission = {};
         if (admin) {
           req.session.admin = admin;
@@ -25,11 +25,10 @@ router.get(
           req.session.admin.permission = permission;
           console.log(permission);
         }
-
-        res.send(JSON.stringify({ user, admin, permission }));
+        res.redirect("/");
       }
       else {
-        res.send(JSON.stringify("User not found"));
+        res.redirect("/");
       }
 
     }

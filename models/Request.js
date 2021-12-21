@@ -23,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(Admin, {
+        targetKey: "admin_id",
         foreignKey: "req_to",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
-        targetKey: "admin_id",
       });
     }
 

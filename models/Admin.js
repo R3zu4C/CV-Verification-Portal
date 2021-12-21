@@ -32,13 +32,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
       });
-      
-      this.hasMany(Request, {
-        foreignKey: "req_to",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-        targetKey: "admin_id",
-      });
 
       this.hasMany(Point, {
         foreignKey: "approved_by",

@@ -10,7 +10,7 @@
       <a href="/auth/azureadoauth2">Login</a>
       <a href="/auth/logout">Logout</a>
     </nav>
-    <p id="user">Hello</p>
+    <p id="userInfo">Hello</p>
     <h1>Add a point</h1>
 
     <form id="addPoint">
@@ -58,6 +58,7 @@
       const pointForm = document.getElementById("addPoint");
       const btnSubmit = document.getElementById("pointSubmit");
       const btnSearch = document.getElementById("pointSearch");
+      const userInfo = document.getElementById("userInfo");
       const f = document.getElementById("f");
 
       window.onload = async () => {
@@ -68,14 +69,12 @@
         let text = "";
         userData = await userData.json();
         if (userData !== "NA") {
-          text = `Welcome ${userData.user.email}`;
-          text += ` (${userData.user.name}) , Admin: ${
-            userData.admin ? "True" : "False"
-          } `;
+          text = `Welcome ${userData.user.user_id}`;
+          text += ` (${userData.user.name}) , Admin: ${ userData.admin ? "True" : "False" }`;
         } else {
           text = "User not logged in";
         }
-        document.getElementById("user").innerHTML = text;
+        userInfo.innerHTML = text;
 
         const res = await fetch("http://localhost:3000/orgs", {
           method: "GET",

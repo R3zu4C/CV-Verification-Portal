@@ -23,7 +23,6 @@ const createPoint = async (pointData) => {
 };
 
 const createRequest = async (pointData, adminData) => {
-  console.log("here");
   await Request.create({
     type: pointData.category,
     point_id: pointData.point_id,
@@ -33,12 +32,11 @@ const createRequest = async (pointData, adminData) => {
 };
 
 const createPointAdminNotifs = async (pointData, userData, adminData) => {
-  console.log(adminData);
   await Notification.create({
     type: "R",
     description: `${userData.name} has requested you to add ${pointData.category}`,
     title: `${pointData.category} Request`,
-    notif_to: adminData,
+    notif_to: adminData.admin_id,
     user_type: "A",
   });
 };
@@ -76,7 +74,6 @@ module.exports = {
       }
     }
     
-    // console.log(requestTo);
     requestTo.forEach(async (admin) => await createRequest(point, admin));
 
     console.log("Requests added to database successfully.");
@@ -96,8 +93,7 @@ module.exports = {
       }
     }
     
-    // console.log(notifTo);
-    notifTo.forEach(async (admin_id) => await createPointAdminNotifs(point, user, admin_id));
+    notifTo.forEach(async (admin) => await createPointAdminNotifs(point, user, admin));
 
     await createPointUserNotif(point);
 
