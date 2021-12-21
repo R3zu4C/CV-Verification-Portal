@@ -21,9 +21,9 @@ const addAllUsers = async () => {
         csvData.forEach(async (data) => {
           try {
             await User.create({
-              s_id: data[2],
+              user_id: data[3],
+              roll_no: data[2],
               name: data[1],
-              email: data[3],
               branch: data[8],
               program: data[7],
             });

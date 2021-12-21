@@ -23,14 +23,14 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(User, {
-        foreignKey: "s_id",
+        foreignKey: "user_id",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });
 
       this.belongsTo(Organization, {
         as: 'points',
-        foreignKey: 'org_point_id',
+        foreignKey: 'org_id',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });

@@ -50,7 +50,6 @@ app.use("/", allRoute);
 // Start the server
 const server = app.listen(process.env.PORT, async () => {
   await sequelize.authenticate();
-  await sequelize.sync({ alter: true });
   console.log("Database connected.");
   console.log(`Server listening on http://localhost:${server.address().port}`);
 });

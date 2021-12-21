@@ -1,4 +1,4 @@
-const Organization = require("../models/Organization");
+const { Organization } = require("../models");
 
 module.exports = {
   fetchAllOrg: async (req, res) => {

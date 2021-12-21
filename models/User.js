@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Admin, Flag, Notification, Request, Point }) {
 
       this.hasOne(Admin, {
-        foreignKey: "email",
+        foreignKey: "user_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.hasMany(Point, {
-        foreignKey: "s_id",
+        foreignKey: "user_id",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });
@@ -49,18 +49,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      s_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+      user_id: {
+        type: DataTypes.STRING(50),
+        primaryKey: true,
+      },
+      roll_no: {
+        type: DataTypes.STRING(50),
         unique: true,
+        allowNull: false,
       },
       name: {
         type: DataTypes.STRING(50),
         allowNull: false,
-      },
-      email: {
-        type: DataTypes.STRING(50),
-        primaryKey: true,
       },
       mobile_no: {
         type: DataTypes.INTEGER,

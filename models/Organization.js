@@ -22,14 +22,14 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.hasMany(Template, {
-        foreignKey: 'org_tempate_id',
+        foreignKey: 'org_id',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });
 
       this.hasMany(Point, {
         as: 'points',
-        foreignKey: 'org_point_id',
+        foreignKey: 'org_id',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });

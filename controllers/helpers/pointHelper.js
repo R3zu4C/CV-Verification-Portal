@@ -1,32 +1,22 @@
 const {
-  AdminToRole,
   Notification,
   Point,
   Request,
-  Role,
   User,
-} = require("../../models/index");
-const { Op } = require("sequelize");
-
-const getRoleIds = async (point) => {
-  const roleIds = [];
-  const roles = await Role.findAll({ where: { org_id: point.org_id } });
-  roles.forEach((role) => roleIds.push(role.role_id));
-
-  return roleIds;
-};
+  Organization,
+} = require("../../models");
 
 const createPoint = async (pointData) => {
   const point = await Point.create({
     title: pointData.title,
     description: pointData.description,
-    s_id: pointData.s_id,
+    user_id: pointData.user_id,
     category: pointData.category,
     org_id: parseInt(pointData.org_id),
     added_by: pointData.added_by,
     status: "P",
     visibility: "P",
-    proof: pointData.proof,
+    proof_link: pointData.proof_link,
   });
 
   return point;
@@ -37,7 +27,7 @@ const createRequest = async (pointData, adminData) => {
     type: pointData.category,
     point_id: pointData.point_id,
     req_by: pointData.added_by,
-    req_to: adminData.s_id,
+    req_to: adminData.user_id,
   });
 };
 
@@ -46,7 +36,7 @@ const createPointAdminNotifs = async (pointData, userData, adminData) => {
     type: "R",
     description: `${userData.name} has requested you to add ${pointData.category}`,
     title: `${pointData.category} Request`,
-    notif_to: adminData.s_id,
+    notif_to: adminData.user_id,
     user_type: "A",
   });
 };
@@ -56,7 +46,7 @@ const createPointUserNotif = async (pointData) => {
     type: "P",
     description: `You have requested to add ${pointData.category}`,
     title: `${pointData.category} Request`,
-    notif_to: pointData.s_id,
+    notif_to: pointData.user_id,
     user_type: "U",
   });
 };
@@ -71,28 +61,41 @@ module.exports = {
   },
 
   addRequestToDatabase: async (point) => {
-    const roleIds = await getRoleIds(point);
+    const org = await Organization.findByPk(point.org_id);
 
-    const requestTo = await AdminToRole.findAll({
-      where: { role_id: { [Op.in]: roleIds } },
+    const roles = await org.getRoles();
+
+    const requestTo = [];
+
+    roles.forEach(async (role) => {
+      const admins = await role.getAdmins();
+      admins.forEach(admin => {
+        console.log(admin.user_id);
+        requestTo.push(admin.user_id);
+      });
     });
-
+    
     requestTo.forEach(async (admin) => await createRequest(point, admin));
 
     console.log("Requests added to database successfully.");
   },
 
   addPointNotifsToDatabase: async (point) => {
-    const roleIds = await getRoleIds(point);
-    const user = await User.findByPk(parseInt(point.s_id));
+    const org = await Organization.findByPk(point.org_id);
+    const roles = await org.getRoles();
+    const user = await User.findOne({ where: { user_id: point.user_id } });
 
-    const requestTo = await AdminToRole.findAll({
-      where: { role_id: { [Op.in]: roleIds } },
+    const requestTo = [];
+
+    roles.forEach(async (role) => {
+      const admins = await role.getAdmins();
+      admins.forEach(admin => {
+        console.log(admin.user_id);
+        requestTo.push(admin.user_id);
+      });
     });
 
-    requestTo.forEach(
-      async (admin) => await createPointAdminNotifs(point, user, admin)
-    );
+    requestTo.forEach(async (admin) => await createPointAdminNotifs(point, user, admin));
 
     createPointUserNotif(point);
 

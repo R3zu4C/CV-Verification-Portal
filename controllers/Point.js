@@ -8,19 +8,7 @@ const {
 module.exports = {
   addPoint: async (req, res) => {
     try {
-      const newPoint = {
-        title: req.body.title,
-        description: req.body.description,
-        s_id: req.body.s_id,
-        category: req.body.category,
-        org_id: parseInt(req.body.org_id),
-        added_by: req.body.added_by,
-        status: "P",
-        visibility: "P",
-        proof: req.body.proof,
-      };
-
-      const point = await addPointToDatabase(newPoint);
+      const point = await addPointToDatabase(req.body);
       await addRequestToDatabase(point);
       await addPointNotifsToDatabase(point);
     } catch (error) {

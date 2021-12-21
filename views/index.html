@@ -13,8 +13,8 @@
       <input type="text" id="title" name="title" value=""><br>
       <label for="description">Description:</label>
       <input type="text" id="description" name="description" value=""><br>
-      <label for="s_id">Roll No.:</label>
-      <input type="text" id="s_id" name="s_id" value=""><br>
+      <label for="s_id">User ID:</label>
+      <input type="text" id="user_id" name="user_id" value=""><br>
       <label for="category">Category:</label>
       <select id="category" name="category">
         <option value="">-- Select --</option>
@@ -113,11 +113,11 @@
         const point = {
           title: pointForm.title.value,
           description: pointForm.description.value,
-          s_id:  pointForm.s_id.value,
+          user_id:  pointForm.user_id.value,
           category: pointForm.category.value,
           org_id: pointForm.org_id.value,
           added_by: pointForm.added_by.value,
-          proof: proof
+          proof_link: proof
         };
 
         await fetch("http://localhost:3000/point", {
@@ -136,7 +136,7 @@
         const point = {
           title: pointForm.title.value,
           description: pointForm.description.value,
-          s_id:  pointForm.s_id.value,
+          user_id:  pointForm.user_id.value,
           category: pointForm.category.value,
           org_id: pointForm.org_id.value,
           added_by: pointForm.added_by.value,

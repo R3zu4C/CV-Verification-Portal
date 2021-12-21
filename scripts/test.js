@@ -7,22 +7,22 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
 
   await User.bulkCreate([
     {
-      s_id: 200123008,
+      roll_no: "200123008",
       name: "Ankush Patanwal",
       branch: "MnC",
-      email: "a.patanwal@iitg.ac.in",
+      user_id: "a.patanwal@iitg.ac.in",
     },
     {
-      s_id: 190101090,
+      roll_no: "190101090",
       name: "Swapnil Srivastava",
       branch: "CSE",
-      email: "s.swapnil@iitg.ac.in",
+      user_id: "s.swapnil@iitg.ac.in",
     },
     {
-      s_id: 200123007,
+      roll_no: "200123007",
       name: "Aman Kumar",
       branch: "MnC",
-      email: "aman200123007@iitg.ac.in",
+      user_id: "aman200123007@iitg.ac.in",
     },
   ]);
 
@@ -35,17 +35,18 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
     {
       name: "Coding Club Admin",
       level: 1,
+      org_id: 100,
     },
     {
       name: "Go Home Club Admin",
       level: 1,
+      org_id: 101,
     },
   ]);
 
   await Admin.bulkCreate([
-    { email: "s.swapnil@iitg.ac.in" },
-    { email: "a.patanwal@iitg.ac.in" },
-    { email: "aman200123007@iitg.ac.in" },
+    { user_id: "s.swapnil@iitg.ac.in" },
+    { user_id: "a.patanwal@iitg.ac.in" },
   ]);
 
   console.log("Mock data added successfully.");
@@ -53,9 +54,9 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
   const CodingClubRole = await Role.findByPk(100);
   const GoHomeClubRole = await Role.findByPk(101);
 
-  const SwapnilAdmin = await Admin.findOne({ where: { email: "s.swapnil@iitg.ac.in" }});
+  const SwapnilAdmin = await Admin.findOne({ where: { user_id: "s.swapnil@iitg.ac.in" }});
   const SwapnilUser = await User.findByPk("s.swapnil@iitg.ac.in");
-  const AnkushAdmin = await Admin.findOne({ where: { email: "a.patanwal@iitg.ac.in"}});
+  const AnkushAdmin = await Admin.findOne({ where: { user_id: "a.patanwal@iitg.ac.in"}});
   const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
 
   await SwapnilAdmin.setUser(SwapnilUser);
