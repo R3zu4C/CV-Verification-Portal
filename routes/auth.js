@@ -20,10 +20,8 @@ router.get(
         let permission = {};
         if (admin) {
           req.session.admin = admin;
-          console.log(admin);
           permission = await admin.getPermissions();
           req.session.admin.permission = permission;
-          console.log(permission);
         }
         res.redirect("/");
       }

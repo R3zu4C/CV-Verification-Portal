@@ -17,10 +17,8 @@ router.get("/status", (req, res) => {
   let admin = req.session.admin;
   let loggedIn = req.session.user ? true : false;
 
-  if(loggedIn)
-  res.send({ user, admin });
-  else
-  res.json("NA");
+  if(loggedIn) res.send({ user, admin });
+  else res.json("NA");
 })
 
 // Getting a list of all the Organizations and their org_id
