@@ -1,7 +1,8 @@
-const { fetchAllOrg } = require("../controllers/Organization");
-const { addPoint, uploadProof } = require("../controllers/Point");
+const { fetchAllOrg } = require("../controllers/orgController");
+const { addPoint, uploadProof } = require("../controllers/pointController");
 const fs = require("fs");
-const { searchPoint } = require("../controllers/Search");
+const { searchPoint } = require("../controllers/searchController");
+const { requireAuth } = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
 
@@ -10,7 +11,7 @@ router.get("/", async (req, res) => {
   res.end(fs.readFileSync("./views/index.html"));
 });
 // Adding a Point thru POST request
-router.post("/point", addPoint);
+router.post("/point", requireAuth, addPoint);
 
 router.get("/status", (req, res) => {
   let user = req.session.user
@@ -25,7 +26,7 @@ router.get("/status", (req, res) => {
 router.get("/orgs", fetchAllOrg);
 
 // Proof uploading service
-router.post("/upload", uploadProof);
+router.post("/upload", requireAuth, uploadProof);
 
 // Getting Search results
 router.post("/search", searchPoint);

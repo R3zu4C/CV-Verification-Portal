@@ -39,15 +39,6 @@ app.use(passport.session());
 
 // Routes
 app.use("/auth", authRoute);
-
-app.use((req, res, next) => {
-  if (!req.session || !req.session.user) {
-    console.log("User is not logged in");
-    return res.status(401).send("User is not logged in");
-  }
-  else console.log("User is logged in");
-  next();
-});
 app.use("/", allRoute);
 
 // Start the server
