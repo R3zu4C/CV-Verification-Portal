@@ -62,7 +62,7 @@
       const f = document.getElementById("f");
 
       window.onload = async () => {
-        let userData = await fetch("http://localhost:3000/status", {
+        let userData = await fetch("https://cv-verification.herokuapp.com/status", {
           method: "GET",
           headers: { "content-type": "application/json" },
         });
@@ -76,7 +76,7 @@
         }
         userInfo.innerHTML = text;
 
-        const res = await fetch("http://localhost:3000/orgs", {
+        const res = await fetch("https://cv-verification.herokuapp.com/orgs", {
           method: "GET",
           headers: { "content-type": "application/json" },
         });
@@ -120,7 +120,7 @@
               chunkId * CHUNK_SIZE,
               chunkId * CHUNK_SIZE + CHUNK_SIZE
             );
-            await fetch("http://localhost:3000/upload", {
+            await fetch("https://cv-verification.herokuapp.com/upload", {
               method: "POST",
               headers: {
                 "content-type": "application/octet-stream",
@@ -149,7 +149,7 @@
           proof_link: proof
         };
 
-        await fetch("http://localhost:3000/point", {
+        await fetch("https://cv-verification.herokuapp.com/point", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -171,7 +171,7 @@
           approved_by: "",
         };
 
-        const res = await fetch("http://localhost:3000/search", {
+        const res = await fetch("https://cv-verification.herokuapp.com/search", {
           method: "POST",
           headers: {
             "content-type": "application/json",

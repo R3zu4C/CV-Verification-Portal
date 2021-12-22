@@ -8,7 +8,7 @@ passport.use(
     {
       clientID: process.env.OAUTH_CLIENT_ID,
       clientSecret: process.env.OAUTH_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/azureadoauth2/callback2", // dont you dare change this
+      callbackURL: "https://cv-verification.herokuapp.com/auth/azureadoauth2/callback2", // dont you dare change this
       // resource: '00000002-0000-0000-c000-000000000000',
       // tenant: 'iitg.ac.in.onmicrosoft.com'
     },

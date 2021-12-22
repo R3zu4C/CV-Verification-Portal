@@ -42,7 +42,7 @@ app.use("/auth", authRoute);
 app.use("/", allRoute);
 
 // Start the server
-const server = app.listen(process.env.PORT, async () => {
+const server = app.listen(process.env.PORT || 3000, async () => {
   await sequelize.authenticate();
   console.log("Database connected.");
   console.log(`Server listening on http://localhost:${server.address().port}`);
