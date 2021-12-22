@@ -14,9 +14,9 @@ router.get("/", async (req, res) => {
 router.post("/point", requireAuth, addPoint);
 
 router.get("/status", (req, res) => {
-  let user = req.session.user
-  let admin = req.session.admin;
-  let loggedIn = req.session.user ? true : false;
+  const user = req.session.user;
+  const admin = req.session.admin;
+  const loggedIn = req.session.user ? true : false;
 
   if(loggedIn) res.send({ user, admin });
   else res.json("NA");
