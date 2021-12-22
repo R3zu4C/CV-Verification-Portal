@@ -19,9 +19,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app",
     "dev": "nodemon app",
-    "dev:mock": "node ./scripts/addMockData",
+    "dev:mock": "node ./scripts/test",
     "dev:users": "node ./scripts/addAllUsers",
-    "dev:tables": "node ./scripts/defineModels"
+    "dev:perm": "node ./scripts/addPerm"
   },
   "author": "",
   "license": "ISC",
