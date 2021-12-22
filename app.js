@@ -1,7 +1,6 @@
 // Imports
 const express = require("express");
 require("dotenv").config();
-const morgan = require("morgan");
 const passport = require("passport");
 const passportSetup = require("./passport");
 
@@ -30,7 +29,10 @@ app.use(
     },
   })
 );
-app.use(morgan("dev"));
+if (process.env.ENVIRONMENT = "DEV") {
+  const morgan = require("morgan");
+  app.use(morgan("dev"));
+}
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
