@@ -11,6 +11,7 @@ module.exports = {
       const point = await addPointToDatabase(req.body);
       await addRequestToDatabase(point);
       await addPointNotifsToDatabase(point);
+      res.send({ redirect: "/" });
     } catch (error) {
       console.error("Error:" + error.message);
       res.status(400).send("Error in inserting new record");
@@ -19,8 +20,8 @@ module.exports = {
 
   uploadProof: async (req, res) => {
     const fileName = req.headers["file-name"];
-    const s_id = req.headers["s_id"];
-    const dir = `./uploads/${s_id}`;
+    const user_id = req.headers["user_id"];
+    const dir = `./uploads/${user_id}`;
 
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
