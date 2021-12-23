@@ -27,11 +27,11 @@ module.exports = {
       replacements: {
         titleQuery: `%${req.body.title}%`,
         descriptionQuery: `%${req.body.description}%`,
-        user_idQuery: `${req.body.user_id}`,
-        org_idQuery: `${req.body.org_id}`,
-        categoryQuery: `${req.body.category}`,
-        added_byQuery: `${req.body.added_by}`,
-        approved_byQuery: `${req.body.approved_by}`,
+        user_idQuery: `%${req.body.user_id}%`,
+        org_idQuery: `%${req.body.org_id}%`,
+        categoryQuery: `%${req.body.category}%`,
+        added_byQuery: `%${req.body.added_by}%`,
+        approved_byQuery: `%${req.body.approved_by}%`,
       },
       type: QueryTypes.SELECT,
     });

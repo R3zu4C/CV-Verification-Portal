@@ -7,7 +7,7 @@
   </head>
   <body>
     <nav>
-      <a href="/auth/azureadoauth2">Login</a>
+      <a href="/auth/login">Login</a>
       <a href="/auth/logout">Logout</a>
     </nav>
     <p id="userInfo">Hello</p>
@@ -149,7 +149,7 @@
           proof_link: proof
         };
 
-        await fetch("https://cv-verification.herokuapp.com/point", {
+        const res = await fetch("https://cv-verification.herokuapp.com/point", {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -157,7 +157,8 @@
           body: JSON.stringify(point),
         });
 
-        window.location.reload();
+        const data = await res.json();
+        window.location = data.redirect;
       });
 
       btnSearch.addEventListener("click", async () => {
