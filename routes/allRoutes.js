@@ -16,10 +16,8 @@ router.post("/point", requireAuth, addPoint);
 router.get("/status", (req, res) => {
   let user = req.session.user
   let admin = req.session.admin;
-  let loggedIn = req.session.user ? true : false;
 
-  if(loggedIn) res.send({ user, admin });
-  else res.json("NA");
+  res.send({ user, admin });
 })
 
 // Getting a list of all the Organizations and their org_id
