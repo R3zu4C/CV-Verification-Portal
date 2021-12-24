@@ -14,7 +14,6 @@ router.get("/", async (req, res) => {
 router.post("/point", requireAuth, addPoint);
 
 router.get("/status", (req, res) => {
-<<<<<<< HEAD
   let user = req.session.user
   let admin = req.session.admin;
 
