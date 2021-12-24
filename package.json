@@ -1,17 +1,18 @@
 {
   "dependencies": {
     "connect-redis": "^6.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fast-csv": "^4.3.6",
     "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
     "passport": "^0.5.2",
     "passport-azure-ad-oauth2": "^0.0.4",
     "redis": "^3.1.2",
-    "sequelize": "^6.12.0-beta.1",
-    "morgan": "^1.10.0"
+    "sequelize": "^6.12.0-beta.1"
   },
   "name": "point_modal",
   "version": "1.0.0",
@@ -26,7 +27,5 @@
   },
   "author": "",
   "license": "ISC",
-  "description": "",
-  "devDependencies": {
-  }
+  "description": ""
 }
