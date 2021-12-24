@@ -4,6 +4,7 @@ const {
   Request,
   User,
   Organization,
+  Flag,
 } = require("../../models");
 
 const createPoint = async (pointData) => {
@@ -31,6 +32,15 @@ const createRequest = async (pointData, adminData) => {
   });
 };
 
+const createFlag = async (flagData) => {
+  const flag = await Flag.create({
+    flagged_by: flagData.flagged_by,
+    point_id: flagData.point_id,
+  });
+
+  return flag;
+}
+
 const createPointAdminNotifs = async (pointData, userData, adminData) => {
   await Notification.create({
     type: "R",
@@ -48,8 +58,35 @@ const createPointUserNotif = async (pointData) => {
     title: `${pointData.category} Request`,
     notif_to: pointData.user_id,
     user_type: "U",
+    point_id: pointData.point_id,
   });
 };
+
+const createFlagAdminNotif = async (flagData, adminData) => {
+  const notif = await Notification.create({
+    type: "F",
+    description: `You have a flag approval request`,
+    title: "Flag Request",
+    notif_to: adminData.admin_id,
+    user_type: "A",
+    flag_id: flagData.flag_id,
+  });
+
+  notif.setFlag(flagData.flag_id);
+};
+
+const createFlagUserNotif = async (pointData) => {
+  const notif = await Notification.create({
+    type: "F",
+    description: `Your point ${pointData.title} has been flagged`,
+    title: "Point Flagged",
+    notif_to: pointData.user_id,
+    user_type: "U",
+    point_id: pointData.point_id,
+  });
+
+  notif.setPoint(pointData.point_id);
+}
 
 module.exports = {
   addPointToDatabase: async (newPoint) => {
@@ -99,4 +136,38 @@ module.exports = {
 
     console.log("Notifications added to database successfully.");
   },
+
+  addFlagToDatabase: async (flagData, pointData) => {
+
+    const flag = await createFlag(flagData);
+    const flaggedBy = await User.findByPk(flagData.flagged_by);
+    flag.setPoint(pointData);
+    flag.setUser(flaggedBy);
+    flaggedBy.addFlag(flag);
+
+    console.log("Flag added to database successfully.");
+
+    return flag;
+  },
+
+  addFlagNotifsToDatabase: async (flagData, pointData) => {
+    const org = await Organization.findByPk(pointData.org_id);
+
+    const roles = await org.getRoles();
+
+    const flagTo = [];
+
+    for (const role of roles) {
+      const admins = await role.getAdmins();
+      for (const admin of admins) {
+        flagTo.push(admin);
+      }
+    }
+
+    flagTo.forEach(async (admin) => await createFlagAdminNotif(flagData, admin));
+
+    await createFlagUserNotif(pointData);
+
+    console.log("Notifications added to database successfully.");
+  }
 };

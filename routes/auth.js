@@ -4,6 +4,7 @@ const {
   login,
   loginCallback,
   logout,
+  status,
 } = require("../controllers/authController");
 
 router.get("/azureadoauth2", passport.authenticate("azure_ad_oauth2"));
@@ -15,6 +16,8 @@ router.get(
   passport.authenticate("azure_ad_oauth2", { failureRedirect: "/login" }),
   loginCallback
 );
+
+router.get("/status", status);
 
 router.get("/logout", logout);
 

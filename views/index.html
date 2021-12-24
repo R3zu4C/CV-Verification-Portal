@@ -18,22 +18,20 @@
       <input type="text" id="title" name="title" value="" /><br />
       <label for="description">Description:</label>
       <input type="text" id="description" name="description" value="" /><br />
-      <label for="user_id">User ID:</label>
-      <input type="text" id="user_id" name="user_id" value="" /><br />
       <label for="category">Category:</label>
       <select id="category" name="category">
         <option value="">-- Select --</option>
         <option value="Project">Project</option>
         <option value="Experience">Experience</option>
         <option value="Achievement">Achievement</option>
-        <option value="Extra-Curricular">Extra-Curricular</option></select
-      ><br />
-      <label for="org_id">Organization:</label>
-      <select id="org_id" name="org_id">
-        <option value="">-- Select --</option></select
-      ><br />
-      <label for="added_by">Added By (searching):</label>
-      <input type="text" id="added_by" name="added_by" value="" disbaled /><br />
+        <option value="Extra-Curricular">Extra-Curricular</option></select><br />
+        <label for="org_id">Organization:</label>
+        <select id="org_id" name="org_id">
+          <option value="">-- Select --</option></select><br />
+        <label for="added_by">Added By (searching):</label>
+        <input type="text" id="added_by" name="added_by" value=""/><br />
+        <label for="user_id">User ID (searching):</label>
+        <input type="text" id="user_id" name="user_id" value="" /><br />
     </form>
 
     File:
@@ -74,7 +72,7 @@
       let userData;
 
       window.onload = async () => {
-        const res = await fetch("http://localhost:3000/status", {
+        const res = await fetch("http://localhost:3000/auth/status", {
           method: "GET",
           headers: { "content-type": "application/json" },
         });
@@ -87,13 +85,6 @@
           text += ` (${userData.user.name}) , Admin: ${
             userData.admin ? "True" : "False"
           }`;
-
-          if (userData.admin) {
-            pointForm.user_id.disabled = false;
-          } else {
-            pointForm.user_id.value = userData.user.user_id;
-            pointForm.user_id.disabled = true;
-          }
         } else {
           text = "User not logged in";
         }
@@ -168,14 +159,12 @@
         const point = {
           title: pointForm.title.value,
           description: pointForm.description.value,
+          user_id: userData.user.user_id,
           category: pointForm.category.value,
           org_id: pointForm.org_id.value,
           added_by: userData.user.user_id,
           proof_link: proof,
         };
-
-        if (userData.admin) point.user_id = pointForm.user_id.value;
-        else point.user_id = userData.user.user_id;
 
         const res = await fetch("http://localhost:3000/point", {
           method: "POST",
@@ -188,6 +177,100 @@
         const data = await res.json();
         window.location = data.redirect;
       });
+
+      const createSearchResultTable = async () => {
+        while(searchResult.firstChild) searchResult.removeChild(searchResult.firstChild);
+
+        let searchResultTable = document.createElement("table");
+        searchResultTable.id = "searchResultTable";
+
+        let searchResultTableHead = document.createElement("thead");
+        searchResultTableHead.id = "searchResultTableHead";
+
+        let searchResultTableHeaderRow = document.createElement("tr");
+        searchResultTableHeaderRow.id = "searchResultTableHeaderRow";
+
+        let pointId = document.createElement("th");
+        pointId.innerText = "Point ID";
+
+        let userId = document.createElement("th");
+        userId.innerText = "User";
+
+        let title = document.createElement("th");
+        title.innerText = "Title";
+
+        let description = document.createElement("th");
+        description.innerText = "Description";
+
+        let category = document.createElement("th");
+        category.innerText = "Category";
+
+        searchResultTableHeaderRow.append(pointId, userId, title, description, category);
+        searchResultTableHead.append(searchResultTableHeaderRow);
+        searchResultTable.append(searchResultTableHead);
+
+        let searchResultTableBody = document.createElement("tbody");
+        searchResultTableBody.id = "searchResultTableBody";   
+        searchResultTable.append(searchResultTableBody);
+        
+        searchResult.append(searchResultTable);
+      }
+
+      const appendSearchResultData = async (pointData) => {
+        const searchResultTable = document.getElementById("searchResultTable");
+
+        let searchResultTableRow = document.createElement("tr");
+        searchResultTableRow.id = "searchResultTableRow";
+
+        let pointId = document.createElement("td");
+        pointId.innerText = pointData.point_id;
+
+        let userId = document.createElement("td");
+        userId.innerText = pointData.user_id;
+
+        let title = document.createElement("td");
+        title.innerText = pointData.title;
+
+        let description = document.createElement("td");
+        description.innerText = pointData.description;
+
+        let category = document.createElement("td");
+        category.innerText = pointData.category;
+
+        let flag = document.createElement("td");
+        let flagBtn = document.createElement("button");
+        if(userData.user.Flags.some(({ point_id }) => point_id === pointData.point_id)) flagBtn.innerText = "-";
+        else flagBtn.innerText = "Flag it!";
+        flag.append(flagBtn);
+
+        const flagBody = {
+          flagged_by: userData.user.user_id,
+          point_id: pointData.point_id
+        }
+
+        flagBtn.addEventListener("click", async () => {
+          if(userData.user.Flags.some(({ point_id }) => point_id === pointData.point_id)) {
+            alert("Point already flagged!");
+          }
+          else {
+            const res = await fetch(`http://localhost:3000/point/${pointData.point_id}/flag`, {
+              method: "POST",
+              headers: {
+              "content-type": "application/json",
+              },
+              body: JSON.stringify(flagBody)
+            });
+            const data = await res.json();
+            window.location = data.redirect;
+          }
+        })
+
+        searchResultTableRow.append(pointId, userId, title, description, category, flag);
+
+        searchResultTable.append(searchResultTableRow);
+
+      }
+
 
       btnSearch.addEventListener("click", async () => {
         const point = {
@@ -208,9 +291,14 @@
           body: JSON.stringify(point),
         });
 
-        const search = await res.json();
+        const searchResult = await res.json();
 
-        searchResult.textContent = JSON.stringify(search);
+        await createSearchResultTable();
+
+        for (const point of searchResult) {
+          appendSearchResultData(point);
+        }
+
       });
     </script>
   </body>

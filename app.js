@@ -10,7 +10,7 @@ const allRoute = require("./routes/allRoutes");
 const authRoute = require("./routes/auth");
 
 // Redis initialization
-var { session, RedisStore, redisClient } = require("./database/redis_session");
+const { session, RedisStore, redisClient } = require("./database/redis_session");
 const { sequelize } = require("./models");
 
 // Create an Express Application

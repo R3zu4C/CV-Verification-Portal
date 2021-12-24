@@ -3,7 +3,11 @@ const {
   addPointToDatabase,
   addRequestToDatabase,
   addPointNotifsToDatabase,
+  addFlagToDatabase,
+  addFlagNotifsToDatabase,
 } = require("./helpers/pointHelper");
+
+const { Point } = require("../models");
 
 module.exports = {
   addPoint: async (req, res) => {
@@ -29,4 +33,17 @@ module.exports = {
 
     res.end("Proof uploaded!");
   },
+
+  flagPoint: async (req, res) => {
+    try {
+      const point = await Point.findByPk(req.params.pointId);
+      const flag = await addFlagToDatabase(req.body, point);
+      await addFlagNotifsToDatabase(flag, point);
+      res.send({ redirect: "/" });
+    } catch (error) {
+      console.error("Error:" + error.message);
+      res.status(400).send("Error in inserting new record");
+    }
+
+  }
 };
