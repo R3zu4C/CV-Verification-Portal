@@ -32,16 +32,14 @@
         <input type="text" id="added_by" name="added_by" value=""/><br />
         <label for="user_id">User ID (searching):</label>
         <input type="text" id="user_id" name="user_id" value="" /><br />
+        <input
+          type="file"
+          id="f"
+          accept=".pdf,.doc,.docx"
+          onchange="fileValidation()"
+        />
     </form>
 
-    File:
-    <input
-      type="file"
-      id="f"
-      accept=".pdf,.doc,.docx"
-      onchange="fileValidation()"
-    />
-    <button id="btnUpload">Read & Upload</button>
     <div id="divOutput"></div>
 
     <button id="pointSubmit">Request</button>
@@ -50,7 +48,7 @@
     <div id="searchResult"></div>
 
     <script>
-      const btnUpload = document.getElementById("btnUpload");
+      // const btnUpload = document.getElementById("btnUpload");
       const divOutput = document.getElementById("divOutput");
       const searchResult = document.getElementById("searchResult");
       const pointForm = document.getElementById("addPoint");
@@ -115,44 +113,6 @@
         }
       }
 
-      let proof = "";
-
-      btnUpload.addEventListener("click", () => {
-        const fileReader = new FileReader();
-        const theFile = f.files[0];
-        fileReader.onload = async (ev) => {
-          const CHUNK_SIZE = 1000000;
-          const chunkCount = ev.target.result.byteLength / CHUNK_SIZE;
-
-          console.log("Read successfully");
-          const fileExtension = theFile.name.split(".").pop();
-          const fileName = `${Math.floor(
-            Math.random() * 900000000 + 100000000
-          )}.${fileExtension}`;
-          proof = fileName;
-          for (let chunkId = 0; chunkId < chunkCount + 1; chunkId++) {
-            const chunk = ev.target.result.slice(
-              chunkId * CHUNK_SIZE,
-              chunkId * CHUNK_SIZE + CHUNK_SIZE
-            );
-            await fetch("http://localhost:3000/upload", {
-              method: "POST",
-              headers: {
-                "content-type": "application/octet-stream",
-                "content-length": chunk.length,
-                "file-name": fileName,
-                user_id: pointForm.user_id.value,
-              },
-              body: chunk,
-            });
-            divOutput.textContent =
-              Math.round((chunkId * 100) / chunkCount, 0) + "%";
-          }
-          console.log(ev.target.result.byteLength);
-        };
-        fileReader.readAsArrayBuffer(theFile);
-      });
-
       btnSubmit.addEventListener("click", async () => {
         if (!userData.user) window.location = "/auth/login";
 
@@ -163,7 +123,6 @@
           category: pointForm.category.value,
           org_id: pointForm.org_id.value,
           added_by: userData.user.user_id,
-          proof_link: proof,
         };
 
         const res = await fetch("http://localhost:3000/point", {
@@ -175,7 +134,43 @@
         });
 
         const data = await res.json();
-        window.location = data.redirect;
+        if(f.files[0]) {
+          const fileReader = new FileReader();
+          const theFile = f.files[0];
+          fileReader.onload = async (ev) => {
+            const CHUNK_SIZE = 1000000;
+            const chunkCount = ev.target.result.byteLength / CHUNK_SIZE;
+  
+            console.log("Read successfully");
+            const fileExtension = theFile.name.split(".").pop();
+            const fileName = `${Math.floor(Math.random() * 900000000 + 100000000)}.${fileExtension}`;
+            for (let chunkId = 0; chunkId < chunkCount + 1; chunkId++) {
+              const chunk = ev.target.result.slice(
+                chunkId * CHUNK_SIZE,
+                chunkId * CHUNK_SIZE + CHUNK_SIZE
+              );
+              await fetch("http://localhost:3000/upload", {
+                method: "POST",
+                headers: {
+                  "content-type": "application/octet-stream",
+                  "content-length": chunk.length,
+                  file_name: fileName,
+                  user_id: userData.user.user_id,
+                  point_id: data.pointId
+                },
+                body: chunk,
+              });
+              divOutput.textContent = Math.round((chunkId * 100) / chunkCount, 0) + "%";
+            }
+            console.log(ev.target.result.byteLength);
+            window.location = data.redirect;
+          };
+          fileReader.readAsArrayBuffer(theFile);
+        }
+        else {
+          window.location = data.redirect;
+        }
+
       });
 
       const createSearchResultTable = async () => {
@@ -273,6 +268,8 @@
 
 
       btnSearch.addEventListener("click", async () => {
+        if (!userData.user) window.location = "/auth/login";
+        
         const point = {
           title: pointForm.title.value,
           description: pointForm.description.value,

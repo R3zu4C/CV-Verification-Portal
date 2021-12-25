@@ -17,7 +17,6 @@ const createPoint = async (pointData) => {
     added_by: pointData.added_by,
     status: "P",
     visibility: "P",
-    proof_link: pointData.proof_link,
   });
 
   return point;
@@ -169,5 +168,5 @@ module.exports = {
     await createFlagUserNotif(pointData);
 
     console.log("Notifications added to database successfully.");
-  }
+  },
 };
