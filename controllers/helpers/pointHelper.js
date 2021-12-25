@@ -7,14 +7,14 @@ const {
   Flag,
 } = require("../../models");
 
-const createPoint = async (pointData) => {
+const createPoint = async (pointData, userId, addedBy) => {
   const point = await Point.create({
     title: pointData.title,
     description: pointData.description,
-    user_id: pointData.user_id,
+    user_id: userId,
     category: pointData.category,
     org_id: parseInt(pointData.org_id),
-    added_by: pointData.added_by,
+    added_by: addedBy,
     status: "P",
     visibility: "P",
   });
@@ -31,9 +31,9 @@ const createRequest = async (pointData, adminData) => {
   });
 };
 
-const createFlag = async (flagData) => {
+const createFlag = async (flagData, flaggedBy) => {
   const flag = await Flag.create({
-    flagged_by: flagData.flagged_by,
+    flagged_by: flaggedBy,
     point_id: flagData.point_id,
   });
 
@@ -88,8 +88,8 @@ const createFlagUserNotif = async (pointData) => {
 }
 
 module.exports = {
-  addPointToDatabase: async (newPoint) => {
-    const point = createPoint(newPoint);
+  addPointToDatabase: async (newPoint, userId) => {
+    const point = createPoint(newPoint, userId, userId);
 
     console.log("Point added to database successfully.");
 
@@ -136,10 +136,10 @@ module.exports = {
     console.log("Notifications added to database successfully.");
   },
 
-  addFlagToDatabase: async (flagData, pointData) => {
+  addFlagToDatabase: async (flagData, pointData, flagged_by) => {
 
-    const flag = await createFlag(flagData);
-    const flaggedBy = await User.findByPk(flagData.flagged_by);
+    const flag = await createFlag(flagData, flagged_by);
+    const flaggedBy = await User.findByPk(flagged_by);
     flag.setPoint(pointData);
     flag.setUser(flaggedBy);
     flaggedBy.addFlag(flag);

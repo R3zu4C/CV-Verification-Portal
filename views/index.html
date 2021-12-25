@@ -40,21 +40,23 @@
         />
     </form>
 
-    <div id="divOutput"></div>
+    <div id="uploadOut"></div>
 
     <button id="pointSubmit">Request</button>
     <button id="pointSearch">Search</button>
 
     <div id="searchResult"></div>
 
+    <div id="requestResult"></div>
+
     <script>
-      // const btnUpload = document.getElementById("btnUpload");
-      const divOutput = document.getElementById("divOutput");
+      const uploadOut = document.getElementById("uploadOut");
       const searchResult = document.getElementById("searchResult");
       const pointForm = document.getElementById("addPoint");
       const btnSubmit = document.getElementById("pointSubmit");
       const btnSearch = document.getElementById("pointSearch");
       const userInfo = document.getElementById("userInfo");
+      const reqResult = document.getElementById("requestResult");
       const f = document.getElementById("f");
 
       const deepFreeze = (obj) => {
@@ -86,7 +88,27 @@
         } else {
           text = "User not logged in";
         }
+        if(userData.admin) {
+          let btnRequest = document.createElement("button");
+          btnRequest.id = "btnRequest";
+          btnRequest.innerText = "View Pending Requests";
+          
+          reqResult.append(btnRequest);
 
+          btnRequest.addEventListener("click", async () => {
+            const res3 = await fetch("http://localhost:3000/requests", {
+              method: "GET",
+            });
+
+            const requests = await res3.json();
+            await createRequestResultTable();
+
+            for (const request of requests) {
+              await appendRequestResultData(request);
+            }
+          })
+        }
+      
         userInfo.innerHTML = text;
 
         const res2 = await fetch("http://localhost:3000/orgs", {
@@ -119,10 +141,8 @@
         const point = {
           title: pointForm.title.value,
           description: pointForm.description.value,
-          user_id: userData.user.user_id,
           category: pointForm.category.value,
           org_id: pointForm.org_id.value,
-          added_by: userData.user.user_id,
         };
 
         const res = await fetch("http://localhost:3000/point", {
@@ -155,12 +175,11 @@
                   "content-type": "application/octet-stream",
                   "content-length": chunk.length,
                   file_name: fileName,
-                  user_id: userData.user.user_id,
                   point_id: data.pointId
                 },
                 body: chunk,
               });
-              divOutput.textContent = Math.round((chunkId * 100) / chunkCount, 0) + "%";
+              uploadOut.textContent = Math.round((chunkId * 100) / chunkCount, 0) + "%";
             }
             console.log(ev.target.result.byteLength);
             window.location = data.redirect;
@@ -239,7 +258,6 @@
         flag.append(flagBtn);
 
         const flagBody = {
-          flagged_by: userData.user.user_id,
           point_id: pointData.point_id
         }
 
@@ -297,6 +315,88 @@
         }
 
       });
+
+      const createRequestResultTable = async () => {
+        let requestResultTable = document.createElement("table");
+        requestResultTable.id = "requestResultTable";
+
+        let requestResultTableHead = document.createElement("thead");
+        requestResultTableHead.id = "requestResultTableHead";
+
+        let requestResultTableHeaderRow = document.createElement("tr");
+        requestResultTableHeaderRow.id = "requestResultTableHeaderRow";
+
+        let reqId = document.createElement("th");
+        reqId.innerText = "Request ID";
+
+        let reqBy = document.createElement("th");
+        reqBy.innerText = "Requested By";
+
+        let pointId = document.createElement("th");
+        pointId.innerText = "Point ID";
+
+        let title = document.createElement("th");
+        title.innerText = "Title";
+
+        let description = document.createElement("th");
+        description.innerText = "Description";
+
+        let category = document.createElement("th");
+        category.innerText = "Category";
+
+        requestResultTableHeaderRow.append(reqId, reqBy, pointId, title, description, category);
+        requestResultTableHead.append(requestResultTableHeaderRow);
+        requestResultTable.append(requestResultTableHead);
+
+        let requestResultTableBody = document.createElement("tbody");
+        requestResultTableBody.id = "requestResultTableBody";   
+        requestResultTable.append(requestResultTableBody);
+        
+        requestResult.append(requestResultTable);
+      }
+
+      const appendRequestResultData = async (reqData) => {
+        const requestResultTable = document.getElementById("requestResultTable");
+
+        let requestResultTableRow = document.createElement("tr");
+        requestResultTableRow.id = "requestResultTableRow";
+
+        let reqId = document.createElement("td");
+        reqId.innerText = reqData.req_id;
+
+        let reqBy = document.createElement("td");
+        reqBy.innerText = reqData.req_by;
+
+        let pointId = document.createElement("td");
+        pointId.innerText = reqData.Point.point_id;
+
+        let title = document.createElement("td");
+        title.innerText = reqData.Point.title;
+
+        let description = document.createElement("td");
+        description.innerText = reqData.Point.description;
+
+        let category = document.createElement("td");
+        category.innerText = reqData.Point.category;
+
+        let approve = document.createElement("td");
+        let approveBtn = document.createElement("button");
+        approveBtn.innerText = "Approve";
+        approve.append(approveBtn);
+
+        approveBtn.addEventListener("click", async () => {
+          const res = await fetch(`http://localhost:3000/requests/${reqData.req_id}/approve`, {
+            method: "GET",
+          });
+          const data = await res.json();
+          window.location = data.redirect;
+        })
+
+        requestResultTableRow.append(reqId, reqBy, pointId, title, description, category, approve);
+
+        requestResultTable.append(requestResultTableRow);
+      }
+    
     </script>
   </body>
 </html>

@@ -3,6 +3,7 @@ const { addPoint, uploadProof, flagPoint } = require("../controllers/pointContro
 const fs = require("fs");
 const { searchPoint } = require("../controllers/searchController");
 const { requireAuth } = require("../middleware/authMiddleware");
+const { allPendingRequests, approveRequest } = require("../controllers/requestController");
 
 const router = require("express").Router();
 
@@ -23,5 +24,9 @@ router.post("/upload", requireAuth, uploadProof);
 router.post("/search", searchPoint);
 
 router.post("/point/:pointId/flag", flagPoint);
+
+router.get("/requests", allPendingRequests);
+
+router.get("/requests/:reqId/approve", approveRequest);
 
 module.exports = router;
