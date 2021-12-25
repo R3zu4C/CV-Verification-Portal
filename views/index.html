@@ -317,6 +317,8 @@
       });
 
       const createRequestResultTable = async () => {
+        while(requestResult.firstChild) requestResult.removeChild(requestResult.firstChild);
+
         let requestResultTable = document.createElement("table");
         requestResultTable.id = "requestResultTable";
 
