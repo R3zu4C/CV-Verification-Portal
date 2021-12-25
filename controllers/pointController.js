@@ -43,6 +43,12 @@ module.exports = {
     try {
       const flagged_by = req.session.userId;
       const point = await Point.findByPk(req.params.pointId);
+      point.update({ approved_by: null });
+      const requests = await point.getRequests();
+
+      for(const request of requests) {
+        await request.update({ approved: 0 });
+      }
       const flag = await addFlagToDatabase(req.body, point, flagged_by);
       await addFlagNotifsToDatabase(flag, point);
       res.send({ redirect: "/" });
