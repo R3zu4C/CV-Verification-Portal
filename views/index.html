@@ -72,7 +72,7 @@
       let userData;
 
       window.onload = async () => {
-        const res = await fetch(`https://${window.location.host}/auth/status`, {
+        const res = await fetch(`${window.location.protocol}//${window.location.host}/auth/status`, {
           method: "GET",
           headers: { "content-type": "application/json" },
         });
@@ -96,7 +96,7 @@
           reqResult.append(btnRequest);
 
           btnRequest.addEventListener("click", async () => {
-            const res3 = await fetch(`https://${window.location.host}/requests`, {
+            const res3 = await fetch(`${window.location.protocol}//${window.location.host}/requests`, {
               method: "GET",
             });
 
@@ -111,7 +111,7 @@
       
         userInfo.innerHTML = text;
 
-        const res2 = await fetch(`https://${window.location.host}/orgs`, {
+        const res2 = await fetch(`${window.location.protocol}//${window.location.host}/orgs`, {
           method: "GET",
           headers: { "content-type": "application/json" },
         });
@@ -145,7 +145,7 @@
           org_id: pointForm.org_id.value,
         };
 
-        const res = await fetch(`https://${window.location.host}/point`, {
+        const res = await fetch(`${window.location.protocol}//${window.location.host}/point`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -169,7 +169,7 @@
                 chunkId * CHUNK_SIZE,
                 chunkId * CHUNK_SIZE + CHUNK_SIZE
               );
-              await fetch(`https://${window.location.host}/upload`, {
+              await fetch(`${window.location.protocol}//${window.location.host}/upload`, {
                 method: "POST",
                 headers: {
                   "content-type": "application/octet-stream",
@@ -266,7 +266,7 @@
             alert("Point already flagged!");
           }
           else {
-            const res = await fetch(`https://${window.location.host}/point/${pointData.point_id}/flag`, {
+            const res = await fetch(`${window.location.protocol}//${window.location.host}/point/${pointData.point_id}/flag`, {
               method: "POST",
               headers: {
               "content-type": "application/json",
@@ -298,7 +298,7 @@
           approved_by: "",
         };
 
-        const res = await fetch(`https://${window.location.host}/search`, {
+        const res = await fetch(`${window.location.protocol}//${window.location.host}/search`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -387,7 +387,7 @@
         approve.append(approveBtn);
 
         approveBtn.addEventListener("click", async () => {
-          const res = await fetch(`https://${window.location.host}/requests/${reqData.req_id}/approve`, {
+          const res = await fetch(`${window.location.protocol}//${window.location.host}/requests/${reqData.req_id}/approve`, {
             method: "GET",
           });
           const data = await res.json();
