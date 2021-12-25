@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.belongsTo(Admin, {
         foreignKey: 'approved_by',
+        targetKey: "admin_id",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });

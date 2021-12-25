@@ -29,6 +29,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasMany(Flag, {
         foreignKey: "approved_by",
+        sourceKey: "admin_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE"
       });
