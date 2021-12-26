@@ -41,7 +41,7 @@ const { sequelize, Permission, Role } = require("../models");
     let GH_admin = await Role.findByPk(101);
 
     for (let i = 100; i < 109; i++) {
-        if(i == 105 ) continue;
+        if(i === 105 ) continue;
         await CC_admin.addPermission(i);
         await GH_admin.addPermission(i);
     }
