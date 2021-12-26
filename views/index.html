@@ -145,7 +145,7 @@
           org_id: pointForm.org_id.value,
         };
 
-        const res = await fetch(`${window.location.protocol}//${window.location.host}/point`, {
+        const res = await fetch(`${window.location.protocol}//${window.location.host}/points`, {
           method: "POST",
           headers: {
             "content-type": "application/json",
@@ -169,7 +169,7 @@
                 chunkId * CHUNK_SIZE,
                 chunkId * CHUNK_SIZE + CHUNK_SIZE
               );
-              await fetch(`${window.location.protocol}//${window.location.host}/point/upload`, {
+              await fetch(`${window.location.protocol}//${window.location.host}/points/upload`, {
                 method: "POST",
                 headers: {
                   "content-type": "application/octet-stream",
@@ -266,7 +266,7 @@
             alert("Point already flagged!");
           }
           else {
-            const res = await fetch(`${window.location.protocol}//${window.location.host}/point/${pointData.point_id}/flag`, {
+            const res = await fetch(`${window.location.protocol}//${window.location.host}/points/${pointData.point_id}/flag`, {
               method: "POST",
               headers: {
               "content-type": "application/json",

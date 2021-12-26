@@ -4,6 +4,6 @@ const router = require("express").Router();
 
 
 // Getting Search results
-router.post("/search", searchPoint);
+router.post("/", searchPoint);
 
 module.exports = router;

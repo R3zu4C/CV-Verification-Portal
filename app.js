@@ -50,7 +50,7 @@ app.use("/auth", authRoute);
 app.use("/orgs", orgRoute);
 app.use("/search", searchRoute);
 app.use("/requests", requestRoute);
-app.use("/point", pointRoute);
+app.use("/points", pointRoute);
 
 
 // Start the server
