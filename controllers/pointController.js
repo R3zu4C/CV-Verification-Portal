@@ -46,9 +46,8 @@ module.exports = {
       point.update({ approved_by: null });
       const requests = await point.getRequests();
 
-      for(const request of requests) {
-        await request.update({ approved: 0 });
-      }
+      await Promise.all(requests.map(request => request.update({ approved: 0 })));
+      
       const flag = await addFlagToDatabase(req.body, point, flagged_by);
       await addFlagNotifsToDatabase(flag, point);
       res.send({ redirect: "/" });

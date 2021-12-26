@@ -17,13 +17,9 @@ module.exports = {
     const requests = await point.getRequests();
     const flags = await point.getFlags({ where: { approved_by: null }});
 
-    for (const _req of requests) {
-      await _req.update({ approved: 1 });
-    }
+    await Promise.all(requests.map(_req => _req.update({ approved: 1 })));
 
-    for (const flag of flags) {
-      await flag.update({ approved_by: approvedBy });
-    }
+    await Promise.all(flags.map(flag => flag.update({ approved_by: approvedBy })));
     
     await point.update({ approved_by: approvedBy });
 
