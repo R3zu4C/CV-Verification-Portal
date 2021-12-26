@@ -169,7 +169,7 @@
                 chunkId * CHUNK_SIZE,
                 chunkId * CHUNK_SIZE + CHUNK_SIZE
               );
-              await fetch(`${window.location.protocol}//${window.location.host}/upload`, {
+              await fetch(`${window.location.protocol}//${window.location.host}/point/upload`, {
                 method: "POST",
                 headers: {
                   "content-type": "application/octet-stream",

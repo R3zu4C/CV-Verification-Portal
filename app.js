@@ -6,8 +6,13 @@ const cors = require("cors");
 const passport = require("passport");
 const passportSetup = require("./passport");
 
-const allRoute = require("./routes/allRoutes");
+const homeRoute = require("./routes/homeRoutes");
+const orgRoute = require("./routes/orgRoutes");
 const authRoute = require("./routes/auth");
+const searchRoute = require("./routes/searchRoutes");
+const pointRoute = require("./routes/pointRoutes");
+const requestRoute = require("./routes/requestRoutes");
+
 
 // Redis initialization
 const { session, RedisStore, redisClient } = require("./database/redis_session");
@@ -40,8 +45,13 @@ app.use(cors());
 // app.use(express.static("public"));
 
 // Routes
+app.use("/", homeRoute);
 app.use("/auth", authRoute);
-app.use("/", allRoute);
+app.use("/orgs", orgRoute);
+app.use("/search", searchRoute);
+app.use("/requests", requestRoute);
+app.use("/point", pointRoute);
+
 
 // Start the server
 const server = app.listen(process.env.PORT, async () => {
