@@ -103,14 +103,17 @@ module.exports = {
 
     const requestTo = [];
 
-    for (const role of roles) {
-      const admins = await role.getAdmins();
-      for (const admin of admins) {
-        requestTo.push(admin);
+    await Promise.all(roles.map(_role => (
+      async (role) => {
+        const admins = await role.getAdmins();
+        for (const admin of admins) {
+          requestTo.push(admin);
+        }
       }
-    }
-    
-    requestTo.forEach(async (admin) => await createRequest(point, admin));
+    )(_role)
+    ));
+
+    await Promise.all(requestTo.map(admin => createRequest(point, admin)));
 
     console.log("Requests added to database successfully.");
   },
@@ -122,14 +125,16 @@ module.exports = {
 
     const notifTo = [];
 
-    for (const role of roles) {
-      const admins = await role.getAdmins();
-      for (const admin of admins) {
-        notifTo.push(admin);
-      }
-    }
-    
-    notifTo.forEach(async (admin) => await createPointAdminNotifs(point, user, admin));
+    await Promise.all(roles.map(_role => (
+      async (role) => {
+        const admins = await role.getAdmins();
+        for (const admin of admins) {
+          notifTo.push(admin);
+        }
+      })(_role)
+    ));
+
+    await Promise.all(notifTo.map((admin) => createPointAdminNotifs(point, user, admin)));
 
     await createPointUserNotif(point);
 
@@ -156,14 +161,16 @@ module.exports = {
 
     const flagTo = [];
 
-    for (const role of roles) {
-      const admins = await role.getAdmins();
-      for (const admin of admins) {
-        flagTo.push(admin);
-      }
-    }
+    await Promise.all(roles.map((_role) => (
+      async (role) => {
+        const admins = await role.getAdmins();
+        for (const admin of admins) {
+          flagTo.push(admin);
+        }
+      })(_role)
+    ));
 
-    flagTo.forEach(async (admin) => await createFlagAdminNotif(flagData, admin));
+    await Promise.all(flagTo.map((admin) => createFlagAdminNotif(flagData, admin)));
 
     await createFlagUserNotif(pointData);
 
