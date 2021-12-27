@@ -2,14 +2,14 @@ const { Admin, Request } = require("../models");
 
 module.exports = {
   allPendingRequests: async (req, res) => {
-    const userId = req.session.userId;
+    const userId = req.session.user.user_id;
     const admin = await Admin.findOne({ where: { admin_id: userId }});
     const requests = await admin.getRequests({ where: { approved: 0 }, include: "Point" });
     res.send(requests);
   },
 
   approveRequest: async (req, res) => {
-    const approvedBy = req.session.userId;
+    const approvedBy = req.session.user.user_id;
     const reqId = req.params.reqId;
 
     const request = await Request.findByPk(reqId);

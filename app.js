@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const passport = require("passport");
 const passportSetup = require("./passport");
+// const Admin = require("./controllers/helpers/authHelper"); dont delete this now... its for testing, ill delete it later :D
 
 const homeRoute = require("./routes/homeRoutes");
 const orgRoute = require("./routes/orgRoutes");
@@ -45,6 +46,14 @@ app.use(cors());
 // app.use(express.static("public"));
 
 // Routes
+// app.use("*", (req, res, next) => {
+//   // console.log("req.session", req.session);
+//   if(req.session.admin) {
+//     const admin = new Admin( req.session.user , req.session.admin);
+//     admin.log();
+//   }
+//   next();
+// })
 app.use("/", homeRoute);
 app.use("/auth", authRoute);
 app.use("/orgs", orgRoute);

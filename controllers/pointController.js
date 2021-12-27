@@ -12,7 +12,7 @@ const { Point } = require("../models");
 module.exports = {
   addPoint: async (req, res) => {
     try {
-      const user_id = req.session.userId;
+      const user_id = req.session.user.user_id;
       const point = await addPointToDatabase(req.body, user_id);
       await addRequestToDatabase(point);
       await addPointNotifsToDatabase(point);
@@ -25,7 +25,7 @@ module.exports = {
 
   uploadProof: async (req, res) => {
     const fileName = req.headers["file_name"];
-    const user_id = req.session.userId;
+    const user_id = req.session.user.user_id;
     const point_id =  req.headers["point_id"];
     const dir = `./uploads/${user_id}`;
 
@@ -41,7 +41,7 @@ module.exports = {
 
   flagPoint: async (req, res) => {
     try {
-      const flagged_by = req.session.userId;
+      const flagged_by = req.session.user.user_id;
       const point = await Point.findByPk(req.params.pointId);
       point.update({ approved_by: null });
       const requests = await point.getRequests();
