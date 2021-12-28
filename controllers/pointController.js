@@ -43,7 +43,7 @@ module.exports = {
     try {
       const flagged_by = req.session.user.user_id;
       const point = await Point.findByPk(req.params.pointId);
-      point.update({ approved_by: null });
+      point.update({ approved_by: null , status: 'F' });
       const requests = await point.getRequests();
 
       await Promise.all(requests.map(request => request.update({ approved: 0 })));

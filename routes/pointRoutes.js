@@ -9,7 +9,7 @@ router.post("/", requireAuth, addPoint);
 // Proof uploading service
 router.post("/upload", requireAuth, uploadProof);
 
-router.post("/:pointId/flag", flagPoint);
+router.post("/:pointId/flag",requireAuth, flagPoint);
 
 
 module.exports = router;

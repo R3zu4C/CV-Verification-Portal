@@ -21,7 +21,7 @@ module.exports = {
 
     await Promise.all(flags.map(flag => flag.update({ approved_by: approvedBy })));
     
-    await point.update({ approved_by: approvedBy });
+    await point.update({ approved_by: approvedBy , status : 'A'});
 
     res.send({ redirect: "/" });
   },
