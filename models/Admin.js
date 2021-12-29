@@ -3,7 +3,7 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Admin extends Model {
 
-    static associate({ User, Permission, Role, Flag, Request, Point }) {
+    static associate({ User, Permission, Role, Flag, Request, Point, AdminPermission }) {
 
       this.belongsTo(User, {
         foreignKey: "admin_id",
@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsToMany(Permission, {
-        through: "admin_permissions",
+        through: AdminPermission,
         foreignKey: "admin_id",
         otherKey: "perm_id",
         onUpdate: 'CASCADE',

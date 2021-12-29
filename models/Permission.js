@@ -2,10 +2,10 @@
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Permission extends Model {
-    static associate({ Admin, Role }) {
+    static associate({ Admin, Role , AdminPermission}) {
 
       this.belongsToMany(Admin, {
-        through: "admin_permissions",
+        through: AdminPermission,
         foreignKey: "perm_id",
         otherKey: "admin_id",
         onUpdate: 'CASCADE',

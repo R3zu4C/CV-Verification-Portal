@@ -3,7 +3,7 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Organization extends Model {
 
-    static associate({ Role, Organization, Template, Point }) {
+    static associate({ Role, Organization, Template, Point, AdminPermission }) {
 
       this.hasMany(Role, {
         foreignKey: 'org_id',
@@ -13,6 +13,12 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasOne(Organization, {
         foreignKey: 'parent_org_id',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      });
+
+      this.hasMany(AdminPermission, {
+        foreignKey: 'org_id',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });
