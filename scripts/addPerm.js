@@ -5,33 +5,54 @@ const { sequelize, Permission, Role } = require("../models");
     // await sequelize.sync({ alter: true, force: true });
     console.log("Database Connected!");
 
+
+    /* 
+    Permission 1 is god level permissions
+    Permission from 101 to 200 are mini god level permission - like maybe for each org or like view personal rights
+    Permission from 201 to 300 are parentOrg level permissions
+    Permission from 301 to 400 are org level permissions
+    */
+
     await Permission.bulkCreate([
         {
-            name: "Add points - Organization",
+            name: "Add points",
+            perm_id: 301,
         },
         {
-            name: "Approve point - Organization",
+            name: "Approve point",
+            perm_id: 302,
         },
         {
-            name: "View flag - Organization",
+            name: "View flag",
+            perm_id: 303,
         },
         {
-            name: "Add role"
+            name: "Add role",
+            perm_id: 304,
         },
         {
-            name: "Approve flag - Organization"
+            name: "Approve flag",
+            perm_id: 305,
         },
         {
-            name: "View personal points"
+            name: "View requests",
+            perm_id: 306,
         },
         {
-            name: "View requests - Organization"
+            name: "Approve requests",
+            perm_id: 307,
         },
         {
-            name: "Approve requests - Organization"
+            name: "Change rigts",
+            perm_id: 308,
         },
         {
-            name: "Change rigts"
+            name: "All rights", //zero restriction access to everything
+            perm_id: 1
+        },
+        {
+            name: "View personal points",
+            perm_id: 101
         }
 
     ]);
@@ -40,8 +61,7 @@ const { sequelize, Permission, Role } = require("../models");
     let CC_admin = await Role.findByPk(100);
     let GH_admin = await Role.findByPk(101);
 
-    for (let i = 100; i < 109; i++) {
-        if(i === 105 ) continue;
+    for (let i = 301; i <= 308; i++) {
         await CC_admin.addPermission(i);
         await GH_admin.addPermission(i);
     }

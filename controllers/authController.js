@@ -20,26 +20,41 @@ module.exports = {
           include: ["Roles", "Permissions"],
         });
         if (admin) {
-          let permission = {};
-          permission["admin"] = admin.Permissions.map((permission) => {
+          let permission = {0: []};
+          admin.Permissions.forEach((_permission) => {
             let temp = {};
-            temp["name"] = permission.name;
-            temp["id"] = permission.perm_id;
-            return temp;
+            if (_permission.perm_id > 200) {
+              // permission[_permission.org_id] += _permission.perm_id; //TODO: add org level permissions
+            }
+            else {
+              permission[0].push(_permission.perm_id)
+            }
           });
           await Promise.all(
             admin.Roles.map(async (role) => {
+
+              if (!permission[role.org_id]) {
+                permission[role.org_id] = {};
+                permission[role.org_id]['perm'] = [];
+              }
+
               let perm = await role.getPermissions();
-              permission[role.name] = {};
-              permission[role.name]["perm"] = perm.map((permission) => {
-                let temp = {};
-                temp["name"] = permission.name;
-                temp["id"] = permission.perm_id;
-                return temp;
+
+              perm.forEach((_permission) => {
+                if(_permission.perm_id <= 200)
+                {
+                  if(!permission[0]['perm'].includes(_permission.perm_id))
+                    permission[0]['perm'].push(_permission.perm_id);
+                }
+                else if(!permission[role.org_id]['perm'].includes(_permission.perm_id))
+                  permission[role.org_id]['perm'].push(_permission.perm_id);
               });
-              permission[role.name]["role_id"] = role.role_id;
-              permission[role.name]["role_level"] = role.level;
-              permission[role.name]["org_id"] = role.org_id;
+
+              if (!permission[role.org_id]['role_level'])
+                permission[role.org_id]['role_level'] = role.level;
+              else
+                permission[role.org_id]['role_level'] = Math.min(permission[role.org_id]['role_level'], role.level);
+
             })
           );
           req.session.admin = permission;
@@ -60,7 +75,7 @@ module.exports = {
 
   status: async (req, res) => {
     let user_id = -1;
-    if(req.session.user) user_id = req.session.user.user_id;
+    if (req.session.user) user_id = req.session.user.user_id;
     const user = await User.findByPk(user_id, { include: "Flags" });
     const _admin = await Admin.findOne({
       where: {
@@ -93,9 +108,9 @@ module.exports = {
         })
       )
     }
-  
+
     const admin = permission;
-  
+
     res.send({ user, admin });
   }
 };
