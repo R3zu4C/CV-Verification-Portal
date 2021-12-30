@@ -23,7 +23,8 @@
     "dev": "nodemon app",
     "dev:mock": "node ./scripts/test",
     "dev:users": "node ./scripts/addAllUsers",
-    "dev:perm": "node ./scripts/addPerm"
+    "dev:perm": "node ./scripts/addPerm",
+    "dev:log": "node ./scripts/log.js"
   },
   "author": "",
   "license": "ISC",
