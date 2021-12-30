@@ -20,8 +20,8 @@ npm run dev:mock
 ```
 npm run dev:users
 ```
-3. Create all the tables in db
+3. Add permissions in db (run after npm run dev:mock)
 ```
-npm run dev:tables
+npm run dev:perm
 ```
 
