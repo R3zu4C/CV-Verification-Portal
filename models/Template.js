@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate({ Organization }) {
       
       this.belongsTo(Organization, {
-        foreignKey: 'org_tempate_id',
+        foreignKey: 'org_id',
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });
