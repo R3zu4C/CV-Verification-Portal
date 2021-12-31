@@ -1,5 +1,5 @@
 const { QueryTypes } = require("sequelize");
-const sequelize = require("../database/connection");
+const {sequelize} = require("../database/connection");
 
 module.exports = {
   searchPoint: async (req, res) => {

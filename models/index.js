@@ -8,7 +8,7 @@ const db = {}
 
 require("dotenv").config();
 
-const sequelize = require("../database/connection");
+const {sequelize} = require("../database/connection");
 
 fs.readdirSync(__dirname)
   .filter((file) => {

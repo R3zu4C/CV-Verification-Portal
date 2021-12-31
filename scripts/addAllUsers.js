@@ -3,7 +3,7 @@
 const fastcsv = require("fast-csv");
 const fs = require("fs");
 const {User }= require("../models");
-const sequelize = require("../database/connection");
+const {sequelize} = require("../database/connection");
 
 const addAllUsers = async () => {
   try {

@@ -1,10 +1,10 @@
-const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog } = require("../models/log");
-const { User, Admin, Role, Organization, Permission, sequelize } = require("../models");
+const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
+const { User, Admin, Role, Organization, Permission } = require("../models");
 
 (async () => {
     try {
-        await sequelize.authenticate();
-        await sequelize.sync({ alter: true });
+        await sequelizelog.authenticate();
+        await sequelizelog.sync({ alter: true });
         console.log("Database Connected!");
 
         const users = await User.findAll();
