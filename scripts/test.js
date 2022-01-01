@@ -1,11 +1,14 @@
 const { sequelize, User, Admin, Organization, Role, Permission } = require("../models");
-// const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
+const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
 
 (async () => {
   try {
     await sequelize.authenticate();
     await sequelize.sync({ alter: true, force: true });
     console.log("Main Database Connected!");
+    await sequelizelog.authenticate();
+    await sequelizelog.sync({ alter: true, force: true });
+    console.log("Logging Database connected!");
 
     await User.bulkCreate([
       {
@@ -138,8 +141,6 @@ const { sequelize, User, Admin, Organization, Role, Permission } = require("../m
   }
 
 
-  // await sequelizelog.authenticate();
-  // await sequelizelog.sync({ alter: true, force: true });
   // console.log("Logging Database Connected!");
 
   // const users = await User.findAll();

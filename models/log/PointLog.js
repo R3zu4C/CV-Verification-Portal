@@ -133,7 +133,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'PointLog',
       initialAutoIncrement: 100,
       tableName: "points_log",
-      indexes: [{ type: "FULLTEXT", name: "desc_idx", fields: ["description"] }],
+      indexes: [{ type: "FULLTEXT", name: "desc_idx", fields: ["description"] }, { unique: false, fields: ["point_id"] }],
     }
   );
   return PointLog;

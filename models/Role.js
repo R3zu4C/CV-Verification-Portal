@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         through: AdminRole,
         foreignKey: "role_id",
         otherKey: "admin_id",
+        targetKey: "admin_id",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       });

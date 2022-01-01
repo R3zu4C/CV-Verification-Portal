@@ -1,29 +1,38 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class RoleLog extends Model {
-    static associate({ AdminLog, PermissionLog, OrganizationLog, RoleAdminLog, RolePermissionLog }) {
-      
+    static associate({
+      AdminLog,
+      PermissionLog,
+      OrganizationLog,
+      AdminRoleLog,
+      RolePermissionLog,
+    }) {
       this.belongsTo(OrganizationLog, {
-        foreignKey: 'org_id',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        foreignKey: "org_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsToMany(PermissionLog, {
         through: RolePermissionLog,
         foreignKey: "role_id",
+        sourceKey: "role_id",
         otherKey: "perm_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        targetKey: "perm_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsToMany(AdminLog, {
-        through: RoleAdminLog,
+        through: AdminRoleLog,
         foreignKey: "role_id",
+        sourceKey: "role_id",
         otherKey: "admin_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        targetKey: "admin_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
     }
 
@@ -33,20 +42,22 @@ module.exports = (sequelize, DataTypes) => {
         name: Role.name,
         org_id: Role.org_id,
         level: Role.level,
-      })
+      });
     }
 
     static bulkCreateFromRole(Roles) {
-      return this.bulkCreate(Roles.map(Role => ({
-        role_id: Role.role_id,
-        name: Role.name,
-        org_id: Role.org_id,
-        level: Role.level,
-      })));
+      return this.bulkCreate(
+        Roles.map((Role) => ({
+          role_id: Role.role_id,
+          name: Role.name,
+          org_id: Role.org_id,
+          level: Role.level,
+        }))
+      );
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   RoleLog.init(
@@ -58,7 +69,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       role_id: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
       },
       name: {
         type: DataTypes.STRING(50),
@@ -71,9 +82,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'RoleLog',
+      modelName: "RoleLog",
       initialAutoIncrement: 100,
       tableName: "roles_log",
+      indexes: [{ unique: false, fields: ["role_id"] }],
     }
   );
   return RoleLog;

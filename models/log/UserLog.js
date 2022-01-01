@@ -80,7 +80,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       user_id: {
         type: DataTypes.STRING(50),
-        allowNull: false
+        allowNull: false,
       },
       roll_no: {
         type: DataTypes.STRING(50),
@@ -105,6 +105,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       tableName: 'users_log',
       modelName: 'UserLog',
+      indexes: [{ unique: false, fields: ["user_id"] }],
     }
   )
   return UserLog

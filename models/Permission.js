@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsToMany(Admin, {
         through: AdminPermission,
         foreignKey: "perm_id",
+        sourceKey: "perm_id",
         otherKey: "admin_id",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
@@ -16,6 +17,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsToMany(Role, {
         through: RolePermission,
         foreignKey: "perm_id",
+        sourceKey: "perm_id",
         otherKey: "role_id",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',

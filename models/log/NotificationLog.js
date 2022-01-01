@@ -91,6 +91,7 @@ module.exports = (sequelize, DataTypes) => {
       initialAutoIncrement: 100,
       tableName: "notifications_log",
       modelName: "NotificationLog",
+      indexes: [{ unique: false, fields: ["notif_id"] }],
     }
   );
   return NotificationLog;

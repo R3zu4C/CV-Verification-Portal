@@ -81,6 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       initialAutoIncrement: 100,
       tableName: "organizations_log",
       modelName: 'OrganizationLog',
+      indexes: [{ unique: false, fields: ["org_id"] }],
     }
   )
   return OrganizationLog

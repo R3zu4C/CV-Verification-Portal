@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsToMany(Role, {
         through: AdminRole,
         foreignKey: "admin_id",
+        sourceKey: "admin_id",
         otherKey: "role_id",
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',

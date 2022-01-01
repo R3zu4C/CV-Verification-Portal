@@ -80,6 +80,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'RequestLog',
       initialAutoIncrement: 100,
       tableName: "requests_log",
+      indexes: [{ unique: false, fields: ["req_id"] }],
     }
   );
   return RequestLog;
