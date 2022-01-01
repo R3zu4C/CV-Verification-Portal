@@ -1,4 +1,5 @@
 'use strict';
+const { NotificationLog } = require('./log');
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Notification extends Model {
@@ -53,6 +54,15 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        afterCreate: (notification, options) => NotificationLog.createFromNotification(notification),
+        afterUpdate: (notification, options) => NotificationLog.createFromNotification(notification),
+        beforeDestroy: (notification, options) => NotificationLog.createFromNotification(notification),
+        afterBulkCreate: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications),
+        afterBulkUpdate: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications),
+        beforeBulkDestroy: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications),
+      },
+
       sequelize,
       initialAutoIncrement: 100,
       tableName: "notifications",

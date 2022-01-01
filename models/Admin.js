@@ -1,9 +1,11 @@
 'use strict'
 const { Model } = require('sequelize')
+const {AdminLog} = require("./log")
+
 module.exports = (sequelize, DataTypes) => {
   class Admin extends Model {
 
-    static associate({ User, Permission, Role, Flag, Request, Point, AdminPermission }) {
+    static associate({ User, Permission, Role, Flag, Request, Point, AdminPermission, AdminRole }) {
 
       this.belongsTo(User, {
         foreignKey: "admin_id",
@@ -20,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsToMany(Role, {
-        through: "role_admin",
+        through: AdminRole,
         foreignKey: "admin_id",
         otherKey: "role_id",
         onUpdate: 'CASCADE',
@@ -62,6 +64,14 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        afterBulkCreate: (admins, options) => AdminLog.bulkCreateFromAdmin(admins),
+        beforeBulkDestroy: (admins, options) => AdminLog.bulkCreateFromAdmin(admins),
+        afterBulkUpdate: (admins, options) => AdminLog.bulkCreateFromAdmin(admins),
+        afterCreate: (admin, options) => AdminLog.createFromAdmin(admin),
+        beforeDestroy: (admin, options) => AdminLog.createFromAdmin(admin),
+        afterUpdate: (admin, options) => AdminLog.createFromAdmin(admin),
+      },
       sequelize,
       tableName: 'admins',
       initialAutoIncrement: 100,

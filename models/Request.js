@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { RequestLog} = require("./log");
 module.exports = (sequelize, DataTypes) => {
   class Request extends Model {
     static associate({ Notification, User, Point, Admin }) {
@@ -50,6 +51,16 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks:
+      {
+        afterCreate: (request, options) => RequestLog.createFromRequest(request),
+        afterUpdate: (request, options) => RequestLog.createFromRequest(request),
+        beforeDestroy: (request, options) => RequestLog.createFromRequest(request),
+        afterBulkCreate: (requests, options) => RequestLog.bulkCreateFromRequest(requests),
+        afterBulkUpdate: (requests, options) => RequestLog.bulkCreateFromRequest(requests),
+        beforeBulkDestroy: (requests, options) => RequestLog.bulkCreateFromRequest(requests),
+      },
+      
       sequelize,
       modelName: 'Request',
       initialAutoIncrement: 100,

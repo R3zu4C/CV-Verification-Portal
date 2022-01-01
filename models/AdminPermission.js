@@ -1,4 +1,5 @@
 'use strict';
+const {AdminPermissionLog} = require('./log')
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class AdminPermission extends Model {
@@ -16,9 +17,16 @@ module.exports = (sequelize, DataTypes) => {
     }
     AdminPermission.init(
         {
-            // timePass: DataTypes.INTEGER
         },
         {
+            hooks:{
+                afterCreate: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission),
+                afterUpdate: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission),
+                beforeDestroy: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission),
+                afterBulkCreate: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions),
+                afterBulkUpdate: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions),
+                beforeBulkDestroy: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions),
+            },
             sequelize,
             modelName: 'AdminPermission',
             // initialAutoIncrement: 100,

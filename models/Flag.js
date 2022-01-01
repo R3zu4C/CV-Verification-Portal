@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const { FlagLog } = require('./log');
 module.exports = (sequelize, DataTypes) => {
   class Flag extends Model {
     static associate({ Admin, User, Point, Notification }) {
@@ -51,6 +52,14 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        afterCreate: (flag, options) => FlagLog.createFromFlag(flag),
+        afterUpdate: (flag, options) => FlagLog.createFromFlag(flag),
+        beforeDestroy: (flag, options) => FlagLog.createFromFlag(flag),
+        afterBulkCreate: (flags, options) => FlagLog.bulkCreateFromFlag(flags),
+        afterBulkUpdate: (flags, options) => FlagLog.bulkCreateFromFlag(flags),
+        beforeBulkDestroy: (flags, options) => FlagLog.bulkCreateFromFlag(flags),
+      },
       sequelize,
       initialAutoIncrement: 100,
       tableName: 'flags',

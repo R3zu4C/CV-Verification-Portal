@@ -1,8 +1,9 @@
 'use strict';
 const { Model } = require('sequelize');
+const {PermissionLog} = require('./log');
 module.exports = (sequelize, DataTypes) => {
   class Permission extends Model {
-    static associate({ Admin, Role , AdminPermission}) {
+    static associate({ Admin, Role , AdminPermission, RolePermission}) {
 
       this.belongsToMany(Admin, {
         through: AdminPermission,
@@ -13,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsToMany(Role, {
-        through: "role_permission",
+        through: RolePermission,
         foreignKey: "perm_id",
         otherKey: "role_id",
         onUpdate: 'CASCADE',
@@ -38,6 +39,15 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        afterBulkCreate: (perms, options) => PermissionLog.bulkCreateFromPermission(perms),
+        beforeBulkDestroy: (perms, options) => PermissionLog.bulkCreateFromPermission(perms),
+        afterBulkUpdate: (perms, options) => PermissionLog.bulkCreateFromPermission(perms),
+        afterCreate: (perm, options) => PermissionLog.createFromPermission(perm),
+        afterUpdate: (perm, options) => PermissionLog.createFromPermission(perm),
+        beforeDestroy: (perm, options) => PermissionLog.createFromPermission(perm),
+      },
+      
       sequelize,
       modelName: 'Permission',
       initialAutoIncrement: 100,

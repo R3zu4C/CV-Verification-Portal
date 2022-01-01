@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasOne(AdminLog, {
         foreignKey: "admin_id",
+        sourceKey: "user_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });

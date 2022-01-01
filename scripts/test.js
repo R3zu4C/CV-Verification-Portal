@@ -1,153 +1,158 @@
 const { sequelize, User, Admin, Organization, Role, Permission } = require("../models");
-const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
+// const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
 
 (async () => {
-  await sequelize.authenticate();
-  await sequelize.sync({ alter: true, force: true });
-  console.log("Main Database Connected!");
+  try {
+    await sequelize.authenticate();
+    await sequelize.sync({ alter: true, force: true });
+    console.log("Main Database Connected!");
 
-  await User.bulkCreate([
-    {
-      roll_no: "200123008",
-      name: "Ankush Patanwal",
-      branch: "MnC",
-      user_id: "a.patanwal@iitg.ac.in",
-    },
-    {
-      roll_no: "190101090",
-      name: "Swapnil Srivastava",
-      branch: "CSE",
-      user_id: "s.swapnil@iitg.ac.in",
-    },
-    {
-      roll_no: "200123007",
-      name: "Aman Kumar",
-      branch: "MnC",
-      user_id: "aman200123007@iitg.ac.in",
-    },
-  ]);
+    await User.bulkCreate([
+      {
+        roll_no: "200123008",
+        name: "Ankush Patanwal",
+        branch: "MnC",
+        user_id: "a.patanwal@iitg.ac.in",
+      },
+      {
+        roll_no: "190101090",
+        name: "Swapnil Srivastava",
+        branch: "CSE",
+        user_id: "s.swapnil@iitg.ac.in",
+      },
+      {
+        roll_no: "200123007",
+        name: "Aman Kumar",
+        branch: "MnC",
+        user_id: "aman200123007@iitg.ac.in",
+      },
+    ]);
 
-  await Organization.bulkCreate([
-    { name: "Coding Club" },
-    { name: "Go Home Club" },
-  ]);
+    await Organization.bulkCreate([
+      { name: "Coding Club" },
+      { name: "Go Home Club" },
+    ]);
 
-  await Role.bulkCreate([
-    {
-      name: "Coding Club Admin",
-      level: 1,
-      org_id: 100,
-    },
-    {
-      name: "Go Home Club Admin",
-      level: 1,
-      org_id: 101,
-    },
-  ]);
+    await Role.bulkCreate([
+      {
+        name: "Coding Club Admin",
+        level: 1,
+        org_id: 100,
+      },
+      {
+        name: "Go Home Club Admin",
+        level: 1,
+        org_id: 101,
+      },
+    ]);
 
-  await Admin.bulkCreate([
-    { admin_id: "s.swapnil@iitg.ac.in" },
-    { admin_id: "a.patanwal@iitg.ac.in" },
-    { admin_id: "aman200123007@iitg.ac.in" },
-  ]);
+    await Admin.bulkCreate([
+      { admin_id: "s.swapnil@iitg.ac.in" },
+      { admin_id: "a.patanwal@iitg.ac.in" },
+      { admin_id: "aman200123007@iitg.ac.in" },
+    ]);
 
-  console.log("Mock data added successfully.");
+    console.log("Mock data added successfully.");
 
-  const CodingClubRole = await Role.findByPk(100);
-  const GoHomeClubRole = await Role.findByPk(101);
+    const CodingClubRole = await Role.findByPk(100);
+    const GoHomeClubRole = await Role.findByPk(101);
 
-  const SwapnilAdmin = await Admin.findOne({
-    where: { admin_id: "s.swapnil@iitg.ac.in" },
-  });
-  const SwapnilUser = await User.findByPk("s.swapnil@iitg.ac.in");
-  const AnkushAdmin = await Admin.findOne({
-    where: { admin_id: "a.patanwal@iitg.ac.in" },
-  });
-  const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
-  const AmanAdmin = await Admin.findOne({
-    where: { admin_id: "aman200123007@iitg.ac.in" },
-  });
-  const AmanUser = await User.findByPk("aman200123007@iitg.ac.in");
+    const SwapnilAdmin = await Admin.findOne({
+      where: { admin_id: "s.swapnil@iitg.ac.in" },
+    });
+    const SwapnilUser = await User.findByPk("s.swapnil@iitg.ac.in");
+    const AnkushAdmin = await Admin.findOne({
+      where: { admin_id: "a.patanwal@iitg.ac.in" },
+    });
+    const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
+    const AmanAdmin = await Admin.findOne({
+      where: { admin_id: "aman200123007@iitg.ac.in" },
+    });
+    const AmanUser = await User.findByPk("aman200123007@iitg.ac.in");
 
-  await AmanAdmin.setUser(AmanUser);
-  await SwapnilAdmin.setUser(SwapnilUser);
-  await AnkushAdmin.setUser(AnkushUser);
+    await AmanAdmin.setUser(AmanUser);
+    await SwapnilAdmin.setUser(SwapnilUser);
+    await AnkushAdmin.setUser(AnkushUser);
 
-  await CodingClubRole.addAdmin(SwapnilAdmin);
-  await GoHomeClubRole.addAdmin(AnkushAdmin);
-  await CodingClubRole.addAdmin(AmanAdmin);
-  await GoHomeClubRole.addAdmin(AmanAdmin);
+    await CodingClubRole.addAdmin(SwapnilAdmin);
+    await GoHomeClubRole.addAdmin(AnkushAdmin);
+    await CodingClubRole.addAdmin(AmanAdmin);
+    await GoHomeClubRole.addAdmin(AmanAdmin);
 
-  console.log("Roles assigned successfully.");
+    console.log("Roles assigned successfully.");
 
-  await Permission.bulkCreate([
-    {
-      name: "Add points",
-      perm_id: 301,
-    },
-    {
-      name: "Approve point",
-      perm_id: 302,
-    },
-    {
-      name: "View flag",
-      perm_id: 303,
-    },
-    {
-      name: "Add role",
-      perm_id: 304,
-    },
-    {
-      name: "Approve flag",
-      perm_id: 305,
-    },
-    {
-      name: "View requests",
-      perm_id: 306,
-    },
-    {
-      name: "Approve requests",
-      perm_id: 307,
-    },
-    {
-      name: "Change rigts",
-      perm_id: 308,
-    },
-    {
-      name: "All rights", //zero restriction access to everything
-      perm_id: 1,
-    },
-    {
-      name: "View personal points",
-      perm_id: 101,
-    },
-  ]);
-  console.log("Permissions added to db!");
+    await Permission.bulkCreate([
+      {
+        name: "Add points",
+        perm_id: 301,
+      },
+      {
+        name: "Approve point",
+        perm_id: 302,
+      },
+      {
+        name: "View flag",
+        perm_id: 303,
+      },
+      {
+        name: "Add role",
+        perm_id: 304,
+      },
+      {
+        name: "Approve flag",
+        perm_id: 305,
+      },
+      {
+        name: "View requests",
+        perm_id: 306,
+      },
+      {
+        name: "Approve requests",
+        perm_id: 307,
+      },
+      {
+        name: "Change rigts",
+        perm_id: 308,
+      },
+      {
+        name: "All rights", //zero restriction access to everything
+        perm_id: 1,
+      },
+      {
+        name: "View personal points",
+        perm_id: 101,
+      },
+    ]);
+    console.log("Permissions added to db!");
 
-  let CC_admin = await Role.findByPk(100);
-  let GH_admin = await Role.findByPk(101);
+    let CC_admin = await Role.findByPk(100);
+    let GH_admin = await Role.findByPk(101);
 
-  for (let i = 301; i <= 308; i++) {
-    await CC_admin.addPermission(i);
-    await GH_admin.addPermission(i);
+    for (let i = 301; i <= 308; i++) {
+      await CC_admin.addPermission(i);
+      await GH_admin.addPermission(i);
+    }
+    console.log("Permissions added to roles!");
+  } catch (e) {
+    console.log(e);
   }
-  console.log("Permissions added to roles!");
 
-  await sequelizelog.authenticate();
-  await sequelizelog.sync({ alter: true, force: true });
-  console.log("Logging Database Connected!");
 
-  const users = await User.findAll();
-  const admins = await Admin.findAll();
-  const roles = await Role.findAll();
-  const orgs = await Organization.findAll();
-  const perms = await Permission.findAll();
+  // await sequelizelog.authenticate();
+  // await sequelizelog.sync({ alter: true, force: true });
+  // console.log("Logging Database Connected!");
 
-  await UserLog.bulkCreateFromUser(users);
-  await AdminLog.bulkCreateFromAdmin(admins);
-  await OrganizationLog.bulkCreateFromOrganization(orgs);
-  await RoleLog.bulkCreateFromRole(roles);
-  await PermissionLog.bulkCreateFromPermission(perms);
+  // const users = await User.findAll();
+  // const admins = await Admin.findAll();
+  // const roles = await Role.findAll();
+  // const orgs = await Organization.findAll();
+  // const perms = await Permission.findAll();
 
-  console.log("Log tables added");
+  // await UserLog.bulkCreateFromUser(users);
+  // await AdminLog.bulkCreateFromAdmin(admins);
+  // await OrganizationLog.bulkCreateFromOrganization(orgs);
+  // await RoleLog.bulkCreateFromRole(roles);
+  // await PermissionLog.bulkCreateFromPermission(perms);
+
+  // console.log("Log tables added");
 })();

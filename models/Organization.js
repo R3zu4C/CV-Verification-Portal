@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize')
+const { OrganizationLog } = require('./log');
 module.exports = (sequelize, DataTypes) => {
   class Organization extends Model {
 
@@ -57,6 +58,15 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {  // 定义钩子函数
+        afterCreate: (org, options) => OrganizationLog.createFromOrganization(org),
+        afterUpdate: (org, options) => OrganizationLog.createFromOrganization(org),
+        beforeDestroy: (org, options) => OrganizationLog.createFromOrganization(org),
+        afterBulkCreate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs),
+        beforeBulkDestroy: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs),
+        afterBulkUpdate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs)
+      },
+
       sequelize,
       initialAutoIncrement: 100,
       tableName: "organizations",

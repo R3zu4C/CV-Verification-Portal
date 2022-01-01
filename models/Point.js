@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const {PointLog } = require('./log');
 module.exports = (sequelize, DataTypes) => {
   class Point extends Model {
     static associate({ Flag, Notification, Request, User, Organization, Admin }) {
@@ -90,6 +91,15 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        afterCreate: (point, options) => PointLog.createFromPoint(point),
+        afterUpdate: (point, options) => PointLog.createFromPoint(point),
+        beforeDestroy: (point, options) => PointLog.createFromPoint(point),
+        afterBulkCreate: (points, options) => PointLog.bulkCreateFromPoint(points),
+        afterBulkUpdate: (points, options) => PointLog.bulkCreateFromPoint(points),
+        beforeBulkDestroy: (points, options) => PointLog.bulkCreateFromPoint(points),
+      },
+      
       sequelize,
       modelName: 'Point',
       initialAutoIncrement: 100,
