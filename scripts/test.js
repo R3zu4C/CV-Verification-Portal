@@ -1,9 +1,10 @@
-const { sequelize, User, Admin, Organization, Role } = require("../models");
+const { sequelize, User, Admin, Organization, Role, Permission } = require("../models");
+const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
 
 (async () => {
   await sequelize.authenticate();
   await sequelize.sync({ alter: true, force: true });
-  console.log("Database Connected!");
+  console.log("Main Database Connected!");
 
   await User.bulkCreate([
     {
@@ -47,7 +48,7 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
   await Admin.bulkCreate([
     { admin_id: "s.swapnil@iitg.ac.in" },
     { admin_id: "a.patanwal@iitg.ac.in" },
-    { admin_id: "aman200123007@iitg.ac.in"}
+    { admin_id: "aman200123007@iitg.ac.in" },
   ]);
 
   console.log("Mock data added successfully.");
@@ -55,11 +56,17 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
   const CodingClubRole = await Role.findByPk(100);
   const GoHomeClubRole = await Role.findByPk(101);
 
-  const SwapnilAdmin = await Admin.findOne({ where: { admin_id: "s.swapnil@iitg.ac.in" }});
+  const SwapnilAdmin = await Admin.findOne({
+    where: { admin_id: "s.swapnil@iitg.ac.in" },
+  });
   const SwapnilUser = await User.findByPk("s.swapnil@iitg.ac.in");
-  const AnkushAdmin = await Admin.findOne({ where: { admin_id: "a.patanwal@iitg.ac.in"}});
+  const AnkushAdmin = await Admin.findOne({
+    where: { admin_id: "a.patanwal@iitg.ac.in" },
+  });
   const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
-  const AmanAdmin = await Admin.findOne({ where: { admin_id: "aman200123007@iitg.ac.in"}});
+  const AmanAdmin = await Admin.findOne({
+    where: { admin_id: "aman200123007@iitg.ac.in" },
+  });
   const AmanUser = await User.findByPk("aman200123007@iitg.ac.in");
 
   await AmanAdmin.setUser(AmanUser);
@@ -73,7 +80,74 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
 
   console.log("Roles assigned successfully.");
 
-  const k = await AnkushAdmin.getRoles();
-  console.log(JSON.stringify(k));
+  await Permission.bulkCreate([
+    {
+      name: "Add points",
+      perm_id: 301,
+    },
+    {
+      name: "Approve point",
+      perm_id: 302,
+    },
+    {
+      name: "View flag",
+      perm_id: 303,
+    },
+    {
+      name: "Add role",
+      perm_id: 304,
+    },
+    {
+      name: "Approve flag",
+      perm_id: 305,
+    },
+    {
+      name: "View requests",
+      perm_id: 306,
+    },
+    {
+      name: "Approve requests",
+      perm_id: 307,
+    },
+    {
+      name: "Change rigts",
+      perm_id: 308,
+    },
+    {
+      name: "All rights", //zero restriction access to everything
+      perm_id: 1,
+    },
+    {
+      name: "View personal points",
+      perm_id: 101,
+    },
+  ]);
+  console.log("Permissions added to db!");
 
+  let CC_admin = await Role.findByPk(100);
+  let GH_admin = await Role.findByPk(101);
+
+  for (let i = 301; i <= 308; i++) {
+    await CC_admin.addPermission(i);
+    await GH_admin.addPermission(i);
+  }
+  console.log("Permissions added to roles!");
+
+  await sequelizelog.authenticate();
+  await sequelizelog.sync({ alter: true, force: true });
+  console.log("Logging Database Connected!");
+
+  const users = await User.findAll();
+  const admins = await Admin.findAll();
+  const roles = await Role.findAll();
+  const orgs = await Organization.findAll();
+  const perms = await Permission.findAll();
+
+  await UserLog.bulkCreateFromUser(users);
+  await AdminLog.bulkCreateFromAdmin(admins);
+  await OrganizationLog.bulkCreateFromOrganization(orgs);
+  await RoleLog.bulkCreateFromRole(roles);
+  await PermissionLog.bulkCreateFromPermission(perms);
+
+  console.log("Log tables added");
 })();
