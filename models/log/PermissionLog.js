@@ -24,18 +24,20 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromPermission(Permission) {
+    static createFromPermission(Permission, action) {
       return this.create({
         perm_id: Permission.perm_id,
         name: Permission.name,
+        action: action,
       });
     }
 
-    static bulkCreateFromPermission(Permissions) {
+    static bulkCreateFromPermission(Permissions, action) {
       return this.bulkCreate(
         Permissions.map((Permission) => ({
           perm_id: Permission.perm_id,
           name: Permission.name,
+          action: action
         }))
       );
     }
@@ -50,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       perm_id: {
         type: DataTypes.INTEGER,

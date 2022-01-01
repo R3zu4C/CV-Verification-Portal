@@ -41,19 +41,21 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromOrganization(Organization) {
+    static createFromOrganization(Organization, action) {
       return this.create({
         org_id: Organization.org_id,
         name: Organization.name,
         parent_org_id: Organization.parent_org_id,
+        action: action,
       })
     }
 
-    static bulkCreateFromOrganization(Organizations) {
+    static bulkCreateFromOrganization(Organizations, action) {
       return this.bulkCreate(Organizations.map(Organization => ({
         org_id: Organization.org_id,
         name: Organization.name,
         parent_org_id: Organization.parent_org_id,
+        action: action
       })));
     }
 
@@ -67,6 +69,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       org_id: {
         type: DataTypes.INTEGER,

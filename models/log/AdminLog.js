@@ -61,18 +61,20 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromAdmin(Admin) {
+    static createFromAdmin(Admin, action) {
       return this.create({
         _id: Admin._id,
         admin_id: Admin.admin_id,
+        action: action,
       });
     }
 
-    static bulkCreateFromAdmin(Admins) {
+    static bulkCreateFromAdmin(Admins, action) {
       return this.bulkCreate(
         Admins.map((Admin) => ({
           _id: Admin._id,
           admin_id: Admin.admin_id,
+          action: action,
         }))
       );
     }
@@ -92,6 +94,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
+      }
     },
     {
       sequelize,

@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             hooks: {
-                afterCreate: (rolePermission, options) => RolePermissionLog.createFromRolePermission(rolePermission),
-                afterUpdate: (rolePermission, options) => RolePermissionLog.createFromRolePermission(rolePermission),
-                beforeDestroy: (rolePermission, options) => RolePermissionLog.createFromRolePermission(rolePermission),
-                afterBulkCreate: (rolePermissions, options) => RolePermissionLog.bulkCreateFromRolePermission(rolePermissions),
-                beforeBulkDestroy: (rolePermissions, options) => RolePermissionLog.bulkCreateFromRolePermission(rolePermissions),
-                afterBulkUpdate: (rolePermissions, options) => RolePermissionLog.bulkCreateFromRolePermission(rolePermissions)
+                afterCreate: (rolePermission, options) => RolePermissionLog.createFromRolePermission(rolePermission, 'C'),
+                afterUpdate: (rolePermission, options) => RolePermissionLog.createFromRolePermission(rolePermission, 'U'),
+                beforeDestroy: (rolePermission, options) => RolePermissionLog.createFromRolePermission(rolePermission, 'D'),
+                afterBulkCreate: (rolePermissions, options) => RolePermissionLog.bulkCreateFromRolePermission(rolePermissions, 'C'),
+                beforeBulkDestroy: (rolePermissions, options) => RolePermissionLog.bulkCreateFromRolePermission(rolePermissions, 'D'),
+                afterBulkUpdate: (rolePermissions, options) => RolePermissionLog.bulkCreateFromRolePermission(rolePermissions, 'U')
             },
 
             sequelize,

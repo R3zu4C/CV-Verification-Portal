@@ -36,22 +36,24 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromRole(Role) {
+    static createFromRole(Role, action) {
       return this.create({
         role_id: Role.role_id,
         name: Role.name,
         org_id: Role.org_id,
         level: Role.level,
+        action: action
       });
     }
 
-    static bulkCreateFromRole(Roles) {
+    static bulkCreateFromRole(Roles, action) {
       return this.bulkCreate(
         Roles.map((Role) => ({
           role_id: Role.role_id,
           name: Role.name,
           org_id: Role.org_id,
           level: Role.level,
+          action: action,
         }))
       );
     }
@@ -66,6 +68,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       role_id: {
         type: DataTypes.INTEGER,

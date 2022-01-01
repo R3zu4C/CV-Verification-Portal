@@ -29,17 +29,18 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromFlag(Flag) {
+    static createFromFlag(Flag, action) {
       return this.create({
         flag_id: Flag.flag_id,
         flagged_by: Flag.flagged_by,
         approved_by: Flag.approved_by,
         point_id: Flag.point_id,
         status: Flag.status,
+        action: action,
       });
     }
 
-    static bulkCreateFromFlag(Flags) {
+    static bulkCreateFromFlag(Flags, action) {
       return this.bulkCreate(
         Flags.map((Flag) => ({
           flag_id: Flag.flag_id,
@@ -47,6 +48,7 @@ module.exports = (sequelize, DataTypes) => {
           approved_by: Flag.approved_by,
           point_id: Flag.point_id,
           status: Flag.status,
+          action: action
         }))
       );
     }
@@ -61,6 +63,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       flag_id: {
         type: DataTypes.INTEGER,

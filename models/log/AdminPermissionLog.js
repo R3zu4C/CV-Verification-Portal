@@ -10,20 +10,22 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromAdminPermission(AdminPermission) {
+    static createFromAdminPermission(AdminPermission, action) {
       return this.create({
         admin_id: AdminPermission.admin_id,
         perm_id: AdminPermission.perm_id,
         org_id: AdminPermission.org_id,
+        action: action,
       });
     }
 
-    static bulkCreateFromAdminPermission(AdminPermissions) {
+    static bulkCreateFromAdminPermission(AdminPermissions, action) {
       return this.bulkCreate(
         AdminPermissions.map((AdminPermission) => ({
           admin_id: AdminPermission.admin_id,
           perm_id: AdminPermission.perm_id,
           org_id: AdminPermission.org_id,
+          action: action,
         }))
       );
     }
@@ -39,6 +41,10 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
+      }
     },
     {
       sequelize,

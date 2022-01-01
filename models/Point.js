@@ -92,12 +92,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterCreate: (point, options) => PointLog.createFromPoint(point),
-        afterUpdate: (point, options) => PointLog.createFromPoint(point),
-        beforeDestroy: (point, options) => PointLog.createFromPoint(point),
-        afterBulkCreate: (points, options) => PointLog.bulkCreateFromPoint(points),
-        afterBulkUpdate: (points, options) => PointLog.bulkCreateFromPoint(points),
-        beforeBulkDestroy: (points, options) => PointLog.bulkCreateFromPoint(points),
+        afterCreate: (point, options) => PointLog.createFromPoint(point, 'C'),
+        afterUpdate: (point, options) => PointLog.createFromPoint(point, 'U'),
+        beforeDestroy: (point, options) => PointLog.createFromPoint(point, 'D'),
+        afterBulkCreate: (points, options) => PointLog.bulkCreateFromPoint(points, 'C'),
+        afterBulkUpdate: (points, options) => PointLog.bulkCreateFromPoint(points, 'U'),
+        beforeBulkDestroy: (points, options) => PointLog.bulkCreateFromPoint(points, 'D'),
       },
       
       sequelize,

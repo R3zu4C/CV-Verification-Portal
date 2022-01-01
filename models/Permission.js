@@ -42,12 +42,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterBulkCreate: (perms, options) => PermissionLog.bulkCreateFromPermission(perms),
-        beforeBulkDestroy: (perms, options) => PermissionLog.bulkCreateFromPermission(perms),
-        afterBulkUpdate: (perms, options) => PermissionLog.bulkCreateFromPermission(perms),
-        afterCreate: (perm, options) => PermissionLog.createFromPermission(perm),
-        afterUpdate: (perm, options) => PermissionLog.createFromPermission(perm),
-        beforeDestroy: (perm, options) => PermissionLog.createFromPermission(perm),
+        afterBulkCreate: (perms, options) => PermissionLog.bulkCreateFromPermission(perms, 'C'),
+        beforeBulkDestroy: (perms, options) => PermissionLog.bulkCreateFromPermission(perms, 'D'),
+        afterBulkUpdate: (perms, options) => PermissionLog.bulkCreateFromPermission(perms, 'U'),
+        afterCreate: (perm, options) => PermissionLog.createFromPermission(perm, 'C'),
+        afterUpdate: (perm, options) => PermissionLog.createFromPermission(perm, 'U'),
+        beforeDestroy: (perm, options) => PermissionLog.createFromPermission(perm, 'D'),
       },
       
       sequelize,

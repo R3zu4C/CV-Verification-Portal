@@ -48,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       return { ...this.get(), id: undefined }
     }
 
-    static createFromUser(User) {
+    static createFromUser(User, action) {
       return this.create({
         roll_no: User.roll_no,
         name: User.name,
@@ -56,10 +56,11 @@ module.exports = (sequelize, DataTypes) => {
         user_id: User.user_id,
         mobile_no: User.mobile_no,
         program: User.program,
+        action: action
       })
     }
 
-    static bulkCreateFromUser(Users) {
+    static bulkCreateFromUser(Users, action) {
       return this.bulkCreate(Users.map(User => ({
         roll_no: User.roll_no,
         name: User.name,
@@ -67,6 +68,7 @@ module.exports = (sequelize, DataTypes) => {
         user_id: User.user_id,
         mobile_no: User.mobile_no,
         program: User.program,
+        action: action
       })))
     }
   }
@@ -77,6 +79,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       user_id: {
         type: DataTypes.STRING(50),

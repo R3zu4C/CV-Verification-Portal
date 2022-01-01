@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 
     }
 
-    static createFromNotification(Notification) {
+    static createFromNotification(Notification, action) {
       return this.create({
         notif_to: Notification.notif_to,
         flag_id: Notification.flag_id,
@@ -33,10 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         type: Notification.type,
         user_type: Notification.user_type,
         seen: Notification.seen,
+        action: action
       })
     }
 
-    static bulkCreateFromNotification(Notifications) {
+    static bulkCreateFromNotification(Notifications, action) {
       return this.bulkCreate(Notifications.map(Notification => ({
         notif_to: Notification.notif_to,
         flag_id: Notification.flag_id,
@@ -48,6 +49,7 @@ module.exports = (sequelize, DataTypes) => {
         type: Notification.type,
         user_type: Notification.user_type,
         seen: Notification.seen,
+        action: action
       })))
     }
 
@@ -61,6 +63,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       notif_id: {
         type: DataTypes.INTEGER,

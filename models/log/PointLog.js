@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromPoint(Point) {
+    static createFromPoint(Point, action) {
       return this.create({
         point_id: Point.point_id,
         user_id: Point.user_id,
@@ -58,10 +58,11 @@ module.exports = (sequelize, DataTypes) => {
         visibility: Point.visibility,
         proof_link: Point.proof_link,
         added_by: Point.added_by,
+        action: action,
       })
     }
 
-    static bulkCreateFromPoint(Points) {
+    static bulkCreateFromPoint(Points, action) {
       return this.bulkCreate(Points.map(Point => ({
         point_id: Point.point_id,
         user_id: Point.user_id,
@@ -76,6 +77,7 @@ module.exports = (sequelize, DataTypes) => {
         visibility: Point.visibility,
         proof_link: Point.proof_link,
         added_by: Point.added_by,
+        action: action,
       })))
     }
 
@@ -89,6 +91,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       point_id: {
         type: DataTypes.INTEGER,

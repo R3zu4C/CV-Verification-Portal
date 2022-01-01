@@ -53,12 +53,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterCreate: (flag, options) => FlagLog.createFromFlag(flag),
-        afterUpdate: (flag, options) => FlagLog.createFromFlag(flag),
-        beforeDestroy: (flag, options) => FlagLog.createFromFlag(flag),
-        afterBulkCreate: (flags, options) => FlagLog.bulkCreateFromFlag(flags),
-        afterBulkUpdate: (flags, options) => FlagLog.bulkCreateFromFlag(flags),
-        beforeBulkDestroy: (flags, options) => FlagLog.bulkCreateFromFlag(flags),
+        afterCreate: (flag, options) => FlagLog.createFromFlag(flag, 'C'),
+        afterUpdate: (flag, options) => FlagLog.createFromFlag(flag, 'U'),
+        beforeDestroy: (flag, options) => FlagLog.createFromFlag(flag, 'D'),
+        afterBulkCreate: (flags, options) => FlagLog.bulkCreateFromFlag(flags, 'C'),
+        afterBulkUpdate: (flags, options) => FlagLog.bulkCreateFromFlag(flags, 'U'),
+        beforeBulkDestroy: (flags, options) => FlagLog.bulkCreateFromFlag(flags, 'D'),
       },
       sequelize,
       initialAutoIncrement: 100,

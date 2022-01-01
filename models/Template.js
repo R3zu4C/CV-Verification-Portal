@@ -33,12 +33,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterBulkCreate: (templates, options) => TemplateLog.bulkCreateFromTemplate(templates),
-        afterBulkUpdate: (templates, options) => TemplateLog.bulkCreateFromTemplate(templates),
-        beforeBulkDestroy: (templates, options) => TemplateLog.bulkCreateFromTemplate(templates),
-        afterCreate: (template, options) => TemplateLog.createFromTemplate(template),
-        afterUpdate: (template, options) => TemplateLog.createFromTemplate(template),
-        beforeDestroy: (template, options) => TemplateLog.createFromTemplate(template),
+        afterBulkCreate: (templates, options) => TemplateLog.bulkCreateFromTemplate(templates, 'C'),
+        afterBulkUpdate: (templates, options) => TemplateLog.bulkCreateFromTemplate(templates, 'U'),
+        beforeBulkDestroy: (templates, options) => TemplateLog.bulkCreateFromTemplate(templates, 'D'),
+        afterCreate: (template, options) => TemplateLog.createFromTemplate(template, 'C'),
+        afterUpdate: (template, options) => TemplateLog.createFromTemplate(template, 'U'),
+        beforeDestroy: (template, options) => TemplateLog.createFromTemplate(template, 'D'),
       },
       
       sequelize,

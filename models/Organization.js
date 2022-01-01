@@ -59,12 +59,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {  // 定义钩子函数
-        afterCreate: (org, options) => OrganizationLog.createFromOrganization(org),
-        afterUpdate: (org, options) => OrganizationLog.createFromOrganization(org),
-        beforeDestroy: (org, options) => OrganizationLog.createFromOrganization(org),
-        afterBulkCreate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs),
-        beforeBulkDestroy: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs),
-        afterBulkUpdate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs)
+        afterCreate: (org, options) => OrganizationLog.createFromOrganization(org, 'C'),
+        afterUpdate: (org, options) => OrganizationLog.createFromOrganization(org, 'U'),
+        beforeDestroy: (org, options) => OrganizationLog.createFromOrganization(org, 'D'),
+        afterBulkCreate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs, 'C'),
+        beforeBulkDestroy: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs, 'D'),
+        afterBulkUpdate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs, 'U'),
       },
 
       sequelize,

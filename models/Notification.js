@@ -55,12 +55,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterCreate: (notification, options) => NotificationLog.createFromNotification(notification),
-        afterUpdate: (notification, options) => NotificationLog.createFromNotification(notification),
-        beforeDestroy: (notification, options) => NotificationLog.createFromNotification(notification),
-        afterBulkCreate: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications),
-        afterBulkUpdate: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications),
-        beforeBulkDestroy: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications),
+        afterCreate: (notification, options) => NotificationLog.createFromNotification(notification, 'C'),
+        afterUpdate: (notification, options) => NotificationLog.createFromNotification(notification, 'U'),
+        beforeDestroy: (notification, options) => NotificationLog.createFromNotification(notification, 'D'),
+        afterBulkCreate: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications, 'C'),
+        afterBulkUpdate: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications, 'U'),
+        beforeBulkDestroy: (notifications, options) => NotificationLog.bulkCreateFromNotification(notifications, 'D'),
       },
 
       sequelize,

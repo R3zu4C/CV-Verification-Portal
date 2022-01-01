@@ -1,10 +1,10 @@
 'use strict';
 const { Model } = require('sequelize');
-const {RoleLog} = require("./log");
+const { RoleLog } = require("./log");
 module.exports = (sequelize, DataTypes) => {
   class Role extends Model {
     static associate({ Admin, Permission, Organization, AdminRole, RolePermission }) {
-      
+
       this.belongsTo(Organization, {
         foreignKey: 'org_id',
         onUpdate: 'CASCADE',
@@ -51,14 +51,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterBulkCreate: (roles, options) => RoleLog.bulkCreateFromRole(roles),
-        beforeBulkDestroy: (roles, options) => RoleLog.bulkCreateFromRole(roles),
-        afterBulkUpdate: (roles, options) => RoleLog.bulkCreateFromRole(roles),
-        afterCreate: (role, options) => RoleLog.createFromRole(role),
-        afterUpdate: (role, options) => RoleLog.createFromRole(role),
-        beforeDestroy: (role, options) => RoleLog.createFromRole(role),
+        afterBulkCreate: (roles, options) => RoleLog.bulkCreateFromRole(roles, 'C'),
+        beforeBulkDestroy: (roles, options) => RoleLog.bulkCreateFromRole(roles, 'D'),
+        afterBulkUpdate: (roles, options) => RoleLog.bulkCreateFromRole(roles, 'U'),
+        afterCreate: (role, options) => RoleLog.createFromRole(role, 'C'),
+        afterUpdate: (role, options) => RoleLog.createFromRole(role, 'U'),
+        beforeDestroy: (role, options) => RoleLog.createFromRole(role, 'D'),
       },
-      
+
       sequelize,
       modelName: 'Role',
       initialAutoIncrement: 100,

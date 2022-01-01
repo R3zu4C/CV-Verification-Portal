@@ -19,12 +19,12 @@ module.exports = (sequelize, DataTypes) => {
     {},
     {
       hooks: {
-        afterCreate: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission),
-        afterUpdate: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission),
-        beforeDestroy: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission),
-        afterBulkCreate: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions),
-        afterBulkUpdate: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions),
-        beforeBulkDestroy: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions),
+        afterCreate: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission, 'C'),
+        afterUpdate: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission, 'U'),
+        beforeDestroy: (adminPermission, options) => AdminPermissionLog.createFromAdminPermission(adminPermission, 'D'),
+        afterBulkCreate: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions, 'C'),
+        afterBulkUpdate: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions, 'U'),
+        beforeBulkDestroy: (adminPermissions, options) => AdminPermissionLog.bulkCreateFromAdminPermission(adminPermissions, 'D'),
       },
       sequelize,
       modelName: "AdminPermission",

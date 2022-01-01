@@ -15,21 +15,23 @@ module.exports = (sequelize, DataTypes) => {
       return { ...this.get(), id: undefined };
     }
 
-    static  createFromTemplate(Template) {
+    static  createFromTemplate(Template, action) {
       return this.create({
         title: Template.title,
         org_id: Template.org_id,
         visibility: Template.visibility,
         template_id: Template.template_id,
+        action: action
       })
     }
 
-    static bulkCreateFromTemplate(Templates) {
+    static bulkCreateFromTemplate(Templates, action) {
       return this.bulkCreate(Templates.map(Template => ({
         title: Template.title,
         org_id: Template.org_id,
         visibility: Template.visibility,
         template_id: Template.template_id,
+        action: action
       })));
     }
     
@@ -40,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       template_id: {
         type: DataTypes.INTEGER,

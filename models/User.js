@@ -76,12 +76,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterBulkCreate: (users, options) => UserLog.bulkCreateFromUser(users),
-        afterBulkUpdate: (users, options) => UserLog.bulkCreateFromUser(users),
-        beforeBulkDestroy: (users, options) => UserLog.bulkCreateFromUser(users),
-        afterCreate: (user, options) => UserLog.createFromUser(user),
-        afterUpdate: (user, options) => UserLog.createFromUser(user),
-        beforeDestroy: (user, options) => UserLog.createFromUser(user),
+        afterBulkCreate: (users, options) => UserLog.bulkCreateFromUser(users, 'C'),
+        afterBulkUpdate: (users, options) => UserLog.bulkCreateFromUser(users, 'U'),
+        beforeBulkDestroy: (users, options) => UserLog.bulkCreateFromUser(users, 'D'),
+        afterCreate: (user, options) => UserLog.createFromUser(user, 'C'),
+        afterUpdate: (user, options) => UserLog.createFromUser(user, 'U'),
+        beforeDestroy: (user, options) => UserLog.createFromUser(user, 'D'),
       },
       
       sequelize,

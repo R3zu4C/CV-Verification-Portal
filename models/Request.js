@@ -53,12 +53,12 @@ module.exports = (sequelize, DataTypes) => {
     {
       hooks:
       {
-        afterCreate: (request, options) => RequestLog.createFromRequest(request),
-        afterUpdate: (request, options) => RequestLog.createFromRequest(request),
-        beforeDestroy: (request, options) => RequestLog.createFromRequest(request),
-        afterBulkCreate: (requests, options) => RequestLog.bulkCreateFromRequest(requests),
-        afterBulkUpdate: (requests, options) => RequestLog.bulkCreateFromRequest(requests),
-        beforeBulkDestroy: (requests, options) => RequestLog.bulkCreateFromRequest(requests),
+        afterCreate: (request, options) => RequestLog.createFromRequest(request, 'C'),
+        afterUpdate: (request, options) => RequestLog.createFromRequest(request, 'U'),
+        beforeDestroy: (request, options) => RequestLog.createFromRequest(request, 'D'),
+        afterBulkCreate: (requests, options) => RequestLog.bulkCreateFromRequest(requests, 'C'),
+        afterBulkUpdate: (requests, options) => RequestLog.bulkCreateFromRequest(requests, 'U'),
+        beforeBulkDestroy: (requests, options) => RequestLog.bulkCreateFromRequest(requests, 'D'),
       },
       
       sequelize,

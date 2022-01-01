@@ -30,7 +30,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
 
-    static createFromRequest(Request) {
+    static createFromRequest(Request, action) {
       return this.create({
         req_id: Request.req_id,
         req_by: Request.req_by,
@@ -38,10 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         point_id: Request.point_id,
         approved: Request.approved,
         type: Request.type,
+        action: action,
       })
     }
 
-    static bulkCreateFromRequest(Requests) {
+    static bulkCreateFromRequest(Requests, action) {
       return this.bulkCreate(Requests.map(Request => ({
         req_id: Request.req_id,
         req_by: Request.req_by,
@@ -49,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         point_id: Request.point_id,
         approved: Request.approved,
         type: Request.type,
+        action: action,
       })))
     }
 
@@ -62,6 +64,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       req_id: {
         type: DataTypes.INTEGER,
