@@ -1,45 +1,56 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class PointLog extends Model {
-    static associate({ FlagLog, NotificationLog, RequestLog, UserLog, OrganizationLog, AdminLog }) {
-
+    static associate({
+      FlagLog,
+      NotificationLog,
+      RequestLog,
+      UserLog,
+      OrganizationLog,
+      AdminLog,
+    }) {
       this.hasMany(FlagLog, {
         foreignKey: "point_id",
+        sourceKey: "point_id",
         onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+        onUpdate: "CASCADE",
       });
 
       this.hasMany(NotificationLog, {
         foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        sourceKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(RequestLog, {
         foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        sourceKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(UserLog, {
         foreignKey: "user_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        targetKey: "user_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(OrganizationLog, {
-        as: 'points',
-        foreignKey: 'org_id',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        as: "points",
+        foreignKey: "org_id",
+        targetKey: "org_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
-      this.belongsTo(AdminLog , {
+      this.belongsTo(AdminLog, {
         foreignKey: "approved_by",
         targetKey: "admin_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
     }
 
@@ -59,30 +70,32 @@ module.exports = (sequelize, DataTypes) => {
         proof_link: Point.proof_link,
         added_by: Point.added_by,
         action: action,
-      })
+      });
     }
 
     static bulkCreateFromPoint(Points, action) {
-      return this.bulkCreate(Points.map(Point => ({
-        point_id: Point.point_id,
-        user_id: Point.user_id,
-        org_id: Point.org_id,
-        approved_by: Point.approved_by,
-        status: Point.status,
-        description: Point.description,
-        title: Point.title,
-        category: Point.category,
-        start_date: Point.start_date,
-        end_date: Point.end_date,
-        visibility: Point.visibility,
-        proof_link: Point.proof_link,
-        added_by: Point.added_by,
-        action: action,
-      })))
+      return this.bulkCreate(
+        Points.map((Point) => ({
+          point_id: Point.point_id,
+          user_id: Point.user_id,
+          org_id: Point.org_id,
+          approved_by: Point.approved_by,
+          status: Point.status,
+          description: Point.description,
+          title: Point.title,
+          category: Point.category,
+          start_date: Point.start_date,
+          end_date: Point.end_date,
+          visibility: Point.visibility,
+          proof_link: Point.proof_link,
+          added_by: Point.added_by,
+          action: action,
+        }))
+      );
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   PointLog.init(
@@ -136,10 +149,13 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'PointLog',
+      modelName: "PointLog",
       initialAutoIncrement: 100,
       tableName: "points_log",
-      indexes: [{ type: "FULLTEXT", name: "desc_idx", fields: ["description"] }, { unique: false, fields: ["point_id"] }],
+      indexes: [
+        { type: "FULLTEXT", name: "desc_idx", fields: ["description"] },
+        { unique: false, fields: ["point_id"] },
+      ],
     }
   );
   return PointLog;

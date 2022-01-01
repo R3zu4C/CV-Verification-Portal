@@ -3,11 +3,11 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class TemplateLog extends Model {
     static associate({ OrganizationLog }) {
-      
       this.belongsTo(OrganizationLog, {
-        foreignKey: 'org_id',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        foreignKey: "org_id",
+        targetKey: "org_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
     }
 
@@ -15,26 +15,27 @@ module.exports = (sequelize, DataTypes) => {
       return { ...this.get(), id: undefined };
     }
 
-    static  createFromTemplate(Template, action) {
+    static createFromTemplate(Template, action) {
       return this.create({
         title: Template.title,
         org_id: Template.org_id,
         visibility: Template.visibility,
         template_id: Template.template_id,
-        action: action
-      })
+        action: action,
+      });
     }
 
     static bulkCreateFromTemplate(Templates, action) {
-      return this.bulkCreate(Templates.map(Template => ({
-        title: Template.title,
-        org_id: Template.org_id,
-        visibility: Template.visibility,
-        template_id: Template.template_id,
-        action: action
-      })));
+      return this.bulkCreate(
+        Templates.map((Template) => ({
+          title: Template.title,
+          org_id: Template.org_id,
+          visibility: Template.visibility,
+          template_id: Template.template_id,
+          action: action,
+        }))
+      );
     }
-    
   }
   TemplateLog.init(
     {

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     }) {
       this.belongsTo(OrganizationLog, {
         foreignKey: "org_id",
+        targetKey: "org_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });

@@ -12,18 +12,21 @@ module.exports = (sequelize, DataTypes) => {
 
       this.belongsTo(UserLog, {
         foreignKey: "flagged_by",
+        targetKey: "user_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
 
       this.belongsTo(PointLog, {
         foreignKey: "point_id",
+        targetKey: "point_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
 
       this.hasMany(NotificationLog, {
         foreignKey: "flag_id",
+        sourceKey: "flag_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });

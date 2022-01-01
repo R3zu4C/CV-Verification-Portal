@@ -1,10 +1,14 @@
-'use strict';
-const { Model } = require('sequelize')
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class UserLog extends Model {
-
-    static associate({ AdminLog, FlagLog, NotificationLog, RequestLog, PointLog }) {
-
+    static associate({
+      AdminLog,
+      FlagLog,
+      NotificationLog,
+      RequestLog,
+      PointLog,
+    }) {
       this.hasOne(AdminLog, {
         foreignKey: "admin_id",
         sourceKey: "user_id",
@@ -14,38 +18,42 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasMany(FlagLog, {
         foreignKey: "flagged_by",
+        sourceKey: "user_id",
         onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+        onUpdate: "CASCADE",
       });
 
       this.hasMany(NotificationLog, {
         foreignKey: "notif_to",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        sourceKey: "user_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(RequestLog, {
         foreignKey: "req_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        sourceKey: "user_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(PointLog, {
         foreignKey: "user_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        sourceKey: "user_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(PointLog, {
         foreignKey: "added_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        sourceKey: "user_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
-
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
 
     static createFromUser(User, action) {
@@ -56,20 +64,22 @@ module.exports = (sequelize, DataTypes) => {
         user_id: User.user_id,
         mobile_no: User.mobile_no,
         program: User.program,
-        action: action
-      })
+        action: action,
+      });
     }
 
     static bulkCreateFromUser(Users, action) {
-      return this.bulkCreate(Users.map(User => ({
-        roll_no: User.roll_no,
-        name: User.name,
-        branch: User.branch,
-        user_id: User.user_id,
-        mobile_no: User.mobile_no,
-        program: User.program,
-        action: action
-      })))
+      return this.bulkCreate(
+        Users.map((User) => ({
+          roll_no: User.roll_no,
+          name: User.name,
+          branch: User.branch,
+          user_id: User.user_id,
+          mobile_no: User.mobile_no,
+          program: User.program,
+          action: action,
+        }))
+      );
     }
   }
 
@@ -109,10 +119,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: 'users_log',
-      modelName: 'UserLog',
+      tableName: "users_log",
+      modelName: "UserLog",
       indexes: [{ unique: false, fields: ["user_id"] }],
     }
-  )
-  return UserLog
-}
+  );
+  return UserLog;
+};

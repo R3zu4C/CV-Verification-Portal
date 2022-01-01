@@ -1,24 +1,27 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class NotificationLog extends Model {
     static associate({ UserLog, FlagLog, PointLog, RequestLog }) {
       this.belongsTo(UserLog, {
-        foreignKey: 'notif_to'
+        foreignKey: "notif_to",
+        targetKey: "user_id",
       });
 
       this.belongsTo(FlagLog, {
-        foreignKey: 'flag_id'
+        foreignKey: "flag_id",
+        targetKey: "flag_id",
       });
 
       this.belongsTo(PointLog, {
-        foreignKey: 'point_id'
+        foreignKey: "point_id",
+        targetKey: "point_id",
       });
 
       this.belongsTo(RequestLog, {
-        foreignKey: 'request_id'
+        foreignKey: "request_id",
+        targetKey: "req_id",
       });
-
     }
 
     static createFromNotification(Notification, action) {
@@ -33,28 +36,30 @@ module.exports = (sequelize, DataTypes) => {
         type: Notification.type,
         user_type: Notification.user_type,
         seen: Notification.seen,
-        action: action
-      })
+        action: action,
+      });
     }
 
     static bulkCreateFromNotification(Notifications, action) {
-      return this.bulkCreate(Notifications.map(Notification => ({
-        notif_to: Notification.notif_to,
-        flag_id: Notification.flag_id,
-        point_id: Notification.point_id,
-        request_id: Notification.request_id,
-        status: Notification.status,
-        title: Notification.title,
-        description: Notification.description,
-        type: Notification.type,
-        user_type: Notification.user_type,
-        seen: Notification.seen,
-        action: action
-      })))
+      return this.bulkCreate(
+        Notifications.map((Notification) => ({
+          notif_to: Notification.notif_to,
+          flag_id: Notification.flag_id,
+          point_id: Notification.point_id,
+          request_id: Notification.request_id,
+          status: Notification.status,
+          title: Notification.title,
+          description: Notification.description,
+          type: Notification.type,
+          user_type: Notification.user_type,
+          seen: Notification.seen,
+          action: action,
+        }))
+      );
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   NotificationLog.init(
