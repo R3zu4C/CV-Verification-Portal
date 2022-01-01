@@ -17,8 +17,10 @@ module.exports = {
     const point = await request.getPoint();
     
     const adminService = new AdminService(req.session.user, req.session.admin);
+    console.log(adminService.log());
+    console.log(adminService.hasPermission("Approve requests", point.org_id));
     if (!adminService.hasPermission("Approve requests", point.org_id))
-      return res.send("User doesn't have requried permissions");
+      return res.send({ note: "User doesn't have requried permissions", redirect: "/" });
 
     const requests = await point.getRequests();
     const flags = await point.getFlags({ where: { approved_by: null }});
