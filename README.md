@@ -4,10 +4,14 @@ In order to run and test the code, follow the below procedure:
 
 1. Clone the repository in your local system
 ```
-git clone https://github.com/R3zu4C/Point-Addition-CV-Portal
+git clone https://github.com/akr-25/CV-Backend-Portal
+```
+2. Install all dependencies
+```
+npm install
 ```
 
-2. Run the project
+3. Run the project
 ```
 npm start
 ```
@@ -19,9 +23,5 @@ npm run dev:mock
 2. Add all users from csv file
 ```
 npm run dev:users
-```
-3. Add permissions in db (run after npm run dev:mock)
-```
-npm run dev:perm
 ```
 
