@@ -2,36 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class FlagLog extends Model {
-    static associate({ AdminLog, UserLog, PointLog, NotificationLog }) {
-      this.belongsTo(AdminLog, {
-        foreignKey: "approved_by",
-        targetKey: "admin_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(UserLog, {
-        foreignKey: "flagged_by",
-        targetKey: "user_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(PointLog, {
-        foreignKey: "point_id",
-        targetKey: "point_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.hasMany(NotificationLog, {
-        foreignKey: "flag_id",
-        sourceKey: "flag_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     static createFromFlag(Flag, action) {
       return this.create({
         flag_id: Flag.flag_id,
@@ -51,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
           approved_by: Flag.approved_by,
           point_id: Flag.point_id,
           status: Flag.status,
-          action: action
+          action: action,
         }))
       );
     }
@@ -62,17 +32,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   FlagLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      action: {
-        type: DataTypes.STRING(1),
-        allowNull: false,
-      },
       flag_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       status: {
@@ -81,13 +51,21 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "P",
         allowNull: false,
       },
+      flagged_by: {
+        type: DataTypes.STRING(50),
+      },
+      approved_by: {
+        type: DataTypes.STRING(50),
+      },
+      point_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
       initialAutoIncrement: 100,
       tableName: "flags_log",
       modelName: "FlagLog",
-      indexes: [{ unique: false, fields: ["flag_id"] }],
     }
   );
   return FlagLog;

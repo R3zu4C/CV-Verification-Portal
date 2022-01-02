@@ -22,10 +22,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   RolePermissionLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      perm_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      role_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       action: {
         type: DataTypes.STRING(1),

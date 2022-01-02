@@ -2,41 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class RoleLog extends Model {
-    static associate({
-      AdminLog,
-      PermissionLog,
-      OrganizationLog,
-      AdminRoleLog,
-      RolePermissionLog,
-    }) {
-      this.belongsTo(OrganizationLog, {
-        foreignKey: "org_id",
-        targetKey: "org_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsToMany(PermissionLog, {
-        through: RolePermissionLog,
-        foreignKey: "role_id",
-        sourceKey: "role_id",
-        otherKey: "perm_id",
-        targetKey: "perm_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsToMany(AdminLog, {
-        through: AdminRoleLog,
-        foreignKey: "role_id",
-        sourceKey: "role_id",
-        otherKey: "admin_id",
-        targetKey: "admin_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     static createFromRole(Role, action) {
       return this.create({
         role_id: Role.role_id,
@@ -65,17 +30,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   RoleLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      action: {
-        type: DataTypes.STRING(1),
-        allowNull: false,
-      },
       role_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       name: {
@@ -86,13 +51,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      org_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
       modelName: "RoleLog",
       initialAutoIncrement: 100,
       tableName: "roles_log",
-      indexes: [{ unique: false, fields: ["role_id"] }],
     }
   );
   return RoleLog;

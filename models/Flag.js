@@ -1,41 +1,38 @@
-'use strict';
-const { Model } = require('sequelize');
-const { FlagLog } = require('./log');
+"use strict";
+const { Model } = require("sequelize");
+const { FlagLog } = require("./log");
 module.exports = (sequelize, DataTypes) => {
   class Flag extends Model {
     static associate({ Admin, User, Point, Notification }) {
-
       this.belongsTo(Admin, {
-        foreignKey: 'approved_by',
+        foreignKey: "approved_by",
         targetKey: "admin_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(User, {
-        foreignKey: 'flagged_by',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        foreignKey: "flagged_by",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(Point, {
-        foreignKey: 'point_id',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        foreignKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(Notification, {
         foreignKey: "flag_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
-
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
-
   }
   Flag.init(
     {
@@ -53,17 +50,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterCreate: (flag, options) => FlagLog.createFromFlag(flag, 'C'),
-        afterUpdate: (flag, options) => FlagLog.createFromFlag(flag, 'U'),
-        beforeDestroy: (flag, options) => FlagLog.createFromFlag(flag, 'D'),
-        afterBulkCreate: (flags, options) => FlagLog.bulkCreateFromFlag(flags, 'C'),
-        afterBulkUpdate: (flags, options) => FlagLog.bulkCreateFromFlag(flags, 'U'),
-        beforeBulkDestroy: (flags, options) => FlagLog.bulkCreateFromFlag(flags, 'D'),
+        afterCreate: (flag, options) => FlagLog.createFromFlag(flag, "C"),
+        afterUpdate: (flag, options) => FlagLog.createFromFlag(flag, "U"),
+        beforeDestroy: (flag, options) => FlagLog.createFromFlag(flag, "D"),
+        afterBulkCreate: (flags, options) => FlagLog.bulkCreateFromFlag(flags, "C"),
+        afterBulkUpdate: (flags, options) => FlagLog.bulkCreateFromFlag(flags, "U"),
+        beforeBulkDestroy: (flags, options) => FlagLog.bulkCreateFromFlag(flags, "D"),
       },
       sequelize,
       initialAutoIncrement: 100,
-      tableName: 'flags',
-      modelName: 'Flag',
+      tableName: "flags",
+      modelName: "Flag",
     }
   );
   return Flag;

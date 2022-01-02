@@ -2,36 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class RequestLog extends Model {
-    static associate({ NotificationLog, UserLog, PointLog, AdminLog }) {
-      this.hasMany(NotificationLog, {
-        foreignKey: "request_id",
-        sourceKey: "req_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(UserLog, {
-        foreignKey: "req_by",
-        targetKey: "user_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(PointLog, {
-        foreignKey: "point_id",
-        targetKey: "point_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(AdminLog, {
-        foreignKey: "req_to",
-        targetKey: "admin_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     static createFromRequest(Request, action) {
       return this.create({
         req_id: Request.req_id,
@@ -64,17 +34,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   RequestLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      action: {
-        type: DataTypes.STRING(1),
-        allowNull: false,
-      },
       req_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       type: {
@@ -84,13 +54,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      req_by: {
+        type: DataTypes.STRING(50),
+      },
+      req_to: {
+        type: DataTypes.STRING(50),
+      },
+      point_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
       modelName: "RequestLog",
       initialAutoIncrement: 100,
       tableName: "requests_log",
-      indexes: [{ unique: false, fields: ["req_id"] }],
     }
   );
   return RequestLog;

@@ -1,11 +1,9 @@
-'use strict';
-const { Model } = require('sequelize')
-const {UserLog} = require('./log')
+"use strict";
+const { Model } = require("sequelize");
+const { UserLog } = require("./log");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-
     static associate({ Admin, Flag, Notification, Request, Point }) {
-
       this.hasOne(Admin, {
         foreignKey: "admin_id",
         onDelete: "CASCADE",
@@ -15,37 +13,36 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(Flag, {
         foreignKey: "flagged_by",
         onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+        onUpdate: "CASCADE",
       });
 
       this.hasMany(Notification, {
         foreignKey: "notif_to",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(Request, {
         foreignKey: "req_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(Point, {
         foreignKey: "user_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(Point, {
         foreignKey: "added_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
-
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   User.init(
@@ -76,18 +73,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterBulkCreate: (users, options) => UserLog.bulkCreateFromUser(users, 'C'),
-        afterBulkUpdate: (users, options) => UserLog.bulkCreateFromUser(users, 'U'),
-        beforeBulkDestroy: (users, options) => UserLog.bulkCreateFromUser(users, 'D'),
-        afterCreate: (user, options) => UserLog.createFromUser(user, 'C'),
-        afterUpdate: (user, options) => UserLog.createFromUser(user, 'U'),
-        beforeDestroy: (user, options) => UserLog.createFromUser(user, 'D'),
+        afterBulkUpdate: (users, options) => UserLog.bulkCreateFromUser(users, "U"),
+        beforeBulkDestroy: (users, options) => UserLog.bulkCreateFromUser(users, "D"),
+        afterUpdate: (user, options) => UserLog.createFromUser(user, "U"),
+        beforeDestroy: (user, options) => UserLog.createFromUser(user, "D"),
       },
-      
+
       sequelize,
-      tableName: 'users',
-      modelName: 'User',
+      tableName: "users",
+      modelName: "User",
     }
-  )
-  return User
-}
+  );
+  return User;
+};

@@ -2,56 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class UserLog extends Model {
-    static associate({
-      AdminLog,
-      FlagLog,
-      NotificationLog,
-      RequestLog,
-      PointLog,
-    }) {
-      this.hasOne(AdminLog, {
-        foreignKey: "admin_id",
-        sourceKey: "user_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
-
-      this.hasMany(FlagLog, {
-        foreignKey: "flagged_by",
-        sourceKey: "user_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
-
-      this.hasMany(NotificationLog, {
-        foreignKey: "notif_to",
-        sourceKey: "user_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.hasMany(RequestLog, {
-        foreignKey: "req_by",
-        sourceKey: "user_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.hasMany(PointLog, {
-        foreignKey: "user_id",
-        sourceKey: "user_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.hasMany(PointLog, {
-        foreignKey: "added_by",
-        sourceKey: "user_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     toJSON() {
       return { ...this.get(), id: undefined };
     }
@@ -85,17 +35,17 @@ module.exports = (sequelize, DataTypes) => {
 
   UserLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      action: {
-        type: DataTypes.STRING(1),
-        allowNull: false,
-      },
       user_id: {
         type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       roll_no: {
@@ -119,9 +69,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+      initialAutoIncrement: 100,
       tableName: "users_log",
       modelName: "UserLog",
-      indexes: [{ unique: false, fields: ["user_id"] }],
     }
   );
   return UserLog;

@@ -2,15 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class TemplateLog extends Model {
-    static associate({ OrganizationLog }) {
-      this.belongsTo(OrganizationLog, {
-        foreignKey: "org_id",
-        targetKey: "org_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     toJSON() {
       return { ...this.get(), id: undefined };
     }
@@ -39,17 +30,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   TemplateLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      action: {
-        type: DataTypes.STRING(1),
-        allowNull: false,
-      },
       template_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       title: {
@@ -58,6 +49,9 @@ module.exports = (sequelize, DataTypes) => {
       visibility: {
         type: DataTypes.CHAR(1),
         default: "P",
+      },
+      org_id: {
+        type: DataTypes.INTEGER,
       },
     },
     {

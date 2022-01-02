@@ -2,15 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class AdminPermissionLog extends Model {
-    static associate({ OrganizationLog }) {
-      this.belongsTo(OrganizationLog, {
-        foreignKey: "org_id",
-        targetKey: "org_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     static createFromAdminPermission(AdminPermission, action) {
       return this.create({
         admin_id: AdminPermission.admin_id,
@@ -37,15 +28,27 @@ module.exports = (sequelize, DataTypes) => {
   }
   AdminPermissionLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
+      admin_id: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      perm_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       action: {
         type: DataTypes.STRING(1),
         allowNull: false,
-      }
+      },
+      org_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       sequelize,

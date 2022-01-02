@@ -2,28 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class PermissionLog extends Model {
-    static associate({ AdminLog, RoleLog, AdminPermissionLog, RolePermissionLog }) {
-      this.belongsToMany(AdminLog, {
-        through: AdminPermissionLog,
-        foreignKey: "perm_id",
-        sourceKey: "perm_id",
-        otherKey: "admin_id",
-        targetKey: "admin_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsToMany(RoleLog, {
-        through: RolePermissionLog,
-        foreignKey: "perm_id",
-        sourceKey: "perm_id",
-        otherKey: "role_id",
-        targetKey: "role_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     static createFromPermission(Permission, action) {
       return this.create({
         perm_id: Permission.perm_id,
@@ -48,17 +26,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   PermissionLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      action: {
-        type: DataTypes.STRING(1),
-        allowNull: false,
-      },
       perm_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       name: {
@@ -70,7 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "PermissionLog",
       initialAutoIncrement: 100,
       tableName: "permissions_log",
-      indexes: [{ unique: false, fields: ["perm_id"] }],
     }
   );
   return PermissionLog;

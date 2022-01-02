@@ -22,10 +22,18 @@ module.exports = (sequelize, DataTypes) => {
   }
   AdminRoleLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
+      },
+      admin_id: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      role_id: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
       },
       action: {
         type: DataTypes.STRING(1),

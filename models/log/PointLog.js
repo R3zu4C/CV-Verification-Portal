@@ -2,58 +2,6 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class PointLog extends Model {
-    static associate({
-      FlagLog,
-      NotificationLog,
-      RequestLog,
-      UserLog,
-      OrganizationLog,
-      AdminLog,
-    }) {
-      this.hasMany(FlagLog, {
-        foreignKey: "point_id",
-        sourceKey: "point_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
-
-      this.hasMany(NotificationLog, {
-        foreignKey: "point_id",
-        sourceKey: "point_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.hasMany(RequestLog, {
-        foreignKey: "point_id",
-        sourceKey: "point_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(UserLog, {
-        foreignKey: "user_id",
-        targetKey: "user_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(OrganizationLog, {
-        as: "points",
-        foreignKey: "org_id",
-        targetKey: "org_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-
-      this.belongsTo(AdminLog, {
-        foreignKey: "approved_by",
-        targetKey: "admin_id",
-        onUpdate: "CASCADE",
-        onDelete: "CASCADE",
-      });
-    }
-
     static createFromPoint(Point, action) {
       return this.create({
         point_id: Point.point_id,
@@ -100,17 +48,17 @@ module.exports = (sequelize, DataTypes) => {
   }
   PointLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      action: {
-        type: DataTypes.STRING(1),
-        allowNull: false,
-      },
       point_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       description: {
@@ -146,6 +94,18 @@ module.exports = (sequelize, DataTypes) => {
       proof_link: {
         type: DataTypes.STRING(255),
       },
+      approved_by: {
+        type: DataTypes.STRING(50),
+      },
+      user_id: {
+        type: DataTypes.STRING(50),
+      },
+      added_by: {
+        type: DataTypes.STRING(50),
+      },
+      org_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
@@ -154,7 +114,6 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "points_log",
       indexes: [
         { type: "FULLTEXT", name: "desc_idx", fields: ["description"] },
-        { unique: false, fields: ["point_id"] },
       ],
     }
   );
