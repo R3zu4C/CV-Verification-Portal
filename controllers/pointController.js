@@ -15,8 +15,8 @@ module.exports = {
     try {
       const user_id = req.session.user.user_id;
       const point = await addPointToDatabase(req.body, user_id, transactionID);
-      await addRequestToDatabase(point, transactionID);
-      await addPointNotifsToDatabase(point, transactionID);
+      const requests = await addRequestToDatabase(point, transactionID);
+      await addPointNotifsToDatabase(point, requests, transactionID);
       transactionID.commit();
       res.send({ redirect: "/", pointId: point.point_id });
     } catch (error) {

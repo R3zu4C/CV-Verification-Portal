@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
     {},
     {
       hooks: {
-        afterCreate: (adminRole, options) => AdminRoleLog.createFromAdminRole(adminRole, 'C'),
-        afterUpdate: (adminRole, options) => AdminRoleLog.createFromAdminRole(adminRole, 'U'),
-        beforeDestroy: (adminRole, options) => AdminRoleLog.createFromAdminRole(adminRole, 'D'),
-        afterBulkCreate: (adminRoles, options) => AdminRoleLog.bulkCreateFromAdminRole(adminRoles, 'C'),
-        afterBulkUpdate: (adminRoles, options) => AdminRoleLog.bulkCreateFromAdminRole(adminRoles, 'U'),
-        beforeBulkDestroy: (adminRoles, options) => AdminRoleLog.bulkCreateFromAdminRole(adminRoles, 'D'),
+        afterCreate: (adminRole, options) => AdminRoleLog.createFromAdminRole(adminRole, "C"),
+        afterUpdate: (adminRole, options) => AdminRoleLog.createFromAdminRole(adminRole, "U"),
+        beforeDestroy: (adminRole, options) => AdminRoleLog.createFromAdminRole(adminRole, "D"),
+        afterBulkCreate: (adminRoles, options) => AdminRoleLog.bulkCreateFromAdminRole(adminRoles, "C"),
+        afterBulkUpdate: (adminRoles, options) => AdminRoleLog.bulkCreateFromAdminRole(adminRoles, "U"),
+        beforeBulkDestroy: (adminRoles, options) => AdminRoleLog.bulkCreateFromAdminRole(adminRoles, "D"),
       },
       sequelize,
       modelName: "AdminRole",

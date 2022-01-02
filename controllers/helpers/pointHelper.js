@@ -25,7 +25,7 @@ const createPoint = async (pointData, userId, addedBy, transactionID) => {
 };
 
 const createRequest = async (pointData, adminData, transactionID) => {
-  await Request.create({
+  const request = await Request.create({
     type: pointData.category,
     point_id: pointData.point_id,
     req_by: pointData.added_by,
@@ -33,6 +33,8 @@ const createRequest = async (pointData, adminData, transactionID) => {
   }, {
     transaction: transactionID
   });
+  request.admin = await request.getAdmin();
+  return request;
 };
 
 const createFlag = async (flagData, flaggedBy, transactionID) => {
@@ -46,13 +48,14 @@ const createFlag = async (flagData, flaggedBy, transactionID) => {
   return flag;
 }
 
-const createPointAdminNotifs = async (pointData, userData, adminData, transactionID) => {
+const createPointAdminNotifs = async (pointData, userData, adminData, requestId, transactionID) => {
   await Notification.create({
     type: "R",
-    description: `${userData.name} has requested you to add ${pointData.category}`,
+    description: `${userData.name} has requested you to add a point: ${pointData.title}`,
     title: `${pointData.category} Request`,
     notif_to: adminData.admin_id,
     user_type: "A",
+    request_id: requestId,
   }, {
     transaction: transactionID
   });
@@ -61,7 +64,7 @@ const createPointAdminNotifs = async (pointData, userData, adminData, transactio
 const createPointUserNotif = async (pointData, transactionID) => {
   await Notification.create({
     type: "P",
-    description: `You have requested to add ${pointData.category}`,
+    description: `You have requested to add a point: ${pointData.title}`,
     title: `${pointData.category} Request`,
     notif_to: pointData.user_id,
     user_type: "U",
@@ -83,7 +86,9 @@ const createFlagAdminNotif = async (flagData, adminData, transactionID) => {
     transaction: transactionID
   });
 
-  notif.setFlag(flagData.flag_id, { transaction: transactionID });
+  // notif.setFlag(flagData.flag_id, { transaction: transactionID });
+  const k = await notif.getFlag();
+  console.log(k);
 };
 
 const createFlagUserNotif = async (pointData, transactionID) => {
@@ -127,28 +132,19 @@ module.exports = {
     )(_role)
     ));
 
-    await Promise.all(requestTo.map(admin => createRequest(point, admin, transactionID)));
+    const requests = await Promise.all(requestTo.map(admin => createRequest(point, admin, transactionID)));
 
     console.log("Requests added to database successfully.");
+
+    return requests;
   },
 
-  addPointNotifsToDatabase: async (point, transactionID) => {
-    const org = await Organization.findByPk(point.org_id);
-    const roles = await org.getRoles();
+  addPointNotifsToDatabase: async (point, requests, transactionID) => {
     const user = await User.findOne({ where: { user_id: point.user_id } });
 
-    const notifTo = [];
-
-    await Promise.all(roles.map(_role => (
-      async (role) => {
-        const admins = await role.getAdmins();
-        for (const admin of admins) {
-          notifTo.push(admin);
-        }
-      })(_role)
-    ));
-
-    await Promise.all(notifTo.map((admin) => createPointAdminNotifs(point, user, admin, transactionID)));
+    await Promise.all(requests.map((request) => {
+      createPointAdminNotifs(point, user, request.admin, request.req_id, transactionID);
+    }));
 
     await createPointUserNotif(point, transactionID);
 

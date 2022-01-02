@@ -74,12 +74,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterBulkCreate: (admins, options) =>
-          AdminLog.bulkCreateFromAdmin(admins, "C"),
-        beforeBulkDestroy: (admins, options) =>
-          AdminLog.bulkCreateFromAdmin(admins, "D"),
-        afterBulkUpdate: (admins, options) =>
-          AdminLog.bulkCreateFromAdmin(admins, "U"),
+        afterBulkCreate: (admins, options) => AdminLog.bulkCreateFromAdmin(admins, "C"),
+        beforeBulkDestroy: (admins, options) => AdminLog.bulkCreateFromAdmin(admins, "D"),
+        afterBulkUpdate: (admins, options) => AdminLog.bulkCreateFromAdmin(admins, "U"),
         afterCreate: (admin, options) => AdminLog.createFromAdmin(admin, "C"),
         beforeDestroy: (admin, options) => AdminLog.createFromAdmin(admin, "D"),
         afterUpdate: (admin, options) => AdminLog.createFromAdmin(admin, "U"),

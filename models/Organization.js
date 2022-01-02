@@ -33,7 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.hasMany(Point, {
-        as: "points",
         foreignKey: "org_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
@@ -57,18 +56,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterCreate: (org, options) =>
-          OrganizationLog.createFromOrganization(org, "C"),
-        afterUpdate: (org, options) =>
-          OrganizationLog.createFromOrganization(org, "U"),
-        beforeDestroy: (org, options) =>
-          OrganizationLog.createFromOrganization(org, "D"),
-        afterBulkCreate: (orgs, options) =>
-          OrganizationLog.bulkCreateFromOrganization(orgs, "C"),
-        beforeBulkDestroy: (orgs, options) =>
-          OrganizationLog.bulkCreateFromOrganization(orgs, "D"),
-        afterBulkUpdate: (orgs, options) =>
-          OrganizationLog.bulkCreateFromOrganization(orgs, "U"),
+        afterCreate: (org, options) => OrganizationLog.createFromOrganization(org, "C"),
+        afterUpdate: (org, options) => OrganizationLog.createFromOrganization(org, "U"),
+        beforeDestroy: (org, options) => OrganizationLog.createFromOrganization(org, "D"),
+        afterBulkCreate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs, "C"),
+        beforeBulkDestroy: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs, "D"),
+        afterBulkUpdate: (orgs, options) => OrganizationLog.bulkCreateFromOrganization(orgs, "U"),
       },
 
       sequelize,

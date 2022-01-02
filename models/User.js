@@ -30,12 +30,14 @@ module.exports = (sequelize, DataTypes) => {
 
       this.hasMany(Point, {
         foreignKey: "user_id",
+        as: "Points",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
 
       this.hasMany(Point, {
         foreignKey: "added_by",
+        as: "PointsAdded",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });

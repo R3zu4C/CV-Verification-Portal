@@ -12,7 +12,6 @@ passport.use(
     },
     (accessToken, refresh_token, params, profile, done) => {
       const waadProfile = jwt.decode(params.id_token);
-      
       done(null, waadProfile);
     }
   )

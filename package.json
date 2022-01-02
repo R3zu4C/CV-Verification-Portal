@@ -25,7 +25,6 @@
     "dev:mock": "node ./scripts/test",
     "dev:users": "node ./scripts/addAllUsers",
     "dev:perm": "node ./scripts/addPerm",
-    "dev:log": "node ./scripts/log.js",
     "dev:table": "node ./scripts/tables.js"
   },
   "author": "",

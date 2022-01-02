@@ -25,9 +25,9 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
       },
       {
         roll_no: "200123007",
-        name: "Aman Kumar",
+        name: "Rajjo",
         branch: "MnC",
-        user_id: "aman200123007@iitg.ac.in",
+        user_id: "ankushpatanwal1508@gmail.com",
       },
     ]);
 
@@ -50,9 +50,8 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     ]);
 
     await Admin.bulkCreate([
-      { admin_id: "s.swapnil@iitg.ac.in" },
       { admin_id: "a.patanwal@iitg.ac.in" },
-      { admin_id: "aman200123007@iitg.ac.in" },
+      { admin_id: "ankushpatanwal1508@gmail.com" },
     ]);
 
     console.log("Mock data added successfully.");
@@ -60,27 +59,16 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     const CodingClubRole = await Role.findByPk(100);
     const GoHomeClubRole = await Role.findByPk(101);
 
-    const SwapnilAdmin = await Admin.findOne({
-      where: { admin_id: "s.swapnil@iitg.ac.in" },
-    });
-    const SwapnilUser = await User.findByPk("s.swapnil@iitg.ac.in");
-    const AnkushAdmin = await Admin.findOne({
-      where: { admin_id: "a.patanwal@iitg.ac.in" },
-    });
+    const AnkushAdmin = await Admin.findOne({ where: { admin_id: "a.patanwal@iitg.ac.in" }});
+    const RajjoAdmin = await Admin.findOne({ where: { admin_id: "ankushpatanwal1508@gmail.com" }});
     const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
-    const AmanAdmin = await Admin.findOne({
-      where: { admin_id: "aman200123007@iitg.ac.in" },
-    });
-    const AmanUser = await User.findByPk("aman200123007@iitg.ac.in");
+    const RajjoUser = await User.findByPk("ankushpatanwal1508@gmail.com");
 
-    await AmanAdmin.setUser(AmanUser);
-    await SwapnilAdmin.setUser(SwapnilUser);
+    await RajjoAdmin.setUser(RajjoUser);
     await AnkushAdmin.setUser(AnkushUser);
 
-    await CodingClubRole.addAdmin(SwapnilAdmin);
     await GoHomeClubRole.addAdmin(AnkushAdmin);
-    await CodingClubRole.addAdmin(AmanAdmin);
-    await GoHomeClubRole.addAdmin(AmanAdmin);
+    await CodingClubRole.addAdmin(RajjoAdmin);
 
     console.log("Roles assigned successfully.");
 
@@ -114,7 +102,7 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
         perm_id: 307,
       },
       {
-        name: "Change rigts",
+        name: "Change rights",
         perm_id: 308,
       },
       {
