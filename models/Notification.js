@@ -1,6 +1,7 @@
 'use strict';
 const { NotificationLog } = require('./log');
 const { Model } = require('sequelize');
+const { sendMailFromNotification } = require('../controllers/mailController');
 module.exports = (sequelize, DataTypes) => {
   class Notification extends Model {
     static associate({ User, Flag, Point, Request }) {
@@ -54,6 +55,9 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        afterCreate: async (notification, options) => sendMailFromNotification(notification),
+      },
       sequelize,
       initialAutoIncrement: 100,
       tableName: "notifications",
