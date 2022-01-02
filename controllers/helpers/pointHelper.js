@@ -55,7 +55,7 @@ const createPointAdminNotifs = async (pointData, userData, adminData, requestId,
     title: `${pointData.category} Request`,
     notif_to: adminData.admin_id,
     user_type: "A",
-    request_id: requestId,
+    req_id: requestId,
   }, {
     transaction: transactionID
   });
@@ -75,7 +75,7 @@ const createPointUserNotif = async (pointData, transactionID) => {
 };
 
 const createFlagAdminNotif = async (flagData, adminData, transactionID) => {
-  const notif = await Notification.create({
+  await Notification.create({
     type: "F",
     description: `You have a flag approval request`,
     title: "Flag Request",
@@ -85,14 +85,10 @@ const createFlagAdminNotif = async (flagData, adminData, transactionID) => {
   }, {
     transaction: transactionID
   });
-
-  // notif.setFlag(flagData.flag_id, { transaction: transactionID });
-  const k = await notif.getFlag();
-  console.log(k);
 };
 
 const createFlagUserNotif = async (pointData, transactionID) => {
-  const notif = await Notification.create({
+  await Notification.create({
     type: "F",
     description: `Your point ${pointData.title} has been flagged`,
     title: "Point Flagged",
@@ -102,8 +98,6 @@ const createFlagUserNotif = async (pointData, transactionID) => {
   }, {
     transaction: transactionID
   });
-
-  notif.setPoint(pointData.point_id, { transaction: transactionID });
 }
 
 module.exports = {

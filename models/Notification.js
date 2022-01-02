@@ -62,7 +62,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterCreate: async (notification, options) => sendMailFromNotification(notification),
+        // afterCreate: async (notification, options) => sendMailFromNotification(notification),
       },
       sequelize,
       initialAutoIncrement: 100,
