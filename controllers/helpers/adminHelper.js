@@ -35,7 +35,6 @@ module.exports = class AdminService {
     let perm_id;
     if (typeof perm == "string") perm_id = permNameToId(perm);
     else perm_id = perm;
-    console.log(perm_id);
     if (org_id == 0 || org_id == undefined) {
       return this.admin_perm.includes(perm_id);
     } else if (this.org[org_id] && this.org[org_id]["perm"]) {

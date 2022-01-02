@@ -147,7 +147,6 @@ module.exports = {
     const flaggedBy = await User.findByPk(flagged_by);
     flag.setPoint(pointData);
     flag.setUser(flaggedBy);
-    flaggedBy.addFlag(flag);
 
     console.log("Flag added to database successfully.");
 
