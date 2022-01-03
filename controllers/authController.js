@@ -60,7 +60,7 @@ module.exports = {
           req.session.admin = permission;
         }
       }
-      res.redirect("/");
+      res.redirect("back");
     } catch (err) {
       console.log(err);
       res.status(500).send(err);

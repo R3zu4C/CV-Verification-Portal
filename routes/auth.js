@@ -11,9 +11,10 @@ router.get("/azureadoauth2", passport.authenticate("azure_ad_oauth2"));
 
 router.get("/login", login);
 
-router.get(
-  "/azureadoauth2/callback2",
-  passport.authenticate("azure_ad_oauth2", { failureRedirect: "/login" }),
+router.get("/azureadoauth2/callback2",
+  passport.authenticate("azure_ad_oauth2", {
+    failureRedirect: "/login",
+  }),
   loginCallback
 );
 
