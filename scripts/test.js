@@ -24,6 +24,12 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
       branch: "MnC",
       user_id: "aman200123007@iitg.ac.in",
     },
+    {
+      roll_no: "200123004",
+      name:"Aditya Pandey",
+      branch: "MnC",
+      user_id: "aditya.pandey@iitg.ac.in"
+    }
   ]);
 
   await Organization.bulkCreate([
@@ -47,7 +53,8 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
   await Admin.bulkCreate([
     { admin_id: "s.swapnil@iitg.ac.in" },
     { admin_id: "a.patanwal@iitg.ac.in" },
-    { admin_id: "aman200123007@iitg.ac.in"}
+    { admin_id: "aman200123007@iitg.ac.in"},
+    { admin_id: "aditya.pandey@iitg.ac.in"}
   ]);
 
   console.log("Mock data added successfully.");
@@ -61,15 +68,20 @@ const { sequelize, User, Admin, Organization, Role } = require("../models");
   const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
   const AmanAdmin = await Admin.findOne({ where: { admin_id: "aman200123007@iitg.ac.in"}});
   const AmanUser = await User.findByPk("aman200123007@iitg.ac.in");
+  const AdityaAdmin = await Admin.findOne({ where: { admin_id: "aditya.pandey@iitg.ac.in"}});
+  const AdityaUser = await User.findByPk("aditya.pandey@iitg.ac.in");
 
   await AmanAdmin.setUser(AmanUser);
   await SwapnilAdmin.setUser(SwapnilUser);
   await AnkushAdmin.setUser(AnkushUser);
+  await AdityaAdmin.setUser(AdityaUser);
 
   await CodingClubRole.addAdmin(SwapnilAdmin);
   await GoHomeClubRole.addAdmin(AnkushAdmin);
   await CodingClubRole.addAdmin(AmanAdmin);
   await GoHomeClubRole.addAdmin(AmanAdmin);
+  await CodingClubRole.addAdmin(AdityaAdmin);
+  await GoHomeClubRole.addAdmin(AdityaAdmin);
 
   console.log("Roles assigned successfully.");
 

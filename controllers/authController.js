@@ -4,6 +4,7 @@ module.exports = {
   login: async (req, res) => res.redirect("/auth/azureadoauth2"),
 
   loginCallback: async (req, res) => {
+    console.log(req.user);
     const user_id = req.user.unique_name;
     try {
       var user = await User.findByPk(user_id);
@@ -75,7 +76,7 @@ module.exports = {
 
   status: async (req, res) => {
     let user_id = -1;
-    if (req.session.user) user_id = req.session.user.user_id;
+    if (req.session.user) {user_id = req.session.user.user_id;}
     const user = await User.findByPk(user_id, { include: "Flags" });
     const _admin = await Admin.findOne({
       where: {
