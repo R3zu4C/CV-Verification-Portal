@@ -52,7 +52,7 @@ module.exports = {
 
       await Promise.all(requests.map(request => request.update({ approved: 0 }, { transaction: transactionID })));
 
-      const flag = await addFlagToDatabase(req.body, point, flagged_by, transactionID);
+      const flag = await addFlagToDatabase(req.body, flagged_by, transactionID);
       await addFlagNotifsToDatabase(flag, point, transactionID);
       transactionID.commit();
       res.send({ redirect: "/" });
