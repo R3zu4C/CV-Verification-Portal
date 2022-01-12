@@ -8,7 +8,11 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/api", async (req, res) => {
-  const allPoints = await Point.findAll();
+  const allPoints = await Point.find({
+    where: {
+      visibility: "P",
+    }
+  });
 
   const userId = req.session.user.user_id;
 
