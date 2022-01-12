@@ -7,7 +7,7 @@ const {
   addFlagNotifsToDatabase,
 } = require("./helpers/pointHelper");
 
-const { Point , sequelize } = require("../models");
+const { Point, Flag, sequelize } = require("../models");
 
 module.exports = {
   addPoint: async (req, res) => {
@@ -23,6 +23,23 @@ module.exports = {
       console.error("Error:" + error.message);
       transactionID.rollback();
       res.status(400).send("Error in inserting new record");
+    }
+  },
+
+  getAllPoint: async (req, res) => {
+    try {
+      const points = await Point.findAll({
+        where: {
+          visibility: 'P',
+        },
+        include: [
+          Flag
+        ],
+      });
+      res.send(points);
+    } catch (error) {
+      console.error("Error:" + error.message);
+      res.status(400).send("Error in getting all points");
     }
   },
 
