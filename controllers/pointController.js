@@ -49,9 +49,9 @@ module.exports = {
 
   uploadProof: async (req, res) => {
     const fileName = req.headers["file_name"];
-    const user_id = req.session.user.user_id;
+    const user_id = req.session.user.roll_no;
     const point_id = req.headers["point_id"];
-    const dir = `./uploads/${user_id}`;
+    const dir = `./public/proofs/${user_id}`;
 
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
