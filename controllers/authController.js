@@ -79,10 +79,16 @@ module.exports = {
       if (req.session.user) {
         user_id = req.session.user.user_id;
       }
+      console.log(req.session);
       const user = await User.findByPk(user_id, { include: "Flags" });
       const admin = req.session.admin;
 
       res.send({ user, admin });
+      res.body={
+        "user": user,
+        "admin": admin
+      }
+      console.log(res.body);
     }
     catch (err) {
       console.log(err);

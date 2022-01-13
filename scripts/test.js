@@ -29,6 +29,12 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
         branch: "MnC",
         user_id: "ankushpatanwal1508@gmail.com",
       },
+      {
+        roll_no: "200123004",
+        name: "Aditya Pandey",
+        branch:"MnC",
+        user_id: "aditya.pandey@iitg.ac.in"
+      }
     ]);
 
     await Organization.bulkCreate([
@@ -52,6 +58,7 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     await Admin.bulkCreate([
       { admin_id: "a.patanwal@iitg.ac.in" },
       { admin_id: "ankushpatanwal1508@gmail.com" },
+      { admin_id: "aditya.pandey@iitg.ac.in"}
     ]);
 
     console.log("Mock data added successfully.");
@@ -61,11 +68,15 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
 
     const AnkushAdmin = await Admin.findOne({ where: { admin_id: "a.patanwal@iitg.ac.in" }});
     const RajjoAdmin = await Admin.findOne({ where: { admin_id: "ankushpatanwal1508@gmail.com" }});
+    const AdityaAdmin = await Admin.findOne({ where: { admin_id: "aditya.pandey@iitg.ac.in" }});
     const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
     const RajjoUser = await User.findByPk("ankushpatanwal1508@gmail.com");
+    const AdityaUser = await User.findByPk("aditya.pandey@iitg.ac.in");
+    
 
     await RajjoAdmin.setUser(RajjoUser);
     await AnkushAdmin.setUser(AnkushUser);
+    await AdityaAdmin.setUser(AdityaUser);
 
     await GoHomeClubRole.addAdmin(AnkushAdmin);
     await CodingClubRole.addAdmin(RajjoAdmin);

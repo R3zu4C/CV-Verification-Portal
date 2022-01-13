@@ -11,10 +11,13 @@ const { Point, Flag, sequelize } = require("../models");
 
 module.exports = {
   addPoint: async (req, res) => {
+    console.log("before transaction");
     const transactionID = await sequelize.transaction();
-    console("addPoint executing");
+    console.log("addPoint executing");
+    console.log(req.body);
     try {
       const user_id = req.session.user.user_id;
+      
       const point = await addPointToDatabase(req.body, user_id, transactionID);
       const requests = await addRequestToDatabase(point, transactionID);
       await addPointNotifsToDatabase(point, requests, transactionID);
