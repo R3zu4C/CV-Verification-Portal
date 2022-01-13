@@ -1,49 +1,8 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class PointLog extends Model {
-    static associate({ FlagLog, NotificationLog, RequestLog, UserLog, OrganizationLog, AdminLog }) {
-
-      this.hasMany(FlagLog, {
-        foreignKey: "point_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
-      });
-
-      this.hasMany(NotificationLog, {
-        foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.hasMany(RequestLog, {
-        foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.belongsTo(UserLog, {
-        foreignKey: "user_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.belongsTo(OrganizationLog, {
-        as: 'points',
-        foreignKey: 'org_id',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.belongsTo(AdminLog , {
-        foreignKey: "approved_by",
-        targetKey: "admin_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-    }
-
-    static createFromPoint(Point) {
+    static createFromPoint(Point, action) {
       return this.create({
         point_id: Point.point_id,
         user_id: Point.user_id,
@@ -58,40 +17,48 @@ module.exports = (sequelize, DataTypes) => {
         visibility: Point.visibility,
         proof_link: Point.proof_link,
         added_by: Point.added_by,
-      })
+        action: action,
+      });
     }
 
-    static bulkCreateFromPoint(Points) {
-      return this.bulkCreate(Points.map(Point => ({
-        point_id: Point.point_id,
-        user_id: Point.user_id,
-        org_id: Point.org_id,
-        approved_by: Point.approved_by,
-        status: Point.status,
-        description: Point.description,
-        title: Point.title,
-        category: Point.category,
-        start_date: Point.start_date,
-        end_date: Point.end_date,
-        visibility: Point.visibility,
-        proof_link: Point.proof_link,
-        added_by: Point.added_by,
-      })))
+    static bulkCreateFromPoint(Points, action) {
+      return this.bulkCreate(
+        Points.map((Point) => ({
+          point_id: Point.point_id,
+          user_id: Point.user_id,
+          org_id: Point.org_id,
+          approved_by: Point.approved_by,
+          status: Point.status,
+          description: Point.description,
+          title: Point.title,
+          category: Point.category,
+          start_date: Point.start_date,
+          end_date: Point.end_date,
+          visibility: Point.visibility,
+          proof_link: Point.proof_link,
+          added_by: Point.added_by,
+          action: action,
+        }))
+      );
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   PointLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
       point_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       description: {
@@ -127,13 +94,27 @@ module.exports = (sequelize, DataTypes) => {
       proof_link: {
         type: DataTypes.STRING(255),
       },
+      approved_by: {
+        type: DataTypes.STRING(50),
+      },
+      user_id: {
+        type: DataTypes.STRING(50),
+      },
+      added_by: {
+        type: DataTypes.STRING(50),
+      },
+      org_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
-      modelName: 'PointLog',
+      modelName: "PointLog",
       initialAutoIncrement: 100,
       tableName: "points_log",
-      indexes: [{ type: "FULLTEXT", name: "desc_idx", fields: ["description"] }],
+      indexes: [
+        { type: "FULLTEXT", name: "desc_idx", fields: ["description"] },
+      ],
     }
   );
   return PointLog;

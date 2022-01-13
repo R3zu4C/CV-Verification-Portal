@@ -1,28 +1,36 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { sendMailFromNotification } = require("../controllers/mailController");
 module.exports = (sequelize, DataTypes) => {
   class Notification extends Model {
     static associate({ User, Flag, Point, Request }) {
       this.belongsTo(User, {
-        foreignKey: 'notif_to'
+        foreignKey: "notif_to",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(Flag, {
-        foreignKey: 'flag_id'
+        foreignKey: "flag_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(Point, {
-        foreignKey: 'point_id'
+        foreignKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(Request, {
-        foreignKey: 'request_id'
+        foreignKey: "req_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
-
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   Notification.init(
@@ -53,6 +61,9 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        // afterCreate: async (notification, options) => sendMailFromNotification(notification),
+      },
       sequelize,
       initialAutoIncrement: 100,
       tableName: "notifications",

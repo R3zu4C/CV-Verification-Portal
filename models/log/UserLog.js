@@ -1,53 +1,12 @@
-'use strict';
-const { Model } = require('sequelize')
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class UserLog extends Model {
-
-    static associate({ AdminLog, FlagLog, NotificationLog, RequestLog, PointLog }) {
-
-      this.hasOne(AdminLog, {
-        foreignKey: "admin_id",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE",
-      });
-
-      this.hasMany(FlagLog, {
-        foreignKey: "flagged_by",
-        onDelete: "CASCADE",
-        onUpdate: "CASCADE"
-      });
-
-      this.hasMany(NotificationLog, {
-        foreignKey: "notif_to",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.hasMany(RequestLog, {
-        foreignKey: "req_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.hasMany(PointLog, {
-        foreignKey: "user_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.hasMany(PointLog, {
-        foreignKey: "added_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-    }
-
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
 
-    static createFromUser(User) {
+    static createFromUser(User, action) {
       return this.create({
         roll_no: User.roll_no,
         name: User.name,
@@ -55,31 +14,39 @@ module.exports = (sequelize, DataTypes) => {
         user_id: User.user_id,
         mobile_no: User.mobile_no,
         program: User.program,
-      })
+        action: action,
+      });
     }
 
-    static bulkCreateFromUser(Users) {
-      return this.bulkCreate(Users.map(User => ({
-        roll_no: User.roll_no,
-        name: User.name,
-        branch: User.branch,
-        user_id: User.user_id,
-        mobile_no: User.mobile_no,
-        program: User.program,
-      })))
+    static bulkCreateFromUser(Users, action) {
+      return this.bulkCreate(
+        Users.map((User) => ({
+          roll_no: User.roll_no,
+          name: User.name,
+          branch: User.branch,
+          user_id: User.user_id,
+          mobile_no: User.mobile_no,
+          program: User.program,
+          action: action,
+        }))
+      );
     }
   }
 
   UserLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
       user_id: {
         type: DataTypes.STRING(50),
-        allowNull: false
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
+        allowNull: false,
       },
       roll_no: {
         type: DataTypes.STRING(50),
@@ -102,9 +69,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: 'users_log',
-      modelName: 'UserLog',
+      initialAutoIncrement: 100,
+      tableName: "users_log",
+      modelName: "UserLog",
     }
-  )
-  return UserLog
-}
+  );
+  return UserLog;
+};

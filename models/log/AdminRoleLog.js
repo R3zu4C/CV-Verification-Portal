@@ -1,34 +1,34 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class RolePermissionLog extends Model {
-    static createFromRolePermission(RolePermission , action) {
+  class AdminRoleLog extends Model {
+    static createFromAdminRole(AdminRole, action) {
       return this.create({
-        role_id: RolePermission.role_id,
-        perm_id: RolePermission.perm_id,
+        role_id: AdminRole.role_id,
+        admin_id: AdminRole.admin_id,
         action: action,
       });
     }
 
-    static bulkCreateFromRolePermission(RolePermissions, action) {
+    static bulkCreateFromAdminRole(AdminRoles, action) {
       return this.bulkCreate(
-        RolePermissions.map((RolePermission) => ({
-          role_id: RolePermission.role_id,
-          perm_id: RolePermission.perm_id,
-          action: action
+        AdminRoles.map((AdminRole) => ({
+          role_id: AdminRole.role_id,
+          admin_id: AdminRole.admin_id,
+          action: action,
         }))
       );
     }
   }
-  RolePermissionLog.init(
+  AdminRoleLog.init(
     {
       log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      perm_id: {
-        type: DataTypes.INTEGER,
+      admin_id: {
+        type: DataTypes.STRING(50),
         allowNull: false,
       },
       role_id: {
@@ -38,14 +38,14 @@ module.exports = (sequelize, DataTypes) => {
       action: {
         type: DataTypes.STRING(1),
         allowNull: false,
-      },
+      }
     },
     {
       sequelize,
-      modelName: "RolePermissionLog",
+      modelName: "AdminRoleLog",
       initialAutoIncrement: 100,
-      tableName: "role_permission_log",
+      tableName: "admin_roles_log",
     }
   );
-  return RolePermissionLog;
+  return AdminRoleLog;
 };

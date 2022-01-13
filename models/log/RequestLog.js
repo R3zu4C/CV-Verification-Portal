@@ -1,36 +1,8 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class RequestLog extends Model {
-    static associate({ NotificationLog, UserLog, PointLog, AdminLog }) {
-
-      this.hasMany(NotificationLog, {
-        foreignKey: "request_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.belongsTo(UserLog, {
-        foreignKey: "req_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.belongsTo(PointLog, {
-        foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-
-      this.belongsTo(AdminLog, {
-        targetKey: "admin_id",
-        foreignKey: "req_to",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      });
-    }
-
-    static createFromRequest(Request) {
+    static createFromRequest(Request, action) {
       return this.create({
         req_id: Request.req_id,
         req_by: Request.req_by,
@@ -38,33 +10,41 @@ module.exports = (sequelize, DataTypes) => {
         point_id: Request.point_id,
         approved: Request.approved,
         type: Request.type,
-      })
+        action: action,
+      });
     }
 
-    static bulkCreateFromRequest(Requests) {
-      return this.bulkCreate(Requests.map(Request => ({
-        req_id: Request.req_id,
-        req_by: Request.req_by,
-        req_to: Request.req_to,
-        point_id: Request.point_id,
-        approved: Request.approved,
-        type: Request.type,
-      })))
+    static bulkCreateFromRequest(Requests, action) {
+      return this.bulkCreate(
+        Requests.map((Request) => ({
+          req_id: Request.req_id,
+          req_by: Request.req_by,
+          req_to: Request.req_to,
+          point_id: Request.point_id,
+          approved: Request.approved,
+          type: Request.type,
+          action: action,
+        }))
+      );
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   RequestLog.init(
     {
-      logId: {
+      log_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
       req_id: {
         type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      action: {
+        type: DataTypes.STRING(1),
         allowNull: false,
       },
       type: {
@@ -74,10 +54,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
       },
+      req_by: {
+        type: DataTypes.STRING(50),
+      },
+      req_to: {
+        type: DataTypes.STRING(50),
+      },
+      point_id: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,
-      modelName: 'RequestLog',
+      modelName: "RequestLog",
       initialAutoIncrement: 100,
       tableName: "requests_log",
     }
