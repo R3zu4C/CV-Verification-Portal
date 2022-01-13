@@ -43,7 +43,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cors());
+app.use(cors(
+  {
+    origin: ["http://localhost:3000", "http://localhost:3006"],
+    credentials: true,
+  }
+  
+));
 app.use(express.static(path.resolve('./public')));
 
 // Routes
