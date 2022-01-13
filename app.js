@@ -3,6 +3,7 @@ const express = require("express");
 require("dotenv").config();
 const morgan = require("morgan");
 const cors = require("cors");
+const path = require("path");
 const passport = require("passport");
 const passportSetup = require("./passport");
 
@@ -43,7 +44,7 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
-// app.use(express.static("public"));
+app.use(express.static(path.resolve('./public')));
 
 // Routes
 app.use("/", homeRoute);
