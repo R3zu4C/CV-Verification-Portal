@@ -7,9 +7,8 @@ module.exports = class AdminService {
     this.org = orgs;
   }
   log() {
-    let str = `Admin: ${this.name} has admin permissions for ${
-      Object.keys(this.org).length
-    } organizations.`;
+    let str = `Admin: ${this.name} has admin permissions for ${Object.keys(this.org).length
+      } organizations.`;
     for (let org in this.org) {
       str += `\n\t ${org}: `;
       for (let perm_id of this.org[org]["perm"]) {
@@ -19,9 +18,8 @@ module.exports = class AdminService {
     console.log(str + `\n\n`);
   }
   detail() {
-    let str = `Admin: ${this.name} has admin permissions for ${
-      Object.keys(this.org).length
-    } organizations.`;
+    let str = `Admin: ${this.name} has admin permissions for ${Object.keys(this.org).length
+      } organizations.`;
     for (let org in this.org) {
       str += `\n\t ${org} : `;
       for (let perm_id of this.org[org]["perm"]) {
@@ -44,13 +42,17 @@ module.exports = class AdminService {
   }
 
   canGivePermissionToAdmin(perm_id, org_id) {
+    if (this.hasPermission(1)) return true; //God admin
+
     return this.hasPermission(perm_id, org_id);
   }
 
   canGivePermissionToRole(perm_id, role_level, org_id) {
+    if (this.hasPermission(1)) return true; //God admin
+
     if (typeof perm_id == "string") perm_id = permNameToId(perm_id);
 
-    if (org_id == undefined || role_level == undefined || role_level == 0)
+    if (org_id === undefined || role_level === undefined || role_level === 0)
       return false; //?: can Role exists without org?
 
     if (perm_id <= 200) return this.admin_perm.includes(perm_id);
@@ -62,10 +64,15 @@ module.exports = class AdminService {
   }
 
   canCreateRole(perm, role_level, org_id) {
-    perm.forEach((perm_id) => {
-      if (!this.canGivePermissionToRole(perm_id, role_level, org_id))
-        return false;
-    });
+    if (this.hasPermission(1)) return true; //God admin
+
+    if (!this.hasPermission("Add role", org_id)) return false;
+
+    if (perm !== undefined && perm !== null)
+      perm.forEach((perm_id) => {
+        if (!this.canGivePermissionToRole(perm_id, role_level, org_id))
+          return false;
+      });
 
     return true;
   }

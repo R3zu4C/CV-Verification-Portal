@@ -12,6 +12,7 @@ const authRoute = require("./routes/auth");
 const searchRoute = require("./routes/searchRoutes");
 const pointRoute = require("./routes/pointRoutes");
 const requestRoute = require("./routes/requestRoutes");
+const adminRoute = require("./routes/adminRoutes");
 
 
 // Redis initialization
@@ -50,6 +51,7 @@ app.use("/auth", authRoute);
 app.use("/orgs", orgRoute);
 app.use("/search", searchRoute);
 app.use("/requests", requestRoute);
+app.use("/admin", adminRoute);
 app.use("/points", pointRoute);
 
 

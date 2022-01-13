@@ -21,7 +21,7 @@ module.exports = {
           include: ["Roles", "Permissions"],
         });
         if (admin) {
-          let permission = {0: []};
+          let permission = { 0: [] };
           admin.Permissions.forEach((_permission) => {
             let temp = {};
             if (_permission.perm_id > 200) {
@@ -42,12 +42,11 @@ module.exports = {
               let perm = await role.getPermissions();
 
               perm.forEach((_permission) => {
-                if(_permission.perm_id <= 200)
-                {
-                  if(!permission[0]['perm'].includes(_permission.perm_id))
+                if (_permission.perm_id <= 200) {
+                  if (!permission[0]['perm'].includes(_permission.perm_id))
                     permission[0]['perm'].push(_permission.perm_id);
                 }
-                else if(!permission[role.org_id]['perm'].includes(_permission.perm_id))
+                else if (!permission[role.org_id]['perm'].includes(_permission.perm_id))
                   permission[role.org_id]['perm'].push(_permission.perm_id);
               });
 
@@ -75,11 +74,19 @@ module.exports = {
   },
 
   status: async (req, res) => {
-    let user_id = -1;
-    if (req.session.user) {user_id = req.session.user.user_id;}
-    const user = await User.findByPk(user_id, { include: "Flags" });
-    const admin = req.session.admin;
+    try {
+      let user_id = -1;
+      if (req.session.user) {
+        user_id = req.session.user.user_id;
+      }
+      const user = await User.findByPk(user_id, { include: "Flags" });
+      const admin = req.session.admin;
 
-    res.send({ user, admin });
+      res.send({ user, admin });
+    }
+    catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
   }
 };

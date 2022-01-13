@@ -41,6 +41,7 @@ const createFlag = async (flagData, flaggedBy, transactionID) => {
   const flag = await Flag.create({
     flagged_by: flaggedBy,
     point_id: flagData.point_id,
+    description: flagData.description,
   }, {
     transaction: transactionID
   });
@@ -145,12 +146,9 @@ module.exports = {
     console.log("Notifications added to database successfully.");
   },
 
-  addFlagToDatabase: async (flagData, pointData, flagged_by, transactionID) => {
+  addFlagToDatabase: async (flagData, flagged_by, transactionID) => {
 
     const flag = await createFlag(flagData, flagged_by, transactionID);
-    const flaggedBy = await User.findByPk(flagged_by);
-    flag.setPoint(pointData, { transaction: transactionID });
-    flag.setUser(flaggedBy, { transaction: transactionID });
 
     console.log("Flag added to database successfully.");
 

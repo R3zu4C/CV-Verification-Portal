@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         flagged_by: Flag.flagged_by,
         approved_by: Flag.approved_by,
         point_id: Flag.point_id,
+        description: Flag.description,
         status: Flag.status,
         action: action,
       });
@@ -20,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
           flagged_by: Flag.flagged_by,
           approved_by: Flag.approved_by,
           point_id: Flag.point_id,
+          description: Flag.description,
           status: Flag.status,
           action: action,
         }))
@@ -44,6 +46,9 @@ module.exports = (sequelize, DataTypes) => {
       action: {
         type: DataTypes.STRING(1),
         allowNull: false,
+      },
+      description: {
+        type: DataTypes.TEXT,
       },
       status: {
         // status can be P(Pending), A(Approved), D(Denied)

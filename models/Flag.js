@@ -41,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
+      description: {
+        type: DataTypes.TEXT,
+      },
       status: {
         // status can be P(Pending), A(Approved), D(Denied)
         type: DataTypes.CHAR(1),

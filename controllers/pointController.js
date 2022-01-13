@@ -7,12 +7,12 @@ const {
   addFlagNotifsToDatabase,
 } = require("./helpers/pointHelper");
 
-const { Point , sequelize } = require("../models");
+const { Point, Flag, sequelize } = require("../models");
 
 module.exports = {
   addPoint: async (req, res) => {
     const transactionID = await sequelize.transaction();
-    
+    console("addPoint executing");
     try {
       const user_id = req.session.user.user_id;
       const point = await addPointToDatabase(req.body, user_id, transactionID);
@@ -24,6 +24,23 @@ module.exports = {
       console.error("Error:" + error.message);
       transactionID.rollback();
       res.status(400).send("Error in inserting new record");
+    }
+  },
+
+  getAllPoint: async (req, res) => {
+    try {
+      const points = await Point.findAll({
+        where: {
+          visibility: 'P',
+        },
+        include: [
+          Flag
+        ],
+      });
+      res.send(points);
+    } catch (error) {
+      console.error("Error:" + error.message);
+      res.status(400).send("Error in getting all points");
     }
   },
 
@@ -53,7 +70,7 @@ module.exports = {
 
       await Promise.all(requests.map(request => request.update({ approved: 0 }, { transaction: transactionID })));
 
-      const flag = await addFlagToDatabase(req.body, point, flagged_by, transactionID);
+      const flag = await addFlagToDatabase(req.body, flagged_by, transactionID);
       await addFlagNotifsToDatabase(flag, point, transactionID);
       transactionID.commit();
       res.send({ redirect: "/" });
