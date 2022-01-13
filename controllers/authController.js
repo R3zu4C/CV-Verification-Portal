@@ -84,11 +84,6 @@ module.exports = {
       const admin = req.session.admin;
 
       res.send({ user, admin });
-      res.body={
-        "user": user,
-        "admin": admin
-      }
-      console.log(res.body);
     }
     catch (err) {
       console.log(err);
