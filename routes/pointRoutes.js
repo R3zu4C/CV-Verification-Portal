@@ -13,6 +13,4 @@ router.get("/all", requireAuth, getAllPoint);
 
 router.post("/:pointId/flag",requireAuth, flagPoint);
 
-
-
 module.exports = router;
