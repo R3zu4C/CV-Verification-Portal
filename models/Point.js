@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(User, {
-        foreignKey: "added_id",
+        foreignKey: "added_by",
         as: "AddedBy",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
