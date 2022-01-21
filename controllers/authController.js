@@ -1,4 +1,5 @@
 const { User, Admin } = require("../models");
+const redirectUrl = 'http://localhost:3006'
 
 module.exports = {
   login: async (req, res) => res.redirect("/auth/azureadoauth2"),
@@ -59,7 +60,7 @@ module.exports = {
           req.session.admin = permission;
         }
       }
-      res.redirect("back");
+      res.redirect(redirectUrl + '/headingPage');
     } catch (err) {
       console.log(err);
       res.status(500).send(err);
