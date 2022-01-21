@@ -31,10 +31,6 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      _id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
       action: {
         type: DataTypes.STRING(1),
         allowNull: false,

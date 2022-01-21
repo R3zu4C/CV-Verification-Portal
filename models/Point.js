@@ -10,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
       User,
       Organization,
       Admin,
+      Proof,
     }) {
+      this.hasMany(Proof, {
+        foreignKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      });
+
       this.hasMany(Flag, {
         foreignKey: "point_id",
         onDelete: "CASCADE",
@@ -94,14 +101,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       visibility: {
-        // visibility can be P(Publiv), R(Private)
+        // visibility can be P(Public), R(Private)
         type: DataTypes.CHAR(1),
         defaultValue: "P",
         allowNull: false,
-      },
-      proof_link: {
-        type: DataTypes.STRING(255),
-      },
+      }
     },
     {
       hooks: {
