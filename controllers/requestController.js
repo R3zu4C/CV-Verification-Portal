@@ -65,6 +65,8 @@ module.exports = {
 
       await point.update({ response_by: rejectedBy, status: 'D' }, { transaction: transactionID });
 
+      await request.update({ remark: req.body.remark }, { transaction: transactionID });
+
       transactionID.commit();
 
       res.send({ redirect: "/" });
