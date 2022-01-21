@@ -8,11 +8,11 @@ module.exports = {
 
   createOrg: async (req, res) => {
     try {
-      const { org_id, name, parent_id } = req.body;
-      const org = await Organization.create({ org_id, name });
+      const { name, parent_id } = req.body;
+      const org = await Organization.create({ name });
 
       if (parent_id) {
-        await org.setOrganization(parent_id);
+        await org.setParentOrganization(parent_id);
       }
 
       res.send(org);
@@ -28,7 +28,7 @@ module.exports = {
       const { org_id } = req.params;
       const org = await Organization.findByPk(org_id, {
         include: [
-            Organization,
+          { model: Organization, as: "childOrganizations" }
         ],
       });
       res.send(org);
@@ -43,7 +43,7 @@ module.exports = {
     try {
       const orgs = await Organization.findAll({
         include: [
-          Organization,
+          { model: Organization, as: "childOrganizations" }
         ],
       });
       res.send(orgs);
