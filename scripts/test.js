@@ -38,7 +38,7 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     ]);
 
     await Organization.bulkCreate([
-      { name: "Coding Club" },
+      { name: "Coding Club"},
       { name: "Go Home Club" },
     ]);
 
@@ -80,6 +80,8 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
 
     await GoHomeClubRole.addAdmin(AnkushAdmin);
     await CodingClubRole.addAdmin(RajjoAdmin);
+    await GoHomeClubRole.addAdmin(AdityaAdmin);
+    await GoHomeClubRole.addAdmin(AdityaAdmin);
 
     console.log("Roles assigned successfully.");
 
