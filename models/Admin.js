@@ -39,14 +39,14 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.hasMany(Flag, {
-        foreignKey: "approved_by",
+        foreignKey: "response_by",
         sourceKey: "admin_id",
         onDelete: "CASCADE",
         onUpdate: "CASCADE",
       });
 
       this.hasMany(Point, {
-        foreignKey: "approved_by",
+        foreignKey: "response_by",
         sourceKey: "admin_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",

@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.create({
         flag_id: Flag.flag_id,
         flagged_by: Flag.flagged_by,
-        approved_by: Flag.approved_by,
+        response_by: Flag.response_by,
         point_id: Flag.point_id,
         description: Flag.description,
         status: Flag.status,
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         Flags.map((Flag) => ({
           flag_id: Flag.flag_id,
           flagged_by: Flag.flagged_by,
-          approved_by: Flag.approved_by,
+          response_by: Flag.response_by,
           point_id: Flag.point_id,
           description: Flag.description,
           status: Flag.status,
@@ -59,7 +59,7 @@ module.exports = (sequelize, DataTypes) => {
       flagged_by: {
         type: DataTypes.STRING(50),
       },
-      approved_by: {
+      response_by: {
         type: DataTypes.STRING(50),
       },
       point_id: {

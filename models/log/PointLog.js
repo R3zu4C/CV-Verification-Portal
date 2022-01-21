@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         point_id: Point.point_id,
         user_id: Point.user_id,
         org_id: Point.org_id,
-        approved_by: Point.approved_by,
+        response_by: Point.response_by,
         status: Point.status,
         description: Point.description,
         title: Point.title,
@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
           point_id: Point.point_id,
           user_id: Point.user_id,
           org_id: Point.org_id,
-          approved_by: Point.approved_by,
+          response_by: Point.response_by,
           status: Point.status,
           description: Point.description,
           title: Point.title,
@@ -94,7 +94,7 @@ module.exports = (sequelize, DataTypes) => {
       proof_link: {
         type: DataTypes.STRING(255),
       },
-      approved_by: {
+      response_by: {
         type: DataTypes.STRING(50),
       },
       user_id: {
