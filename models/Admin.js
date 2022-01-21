@@ -66,10 +66,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Admin.init(
     {
-      _id: {
-        type: DataTypes.INTEGER,
+      admin_id: {
+        type: DataTypes.STRING(50),
         primaryKey: true,
-        autoIncrement: true,
       },
     },
     {

@@ -10,7 +10,18 @@ module.exports = (sequelize, DataTypes) => {
       User,
       Organization,
       Admin,
+      Proof,
+      PointProof,
     }) {
+      this.belongsToMany(Proof, {
+        through: PointProof,
+        foreignKey: "point_id",
+        sourceKey: "point_id",
+        otherKey: "proof_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      });
+
       this.hasMany(Flag, {
         foreignKey: "point_id",
         onDelete: "CASCADE",
@@ -94,7 +105,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       visibility: {
-        // visibility can be P(Publiv), R(Private)
+        // visibility can be P(Public), R(Private)
         type: DataTypes.CHAR(1),
         defaultValue: "P",
         allowNull: false,
