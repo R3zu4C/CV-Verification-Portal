@@ -8,6 +8,6 @@ router.get("/", requireAuth, allPendingRequests);
 
 router.get("/:reqId/approve", requireAuth, approveRequest);
 
-router.get("/:reqId/reject", requireAuth, rejectRequest);
+router.post("/:reqId/reject", requireAuth, rejectRequest);
 
 module.exports = router;
