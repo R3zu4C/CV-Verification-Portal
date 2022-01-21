@@ -4,13 +4,9 @@ const { ProofLog } = require("./log");
 
 module.exports = (sequelize, DataTypes) => {
   class Proof extends Model {
-    static associate({ Point, PointProof }) {
-      this.belongsToMany(Point, {
-        
-        through: PointProof,
-        foreignKey: "proof_id",
-        sourceKey: "proof_id",
-        otherKey: "point_id",
+    static associate({ Point }) {
+      this.belongsTo(Point, {
+        foreignKey: "point_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });

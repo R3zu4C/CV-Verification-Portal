@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      point_id: {
+        type: DataTypes.INTEGER,
+      },
       proof_link: {
         type: DataTypes.STRING(255),
       },

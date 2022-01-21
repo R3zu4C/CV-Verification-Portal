@@ -7,7 +7,7 @@ const {
   addFlagNotifsToDatabase,
 } = require("./helpers/pointHelper");
 
-const { Point, Flag, sequelize } = require("../models");
+const { Point, Proof, Flag, sequelize } = require("../models");
 
 module.exports = {
   addPoint: async (req, res) => {
@@ -56,7 +56,11 @@ module.exports = {
     res.end("Proof uploaded!");
 
     const point = await Point.findByPk(point_id);
-    await point.update({ proof_link: fileName });
+    const proof = await Proof.create({
+      proof_link: fileName,
+      point_id: point.point_id,
+    });
+    point.addProof(proof);
   },
 
   flagPoint: async (req, res) => {
