@@ -26,6 +26,10 @@ module.exports = {
   getOrgWithChildren: async (req, res) => {
     try {
       const { org_id } = req.params;
+      if(org_id.match(/^[0-9]+$/) == null)
+      {
+        return res.status(404).send("Invalid org_id");
+      }
       const org = await Organization.findByPk(org_id, {
         include: [
           { model: Organization, as: "childOrganizations" }
@@ -61,7 +65,7 @@ module.exports = {
 
       if (name) await org.update({ name });
 
-      if (parent_id) await org.setOrganization(parent_id);
+      if (parent_id) await org.setParentOrganization(parent_id);
       res.send(org);
     }
     catch (err) {
