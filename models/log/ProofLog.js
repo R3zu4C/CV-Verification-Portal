@@ -2,18 +2,20 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ProofLog extends Model {
-    static createFromProof(proof, action) {
+    static createFromProof(Proof, action) {
       return this.create({
-        proof_id: proof.proof_id,
-        proof_link: proof.proof_link,
+        proof_id: Proof.proof_id,
+        proof_link: Proof.proof_link,
+        action: action,
       });
     }
 
-    static bulkCreateFromProof(proofs, action) {
+    static bulkCreateFromProof(Proofs, action) {
       return this.bulkCreate(
-        proofs.map((proof) => ({
-          proof_id: proof.proof_id,
-          proof_link: proof.proof_link,
+        Proofs.map((Proof) => ({
+          proof_id: Proof.proof_id,
+          proof_link: Proof.proof_link,
+          action: action,
         }))
       );
     }
