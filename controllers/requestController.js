@@ -5,7 +5,7 @@ module.exports = {
   allPendingRequests: async (req, res) => {
     const userId = req.session.user.user_id;
     const admin = await Admin.findOne({ where: { admin_id: userId } });
-    const requests = await admin.getRequests({ where: { approved: 'P' }, include: "Point" });
+    const requests = await admin.getRequests({ where: { status: 'P' }, include: "Point" });
     res.send(requests);
   },
 
@@ -25,7 +25,7 @@ module.exports = {
       const requests = await point.getRequests();
       const flags = await point.getFlags({ where: { response_by: null } });
 
-      await Promise.all(requests.map(_req => _req.update({ approved: status }, { transaction: transactionID })));
+      await Promise.all(requests.map(_req => _req.update({ status: status }, { transaction: transactionID })));
 
       await Promise.all(flags.map(flag => flag.update({ response_by: responseBy, status: status }, { transaction: transactionID })));
 

@@ -44,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.STRING(50),
       },
-      approved: {
+      status: {
         type: DataTypes.STRING(1),
         defaultValue: 'P',
       },

@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         req_by: Request.req_by,
         req_to: Request.req_to,
         point_id: Request.point_id,
-        approved: Request.approved,
+        status: Request.status,
         type: Request.type,
         action: action,
       });
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
           req_by: Request.req_by,
           req_to: Request.req_to,
           point_id: Request.point_id,
-          approved: Request.approved,
+          status: Request.status,
           type: Request.type,
           action: action,
         }))
@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.STRING(50),
       },
-      approved: {
+      status: {
         type: DataTypes.STRING(1),
         defaultValue: 'P',
       },
