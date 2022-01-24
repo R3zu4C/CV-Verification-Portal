@@ -81,7 +81,11 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     await GoHomeClubRole.addAdmin(AnkushAdmin);
     await CodingClubRole.addAdmin(RajjoAdmin);
     await GoHomeClubRole.addAdmin(AdityaAdmin);
-    await GoHomeClubRole.addAdmin(AdityaAdmin);
+    await CodingClubRole.addAdmin(AdityaAdmin);
+
+    // const k1 = await RajjoAdmin.getUser();
+    // const k2 = await RajjoUser.getAdmin();
+    // console.log(k1, k2);
 
     console.log("Roles assigned successfully.");
 
@@ -140,6 +144,8 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
   } catch (e) {
     console.log(e);
   }
+
+
 
 
   // console.log("Logging Database Connected!");

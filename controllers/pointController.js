@@ -51,13 +51,9 @@ module.exports = {
     const user_id = req.session.user.roll_no;
     const point_id = req.headers["point_id"];
     const dir = `./public/proofs/${user_id}`;
-
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-
     req.on("data", (chunk) => fs.appendFileSync(`${dir}/${fileName}`, chunk));
-
     res.end("Proof uploaded!");
-
     const point = await Point.findByPk(point_id);
     await point.update({ proof_link: fileName });
   },

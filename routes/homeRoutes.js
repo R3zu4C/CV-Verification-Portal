@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/api", async (req, res) => {
-  const allPoints = await Point.find({
+  const allPoints = await Point.findAll({
     where: {
       visibility: "P",
     }
