@@ -15,7 +15,7 @@ const sequelize = new Sequelize(
       }
     },
     ssl: true,
-    port: 3306,
+    port: process.env.DB_PORT,
     logging: false,
   }
 );
@@ -34,7 +34,7 @@ const sequelizelog = new Sequelize(
       }
     },
     ssl: true,
-    port: 3306,
+    port: process.env.DB_LOG_PORT,
     logging: false,
   }
 )
