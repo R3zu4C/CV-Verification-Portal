@@ -12,7 +12,7 @@ const multer = require('multer');
 
 const multi_upload = require("../middleware/proofUpload");
 
-const { Point, Proof, Flag, sequelize } = require("../models");
+const { Point, Proof, Flag, sequelize ,User } = require("../models");
 
 module.exports = {
   addPoint: async (req, res) => {
@@ -64,7 +64,14 @@ module.exports = {
           visibility: 'P',
         },
         include: [
-          Flag
+          {
+            model: Flag
+          },
+          {
+            model: User,
+            as: "User",
+            attributes: ['user_id', 'name', 'roll_no', 'branch', 'program'],
+          } 
         ],
       });
       res.send(points);
