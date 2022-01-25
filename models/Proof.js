@@ -30,12 +30,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        // afterBulkCreate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "C"),
-        // beforeBulkDestroy: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "D"),
-        // afterBulkUpdate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "U"),
-        // afterCreate: (proof, options) => ProofLog.createFromProof(proof, "C"),
-        // beforeDestroy: (proof, options) => ProofLog.createFromProof(proof, "D"),
-        // afterUpdate: (proof, options) => ProofLog.createFromProof(proof, "U"),
+        afterBulkCreate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "C"),
+        beforeBulkDestroy: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "D"),
+        afterBulkUpdate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "U"),
+        afterCreate: (proof, options) => ProofLog.createFromProof(proof, "C"),
+        beforeDestroy: (proof, options) => ProofLog.createFromProof(proof, "D"),
+        afterUpdate: (proof, options) => ProofLog.createFromProof(proof, "U"),
       },
       sequelize,
       initialAutoIncrement: 100,

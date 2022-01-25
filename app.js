@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const path = require("path");
 const passport = require("passport");
-const passportSetup = require("./passport");
+const passportSetup = require("./src/passport");
 
 const homeRoute = require("./routes/homeRoutes");
 const orgRoute = require("./routes/orgRoutes");

@@ -60,18 +60,18 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     const GoHomeClubRole = await Role.findByPk(101);
 
     const AnkushAdmin = await Admin.findOne({ where: { admin_id: "a.patanwal@iitg.ac.in" }});
-    const RajjoAdmin = await Admin.findOne({ where: { admin_id: "aman200123007@iitg.ac.in" }});
+    const AmanAdmin = await Admin.findOne({ where: { admin_id: "aman200123007@iitg.ac.in" }});
     const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
-    const RajjoUser = await User.findByPk("aman200123007@iitg.ac.in");
+    const AmanUser = await User.findByPk("aman200123007@iitg.ac.in");
 
-    // await RajjoAdmin.setUser(RajjoUser);
+    // await AmanAdmin.setUser(AmanUser);
     // await AnkushAdmin.setUser(AnkushUser);
 
     await GoHomeClubRole.addAdmin(AnkushAdmin);
-    await CodingClubRole.addAdmin(RajjoAdmin);
+    await CodingClubRole.addAdmin(AmanAdmin);
 
-    // const k1 = await RajjoAdmin.getUser();
-    // const k2 = await RajjoUser.getAdmin();
+    // const k1 = await AmanAdmin.getUser();
+    // const k2 = await AmanUser.getAdmin();
     // console.log(k1, k2);
 
     console.log("Roles assigned successfully.");
@@ -131,9 +131,6 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
   } catch (e) {
     console.log(e);
   }
-
-
-
 
   // console.log("Logging Database Connected!");
 
