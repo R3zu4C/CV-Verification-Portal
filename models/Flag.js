@@ -17,7 +17,8 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      this.belongsTo(Point, {
+      this.belongsTo(Point, { //! this is allowing null values
+        allowNull: false,
         foreignKey: "point_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",

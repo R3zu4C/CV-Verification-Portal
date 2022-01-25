@@ -173,7 +173,7 @@ module.exports = {
 
     await Promise.all(flagTo.map((admin) => createFlagAdminNotif(flagData, admin, transactionID)));
 
-    await createFlagUserNotif(pointData, transactionID);
+    // await createFlagUserNotif(pointData, transactionID);
 
     console.log("Notifications added to database successfully.");
   },
