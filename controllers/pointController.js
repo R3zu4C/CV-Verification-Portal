@@ -3,8 +3,6 @@ const {
   addPointToDatabase,
   addRequestToDatabase,
   addPointNotifsToDatabase,
-  addFlagToDatabase,
-  addFlagNotifsToDatabase,
 } = require("./helpers/pointHelper");
 const path = require("path");
 
@@ -100,60 +98,6 @@ module.exports = {
     } catch (error) {
       console.error("Error:" + error.message);
       res.status(400).send("Error in getting all points");
-    }
-  },
-
-  flagPoint: async (req, res) => {
-    const transactionID = await sequelize.transaction();
-    try {
-      const flagged_by = req.session.user.user_id;
-      const point = await Point.findByPk(req.params.pointId, {
-        include: [Flag],
-      });
-      
-      if (!point) {
-        return res.status(404).send({ error: { message: "Point not found" } });
-      } else if (point.status !== "A") {
-        return res
-          .status(400)
-          .send({ error: { message: "Only aprroved points can be flagged" } });
-      } else if (point.visibility !== "P") {
-        return res
-          .status(400)
-          .send({ error: { message: "Only public points can be flagged" } });
-      }
-      let bool = false;
-      point.Flags.forEach((flag) => {
-        if (flag.flagged_by === flagged_by) bool = true;
-      });
-      if (bool)
-        return res
-          .status(400)
-          .send({
-            error: { message: "You have already flagged this point once" },
-          });
-      // point.update(
-      //   { response_by: null, status: "S" },
-      //   { transaction: transactionID }
-      // );
-      // const requests = await point.getRequests();
-
-      // await Promise.all(
-      //   requests.map((request) =>
-      //     request.update({ status: "P" }, { transaction: transactionID })
-      //   )
-      // );
-
-      const flagData = { ...req.body, point_id: point.point_id };
-
-      const flag = await addFlagToDatabase(flagData, flagged_by, transactionID);
-      await addFlagNotifsToDatabase(flag, point, transactionID);
-      transactionID.commit();
-      res.send({ redirect: "/" });
-    } catch (error) {
-      console.error("Error:" + error.message);
-      transactionID.rollback();
-      res.status(400).send("Error in inserting new record");
     }
   },
 };
