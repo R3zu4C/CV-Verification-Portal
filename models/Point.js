@@ -105,6 +105,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.CHAR(1),
         defaultValue: "P",
         allowNull: false,
+      },
+      remark: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       }
     },
     {

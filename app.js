@@ -14,6 +14,7 @@ const searchRoute = require("./routes/searchRoutes");
 const pointRoute = require("./routes/pointRoutes");
 const requestRoute = require("./routes/requestRoutes");
 const adminRoute = require("./routes/adminRoutes");
+const flagRoute = require("./routes/flagRoutes");
 
 
 // Redis initialization
@@ -60,6 +61,7 @@ app.use("/search", searchRoute);
 app.use("/requests", requestRoute);
 app.use("/admin", adminRoute);
 app.use("/points", pointRoute);
+app.use("/flag", flagRoute);
 
 
 // Start the server
