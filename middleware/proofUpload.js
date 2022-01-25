@@ -1,9 +1,12 @@
 const multer = require('multer');
+const fs = require("fs");
 const path = require('path');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, path.join(__dirname, '../public/proofs/' + req.session.user.roll_no))
+    const dir = path.join(__dirname, '../public/proofs/' + req.session.user.roll_no);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir)
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + "." + file.originalname.split(".").pop())

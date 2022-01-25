@@ -43,7 +43,6 @@ module.exports = {
             proof_link: _proof.filename,
             point_id: point.point_id,
           }, { transaction: transactionID });
-          point.addProof(proof);
         }
         transactionID.commit();
         res.send({ redirect: "/" });
