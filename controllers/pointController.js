@@ -10,7 +10,7 @@ const multer = require('multer');
 
 const multi_upload = require("../middleware/proofUpload");
 
-const { Point, Proof, Flag, sequelize ,User } = require("../models");
+const { Point, Proof, Flag, sequelize, User } = require("../models");
 
 module.exports = {
   addPoint: async (req, res) => {
@@ -41,12 +41,13 @@ module.exports = {
         }
         return;
       }
-
+      
       const transactionID = await sequelize.transaction();
       try {
         const user_id = req.session.user.user_id;
         const pointData = JSON.parse(`${req.body.point}`);
-        pointData.org_id = (pointData.org_id === '') ? pointData.org_id = null : pointData.org_id = parseInt(pointData.org_id);
+        pointData.org_id = (pointData.org_id === '' || !pointData.org_id) ? null : parseInt(pointData.org_id);
+        console.log(pointData);
         const point = await addPointToDatabase(
           pointData,
           user_id,
