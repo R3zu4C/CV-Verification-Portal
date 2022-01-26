@@ -13,7 +13,7 @@ const createPoint = async (pointData, userId, addedBy, transactionID) => {
     description: pointData.description,
     user_id: userId,
     category: pointData.category,
-    org_id: parseInt(pointData.org_id),
+    org_id: pointData.org_id,
     added_by: addedBy,
     status: "P",
     visibility: "P",

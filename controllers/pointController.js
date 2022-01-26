@@ -46,6 +46,7 @@ module.exports = {
       try {
         const user_id = req.session.user.user_id;
         const pointData = JSON.parse(`${req.body.point}`);
+        pointData.org_id = (pointData.org_id === '') ? pointData.org_id = null : pointData.org_id = parseInt(pointData.org_id);
         const point = await addPointToDatabase(
           pointData,
           user_id,
