@@ -4,13 +4,9 @@ const { ProofLog } = require("./log");
 
 module.exports = (sequelize, DataTypes) => {
   class Proof extends Model {
-    static associate({ Point, PointProof }) {
-      this.belongsToMany(Point, {
-        
-        through: PointProof,
-        foreignKey: "proof_id",
-        sourceKey: "proof_id",
-        otherKey: "point_id",
+    static associate({ Point }) {
+      this.belongsTo(Point, {
+        foreignKey: "point_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
@@ -34,12 +30,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       hooks: {
-        afterBulkCreate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "C"),
-        beforeBulkDestroy: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "D"),
-        afterBulkUpdate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "U"),
-        afterCreate: (proof, options) => ProofLog.createFromProof(proof, "C"),
-        beforeDestroy: (proof, options) => ProofLog.createFromProof(proof, "D"),
-        afterUpdate: (proof, options) => ProofLog.createFromProof(proof, "U"),
+        // afterBulkCreate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "C"),
+        // beforeBulkDestroy: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "D"),
+        // afterBulkUpdate: (proofs, options) => ProofLog.bulkCreateFromProof(proofs, "U"),
+        // afterCreate: (proof, options) => ProofLog.createFromProof(proof, "C"),
+        // beforeDestroy: (proof, options) => ProofLog.createFromProof(proof, "D"),
+        // afterUpdate: (proof, options) => ProofLog.createFromProof(proof, "U"),
       },
       sequelize,
       initialAutoIncrement: 100,

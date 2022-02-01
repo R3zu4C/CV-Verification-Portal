@@ -8,11 +8,11 @@ module.exports = {
 
   createOrg: async (req, res) => {
     try {
-      const { org_id, name, parent_id } = req.body;
-      const org = await Organization.create({ org_id, name });
+      const { name, parent_id } = req.body;
+      const org = await Organization.create({ name });
 
       if (parent_id) {
-        await org.setOrganization(parent_id);
+        await org.setParentOrganization(parent_id);
       }
 
       res.send(org);
@@ -26,9 +26,13 @@ module.exports = {
   getOrgWithChildren: async (req, res) => {
     try {
       const { org_id } = req.params;
+      if(org_id.match(/^[0-9]+$/) == null)
+      {
+        return res.status(404).send("Invalid org_id");
+      }
       const org = await Organization.findByPk(org_id, {
         include: [
-            Organization,
+          { model: Organization, as: "childOrganizations" }
         ],
       });
       res.send(org);
@@ -43,7 +47,7 @@ module.exports = {
     try {
       const orgs = await Organization.findAll({
         include: [
-          Organization,
+          { model: Organization, as: "childOrganizations" }
         ],
       });
       res.send(orgs);
@@ -61,7 +65,7 @@ module.exports = {
 
       if (name) await org.update({ name });
 
-      if (parent_id) await org.setOrganization(parent_id);
+      if (parent_id) await org.setParentOrganization(parent_id);
       res.send(org);
     }
     catch (err) {

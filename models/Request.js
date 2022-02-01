@@ -44,9 +44,12 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         type: DataTypes.STRING(50),
       },
-      approved: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      status: {
+        type: DataTypes.STRING(1),
+        defaultValue: 'P',
+      },
+      remark: {
+        type: DataTypes.TEXT,
       },
     },
     {

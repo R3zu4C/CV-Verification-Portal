@@ -10,8 +10,9 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      this.hasOne(Organization, {
+      this.hasMany(Organization, {
         foreignKey: "parent_org_id",
+        as: "childOrganizations",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
@@ -23,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(Organization, {
+        as: "parentOrganization",
         foreignKey: "parent_org_id",
       });
 

@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
   class Flag extends Model {
     static associate({ Admin, User, Point, Notification }) {
       this.belongsTo(Admin, {
-        foreignKey: "approved_by",
+        foreignKey: "response_by",
         targetKey: "admin_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",

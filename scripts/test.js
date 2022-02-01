@@ -25,9 +25,9 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
       },
       {
         roll_no: "200123007",
-        name: "Rajjo",
+        name: "Aman Kumar",
         branch: "MnC",
-        user_id: "ankushpatanwal1508@gmail.com",
+        user_id: "aman200123007@iitg.ac.in",
       },
       {
         roll_no: "200123004",
@@ -58,7 +58,8 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     await Admin.bulkCreate([
       { admin_id: "a.patanwal@iitg.ac.in" },
       { admin_id: "ankushpatanwal1508@gmail.com" },
-      { admin_id: "aditya.pandey@iitg.ac.in"}
+      { admin_id: "aditya.pandey@iitg.ac.in"},
+      { admin_id: "aman200123007@iitg.ac.in" },
     ]);
 
     console.log("Mock data added successfully.");

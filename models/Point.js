@@ -11,13 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       Organization,
       Admin,
       Proof,
-      PointProof,
     }) {
-      this.belongsToMany(Proof, {
-        through: PointProof,
+      this.hasMany(Proof, {
         foreignKey: "point_id",
-        sourceKey: "point_id",
-        otherKey: "proof_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
@@ -61,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       this.belongsTo(Admin, {
-        foreignKey: "approved_by",
+        foreignKey: "response_by",
         targetKey: "admin_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
@@ -109,10 +105,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.CHAR(1),
         defaultValue: "P",
         allowNull: false,
-      },
-      proof_link: {
-        type: DataTypes.STRING(255),
-      },
+      }
     },
     {
       hooks: {
