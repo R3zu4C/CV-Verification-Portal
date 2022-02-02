@@ -30,6 +30,7 @@ module.exports = class AdminService {
   }
 
   hasPermission(perm, org_id) {
+    if (this.admin_perm && this.admin_perm.includes(1)) return true; //God admin
     let perm_id;
     if (typeof perm == "string") perm_id = permNameToId(perm);
     else perm_id = perm;

@@ -1,5 +1,5 @@
 const { sequelize, User, Admin, Organization, Role, Permission } = require("../models");
-const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
+const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelize: sequelizelog } = require("../models/log");
 
 (async () => {
   try {

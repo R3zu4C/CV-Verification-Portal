@@ -6,7 +6,7 @@ const {
 
 const AdminService = require("./helpers/adminHelper");
 
-const { Point, Flag, sequelize, User } = require("../models");
+const { Point, Flag, sequelize, Remark } = require("../models");
 
 module.exports = {
 	acceptFlag: async (req, res) => {
@@ -100,12 +100,20 @@ module.exports = {
 			const flag_id = req.params.flagId;
 			const response_by = req.session.user.user_id;
 			const flag = await Flag.findByPk(flag_id, {
-				include: Point
+				include: [
+					{
+						model: Point,
+						include: [Remark]
+					}
+				]
 			});
 			if (!flag)
 				return res.status(404).send({ error: { message: "Flag not found" } });
 
 			const point = flag.Point;
+
+			if(point.status === "S")
+				return res.status(400).send({ error: { message: "Suggestions has already been made" } }); //? Can suggest again?
 
 			const adminService = new AdminService(req.session.user, req.session.admin);
 			if (adminService.hasPermission("Approve requests", point.org_id) === false)
@@ -115,10 +123,25 @@ module.exports = {
 				{
 					status: "S",
 					response_by: response_by,
-					remark: req.body.remark,
 				},
 				{ transaction: transactionID }
 			);
+
+			await point.Remarks.map((remark) => {
+				remark.update({
+					active: false
+				}, { transaction: transactionID });
+			});
+
+			await Remark.create({
+				remark: req.body.remark,
+				from: response_by,
+				point_id: point.point_id,
+				active: true,
+			}, {
+				transaction: transactionID
+			});
+
 
 			await flag.update(
 				{

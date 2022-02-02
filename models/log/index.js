@@ -31,6 +31,6 @@ Object.keys(db).forEach((modelName) => {
   }
 })
 
-db.sequelizelog = sequelize;
+db.sequelize = sequelize;
 
 module.exports = db

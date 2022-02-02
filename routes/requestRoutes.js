@@ -6,8 +6,10 @@ const router = require("express").Router();
 
 router.get("/", requireAuth, allPendingRequests);
 
-router.get("/:reqId/approve", requireAuth, (req, res) => respondToRequest(req, res, "A"));
+router.post("/:reqId/approve", requireAuth, (req, res) => respondToRequest(req, res, "A"));
 
 router.post("/:reqId/reject", requireAuth, (req, res) => respondToRequest(req, res, "D"));
+
+router.post("/:reqId/suggest", requireAuth, (req, res) => respondToRequest(req, res, "S"));
 
 module.exports = router;
