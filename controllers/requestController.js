@@ -47,7 +47,7 @@ module.exports = {
         }, {transaction: transactionID});
       }
 
-      const requests = await point.getRequests();
+      const requests = await point.getRequests({where : {status: 'P'}});
       const flags = await point.getFlags({ where: { response_by: null } });
 
       await Promise.all(requests.map(_req => _req.update({ status: "D" }, { transaction: transactionID })));
