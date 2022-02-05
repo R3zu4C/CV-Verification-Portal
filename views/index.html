@@ -245,7 +245,7 @@
             alert("Point already flagged!");
           }
           else {
-            const res = await fetch(`${window.location.protocol}//${window.location.host}/points/${pointData.point_id}/flag`, {
+            const res = await fetch(`${window.location.protocol}//${window.location.host}/flag/${pointData.point_id}`, {
               method: "POST",
               headers: {
               "content-type": "application/json",

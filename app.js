@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const path = require("path");
 const passport = require("passport");
-const passportSetup = require("./passport");
+const passportSetup = require("./src/passport");
 
 const homeRoute = require("./routes/homeRoutes");
 const orgRoute = require("./routes/orgRoutes");
@@ -15,6 +15,7 @@ const pointRoute = require("./routes/pointRoutes");
 const requestRoute = require("./routes/requestRoutes");
 const adminRoute = require("./routes/adminRoutes");
 const userRoute = require("./routes/userRoutes");
+const flagRoute = require("./routes/flagRoutes");
 
 
 // Redis initialization
@@ -72,6 +73,7 @@ app.use("/requests", requestRoute);
 app.use("/admin", adminRoute);
 app.use("/points", pointRoute);
 app.use("/user",userRoute);
+app.use("/flag", flagRoute);
 
 
 // Start the server

@@ -16,6 +16,9 @@ module.exports = {
       const reqId = req.params.reqId;
 
       const request = await Request.findByPk(reqId);
+      if (!request) {
+        return res.status(404).send({error: {message: "Request not found"}});
+      }
       const point = await request.getPoint();
 
       const adminService = new AdminService(req.session.user, req.session.admin);

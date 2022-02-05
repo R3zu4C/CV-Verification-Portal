@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      this.belongsTo(Point, {
+      this.belongsTo(Point, { //! this is allowing null values
         foreignKey: "point_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
@@ -48,6 +48,10 @@ module.exports = (sequelize, DataTypes) => {
         // status can be P(Pending), A(Approved), D(Denied)
         type: DataTypes.CHAR(1),
         defaultValue: "P",
+        allowNull: false,
+      },
+      point_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

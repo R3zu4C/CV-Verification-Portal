@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
       });
 
-      this.belongsTo(Organization, {
+      this.belongsTo(Organization, { //! organzition is not taking a null value, self projects exists without an organization
         foreignKey: "org_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
@@ -105,6 +105,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.CHAR(1),
         defaultValue: "P",
         allowNull: false,
+      },
+      remark: {
+        type: DataTypes.TEXT,
+        allowNull: true,
       }
     },
     {

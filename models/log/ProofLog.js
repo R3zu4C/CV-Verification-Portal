@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       return this.create({
         proof_id: Proof.proof_id,
         proof_link: Proof.proof_link,
+        point_id: Proof.point_id,
         action: action,
       });
     }
@@ -15,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
         Proofs.map((Proof) => ({
           proof_id: Proof.proof_id,
           proof_link: Proof.proof_link,
+          point_id: Proof.point_id,
           action: action,
         }))
       );

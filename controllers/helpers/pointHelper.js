@@ -13,9 +13,7 @@ const createPoint = async (pointData, userId, addedBy, transactionID) => {
     description: pointData.description,
     user_id: userId,
     category: pointData.category,
-    org_id: parseInt(pointData.org_id),
-    // start_date: pointData.start_date,
-    // end_date: pointData.end_date,
+    org_id: pointData.org_id,
     added_by: addedBy,
     status: "P",
     visibility: "P",
@@ -175,7 +173,7 @@ module.exports = {
 
     await Promise.all(flagTo.map((admin) => createFlagAdminNotif(flagData, admin, transactionID)));
 
-    await createFlagUserNotif(pointData, transactionID);
+    // await createFlagUserNotif(pointData, transactionID);
 
     console.log("Notifications added to database successfully.");
   },
