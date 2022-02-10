@@ -11,7 +11,6 @@ try {
     auth_pass: process.env.REDIS_OAUTH_PASS,
     no_ready_check: true,
   });
-
   redisClient.on("error", function (err) {
     console.log("Could not establish a connection with redis. " + err);
   });

@@ -81,10 +81,10 @@ module.exports = {
       if (req.session.user) {
         user_id = req.session.user.user_id;
       }
-      console.log("---------------------------------")
-      console.log("session",req.session);
-      console.log(user_id);
-      console.log("---------------------------------")
+      // console.log("---------------------------------")
+      // console.log("session",req.session);
+      // console.log(user_id);
+      // console.log("---------------------------------")
       const user = await User.findByPk(user_id, { include: "Flags" });
       const admin = req.session.admin;
 

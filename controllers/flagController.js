@@ -6,7 +6,7 @@ const {
 
 const AdminService = require("./helpers/adminHelper");
 
-const { Point, Flag, sequelize, User } = require("../models");
+const { Point, Flag, sequelize, Remark } = require("../models");
 
 module.exports = {
 	acceptFlag: async (req, res) => {
@@ -100,12 +100,20 @@ module.exports = {
 			const flag_id = req.params.flagId;
 			const response_by = req.session.user.user_id;
 			const flag = await Flag.findByPk(flag_id, {
-				include: Point
+				include: [
+					{
+						model: Point,
+						include: [Remark]
+					}
+				]
 			});
 			if (!flag)
 				return res.status(404).send({ error: { message: "Flag not found" } });
 
 			const point = flag.Point;
+
+			if(point.status === "S")
+				return res.status(400).send({ error: { message: "Suggestions has already been made" } }); // Can suggest again? No.
 
 			const adminService = new AdminService(req.session.user, req.session.admin);
 			if (adminService.hasPermission("Approve requests", point.org_id) === false)
@@ -115,10 +123,25 @@ module.exports = {
 				{
 					status: "S",
 					response_by: response_by,
-					remark: req.body.remark,
 				},
 				{ transaction: transactionID }
 			);
+
+			await point.Remarks.map((remark) => {
+				remark.update({
+					active: false
+				}, { transaction: transactionID });
+			});
+
+			await Remark.create({
+				remark: req.body.remark,
+				from: response_by,
+				point_id: point.point_id,
+				active: true,
+			}, {
+				transaction: transactionID
+			});
+
 
 			await flag.update(
 				{
@@ -144,20 +167,23 @@ module.exports = {
 
 
 	flagPoint: async (req, res) => {
+		
 		const transactionID = await sequelize.transaction();
 		try {
 			const flagged_by = req.session.user.user_id;
 			const point = await Point.findByPk(req.params.pointId, {
 				include: [Flag],
 			});
-
+			
 			if (!point) {
 				return res.status(404).send({ error: { message: "Point not found" } });
 			} else if (point.status !== "A") {
+				
 				return res
 					.status(400)
 					.send({ error: { message: "Only aprroved points can be flagged" } });
 			} else if (point.visibility !== "P") {
+				
 				return res
 					.status(400)
 					.send({ error: { message: "Only public points can be flagged" } });
@@ -166,10 +192,14 @@ module.exports = {
 			point.Flags.forEach((flag) => {
 				if (flag.flagged_by === flagged_by) bool = true;
 			});
+			
 			if (bool)
-				return res.status(400).send({
-					error: { message: "You have already flagged this point once" },
-				});
+				{
+					console.log("you have already flagged this point once");
+					return res.status(400).send({
+						error: { message: "You have already flagged this point once" },
+					});
+			}
 			// point.update(
 			//   { response_by: null, status: "S" },
 			//   { transaction: transactionID }
@@ -181,9 +211,8 @@ module.exports = {
 			//     request.update({ status: "P" }, { transaction: transactionID })
 			//   )
 			// );
-
+			
 			const flagData = { ...req.body, point_id: point.point_id };
-
 			const flag = await addFlagToDatabase(flagData, flagged_by, transactionID);
 			await addFlagNotifsToDatabase(flag, point, transactionID);
 			transactionID.commit();

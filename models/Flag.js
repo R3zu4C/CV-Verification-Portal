@@ -10,26 +10,22 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
-
       this.belongsTo(User, {
         foreignKey: "flagged_by",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
-
       this.belongsTo(Point, { //! this is allowing null values
         foreignKey: "point_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
-
       this.hasMany(Notification, {
         foreignKey: "flag_id",
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
     }
-
     toJSON() {
       return { ...this.get(), id: undefined };
     }

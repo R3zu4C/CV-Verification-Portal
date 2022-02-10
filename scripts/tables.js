@@ -1,4 +1,4 @@
-const { sequelizelog } = require("../models/log");
+const { sequelize: sequelizelog } = require("../models/log");
 const { sequelize } = require("../models");
 
 (async () => {

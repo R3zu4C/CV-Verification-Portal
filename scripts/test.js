@@ -1,5 +1,5 @@
 const { sequelize, User, Admin, Organization, Role, Permission } = require("../models");
-const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog } = require("../models/log");
+const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelize: sequelizelog } = require("../models/log");
 
 (async () => {
   try {
@@ -57,7 +57,6 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
 
     await Admin.bulkCreate([
       { admin_id: "a.patanwal@iitg.ac.in" },
-      { admin_id: "ankushpatanwal1508@gmail.com" },
       { admin_id: "aditya.pandey@iitg.ac.in"},
       { admin_id: "aman200123007@iitg.ac.in" },
     ]);
@@ -68,19 +67,15 @@ const { UserLog, AdminLog, RoleLog, OrganizationLog, PermissionLog, sequelizelog
     const GoHomeClubRole = await Role.findByPk(101);
 
     const AnkushAdmin = await Admin.findOne({ where: { admin_id: "a.patanwal@iitg.ac.in" }});
-    const RajjoAdmin = await Admin.findOne({ where: { admin_id: "ankushpatanwal1508@gmail.com" }});
     const AdityaAdmin = await Admin.findOne({ where: { admin_id: "aditya.pandey@iitg.ac.in" }});
     const AnkushUser = await User.findByPk("a.patanwal@iitg.ac.in");
-    const RajjoUser = await User.findByPk("ankushpatanwal1508@gmail.com");
     const AdityaUser = await User.findByPk("aditya.pandey@iitg.ac.in");
     
 
-    await RajjoAdmin.setUser(RajjoUser);
     await AnkushAdmin.setUser(AnkushUser);
     await AdityaAdmin.setUser(AdityaUser);
 
     await GoHomeClubRole.addAdmin(AnkushAdmin);
-    await CodingClubRole.addAdmin(RajjoAdmin);
     await GoHomeClubRole.addAdmin(AdityaAdmin);
     await CodingClubRole.addAdmin(AdityaAdmin);
     const AmanAdmin = await Admin.findOne({ where: { admin_id: "aman200123007@iitg.ac.in" }});

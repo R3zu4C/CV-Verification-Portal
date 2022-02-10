@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       Organization,
       Admin,
       Proof,
+      Remark
     }) {
       this.hasMany(Proof, {
         foreignKey: "point_id",
@@ -55,6 +56,12 @@ module.exports = (sequelize, DataTypes) => {
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       });
+
+      this.hasMany(Remark, {
+        foreignKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
 
       this.belongsTo(Admin, {
         foreignKey: "response_by",
@@ -105,10 +112,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.CHAR(1),
         defaultValue: "P",
         allowNull: false,
-      },
-      remark: {
-        type: DataTypes.TEXT,
-        allowNull: true,
       }
     },
     {
