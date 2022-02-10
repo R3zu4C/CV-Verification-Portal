@@ -41,7 +41,7 @@ module.exports = {
         }
         return;
       }
-      
+
       const transactionID = await sequelize.transaction();
       try {
         const user_id = req.session.user.user_id;
@@ -102,4 +102,82 @@ module.exports = {
       res.status(400).send("Error in getting all points");
     }
   },
+
+  deletePoint: async (req, res) => {
+    try {
+      const transactionID = await sequelize.transaction();
+      const session_userId = req.session.user.user_id;
+      const pointId = req.params.pointId;
+      const point = await Point.findByPk(pointId);
+      if (!point) {
+        return res.status(400).send("Point not found");
+      }
+      if (point.user_id !== session_userId) {
+        return res.status(400).send("You are not authorized to delete this point");
+      }
+
+      const requests = await point.getRequests({ where: { status: 'P' } });
+      const flags = await point.getFlags({ where: { response_by: null } });
+
+      await Promise.all(requests.map(_req => _req.update({ status: "D" }, { transaction: transactionID })));
+      await Promise.all(flags.map(flag => flag.update({ status: "D" }, { transaction: transactionID })));
+
+      await point.update({ status: "D" }, { transaction: transactionID });
+
+      await transactionID.commit();
+      res.send("Point deleted");
+    } catch (error) {
+      await transactionID.rollback();
+      console.error("Error:" + error.message);
+      res.status(400).send("Error in deleting point");
+    }
+  },
+
+  updatePoint: async (req, res) => {
+    try {
+      const transactionID = await sequelize.transaction();
+      const session_userId = req.session.user.user_id;
+      const pointId = req.params.pointId;
+      const point = await Point.findByPk(pointId);
+      const pointData = req.body;
+      if (!point) {
+        return res.status(400).send({ error: { message: "Point not found" } });
+      }
+      if (point.user_id !== session_userId) {
+        return res.status(400).send({ error: { message: "You are not authorized to update this point" } });
+      }
+      if (pointData.org_id && pointData.org_id !== point.org_id) {
+        return res.status(400).send({ error: { message: "Organization of a point cannot be changed" } });
+      }
+
+      const requests = await point.getRequests({ where: { status: 'P' } });
+      const flags = await point.getFlags({ where: { response_by: null } });
+
+      await Promise.all(requests.map(_req => _req.update({ status: "D" }, { transaction: transactionID })));
+      await Promise.all(flags.map(flag => flag.update({ status: "D" }, { transaction: transactionID })));
+
+      await point.update({
+        status: "P",
+        visibility: pointData.visibility,
+        title: pointData.title,
+        description: pointData.description,
+      }, {
+        transaction: transactionID
+      });
+
+      if (point.org_id) {
+        const requests = await addRequestToDatabase(point, transactionID);
+        await addPointNotifsToDatabase(point, requests, transactionID);
+      }
+
+      await transactionID.commit();
+
+      res.send({ error: null, data: point, message: "Point updated successfully" });
+
+    } catch (error) {
+      await transactionID.rollback();
+      console.error("Error:" + error.message);
+      res.status(400).send({ error: { message: "Error in updating point" } });
+    }
+  }
 };

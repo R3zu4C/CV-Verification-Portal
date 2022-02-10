@@ -113,7 +113,7 @@ module.exports = {
 			const point = flag.Point;
 
 			if(point.status === "S")
-				return res.status(400).send({ error: { message: "Suggestions has already been made" } }); //? Can suggest again?
+				return res.status(400).send({ error: { message: "Suggestions has already been made" } }); // Can suggest again? No.
 
 			const adminService = new AdminService(req.session.user, req.session.admin);
 			if (adminService.hasPermission("Approve requests", point.org_id) === false)
