@@ -154,10 +154,6 @@
           org_id: pointForm.org_id.value,
         };
 
-        const point = new Blob([JSON.stringify(pointData)], {
-          type: "application/json"
-        });
-
         fd.append("point", JSON.stringify(pointData));
 
         const res = await fetch(`${window.location.protocol}//${window.location.host}/points`, {
@@ -367,7 +363,7 @@
 
         approveBtn.addEventListener("click", async () => {
           const res = await fetch(`${window.location.protocol}//${window.location.host}/requests/${reqData.req_id}/approve`, {
-            method: "GET",
+            method: "POST",
           });
           const data = await res.json();
           window.location = data.redirect;
