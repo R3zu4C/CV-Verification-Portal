@@ -9,6 +9,15 @@ const AdminService = require("./helpers/adminHelper");
 const { Point, Flag, sequelize, Remark } = require("../models");
 
 module.exports = {
+	// flagsForAdmin: async (req,res)=>{
+	// 	try{
+	// 		const user_id = req.session.user.user_id;
+	// 		const 
+	// 	} catch(err) {
+	// 		res.status(500).send({err})
+	// 	}
+	// },
+
 	acceptFlag: async (req, res) => {
 		try {
 			const transactionID = await sequelize.transaction();
@@ -92,11 +101,10 @@ module.exports = {
 	},
 
 	suggestUser: async (req, res) => {
-		const transactionID = await sequelize.transaction();
+		const transactionID = await sequelize.transaction(); 
 		try {
 			if (!req.body.remark)
 				return res.status(400).send({ error: { message: "Remark is required" } });
-
 			const flag_id = req.params.flagId;
 			const response_by = req.session.user.user_id;
 			const flag = await Flag.findByPk(flag_id, {
@@ -109,9 +117,7 @@ module.exports = {
 			});
 			if (!flag)
 				return res.status(404).send({ error: { message: "Flag not found" } });
-
 			const point = flag.Point;
-
 			if(point.status === "S")
 				return res.status(400).send({ error: { message: "Suggestions has already been made" } }); // Can suggest again? No.
 

@@ -1,3 +1,4 @@
+const {requireAuth } = require("../middleware/authMiddleware")
 const { Point, Admin, User, Flag, sequelize } = require("../models");
 const fs = require("fs");
 
@@ -7,7 +8,7 @@ router.get("/", async (req, res) => {
   res.end(fs.readFileSync("./views/index.html"));
 });
 
-router.get("/api", async (req, res) => {
+router.get("/api", requireAuth, async (req, res) => {
   const allPoints = await Point.findAll({
     where: {
       visibility: "P",

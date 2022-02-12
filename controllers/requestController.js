@@ -4,7 +4,7 @@ const AdminService = require("./helpers/adminHelper")
 module.exports = {
   allPendingRequests: async (req, res) => {
     const userId = req.session.user.user_id;
-    const admin = await Admin.findOne({ where: { admin_id: userId } });
+    const admin = await Admin.findOne({ where:{ admin_id: userId }});
     const requests = await admin.getRequests({ where: { status: 'P' },
      include: ["Point", "User"]
     });
@@ -15,7 +15,7 @@ module.exports = {
 
   allApprovedRequests: async (req,res) => {
     const userId = req.session.user.user_id;
-    const admin = await Admin.findOne({wher: {admin_id: userId}});
+    const admin = await Admin.findOne({where: {admin_id: userId}});
     const requests = await admin.getRequests({ where: {status: 'A'}, include:["Point", "User"]}); 
     res.send(requests);
   },

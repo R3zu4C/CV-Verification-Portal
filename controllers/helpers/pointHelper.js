@@ -45,7 +45,6 @@ const createFlag = async (flagData, flaggedBy, transactionID) => {
   }, {
     transaction: transactionID
   });
-
   return flag;
 }
 
@@ -113,7 +112,7 @@ module.exports = {
   addRequestToDatabase: async (point, transactionID) => {
     const org = await Organization.findByPk(point.org_id);
 
-    const roles = await org.getRoles();
+    const roles = await org.getRoles();   
 
     const requestTo = [];
 

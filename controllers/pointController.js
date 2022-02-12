@@ -22,7 +22,7 @@ module.exports = {
     }
   },
   addPoint: async (req, res) => {
-    console.log(req.body.point)
+    console.log(req.body)
     multi_upload(req, res, async function (err) {
       if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
@@ -40,8 +40,7 @@ module.exports = {
       const transactionID = await sequelize.transaction();
       try {
         const user_id = req.session.user.user_id;
-        // const pointData = JSON.parse(`${req.body.point}`);
-        const pointData = JSON.parse(JSON.stringify(req.body.point));
+        const pointData = JSON.parse(`${req.body.point}`);
         const point = await addPointToDatabase(pointData, user_id, transactionID);
         const requests = await addRequestToDatabase(point, transactionID);
         await addPointNotifsToDatabase(point, requests, transactionID);
@@ -64,6 +63,9 @@ module.exports = {
       res.status(200).end('Your files uploaded.');
   })
   },
+
+  
+
   getAllPoint: async (req, res) => {
     try {
       const points = await Point.findAll({
