@@ -3,7 +3,7 @@ const {
     acceptFlag,
     declineFlag,
     suggestUser,
-    // flagsForAdmin
+    pendingFlagsForAdmin
 } = require("../controllers/flagController");
 const { requireAuth } = require("../middleware/authMiddleware");
 
@@ -11,7 +11,7 @@ const router = require("express").Router();
 
 // Adding a Point thru POST request
 
-// router.get("/admin", requireAuth, flagsForAdmin)
+router.get("/admin", requireAuth, pendingFlagsForAdmin)
 
 router.post("/:pointId", requireAuth, flagPoint);
 

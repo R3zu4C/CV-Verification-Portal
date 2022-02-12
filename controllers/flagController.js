@@ -3,20 +3,32 @@ const {
 	addFlagToDatabase,
 	addFlagNotifsToDatabase,
 } = require("./helpers/pointHelper");
+const { Op } =require("sequelize");
 
 const AdminService = require("./helpers/adminHelper");
 
 const { Point, Flag, sequelize, Remark } = require("../models");
 
 module.exports = {
-	// flagsForAdmin: async (req,res)=>{
-	// 	try{
-	// 		const user_id = req.session.user.user_id;
-	// 		const 
-	// 	} catch(err) {
-	// 		res.status(500).send({err})
-	// 	}
-	// },
+	pendingFlagsForAdmin: async (req,res)=>{
+		try{
+			const adminService = AdminService(req.session.user, req.session.admin);
+			let adminOrg =adminService.org;
+			adminOrg = Object.keys(adminOrg).map(org=> parseInt(org));
+			const orgSubQuery = `SELECT point_id FROM points WHERE org_id IN (${adminOrg.join(',')})`;
+			const pendingFlagsOfAdmin = await Flag.findAll({
+				where: {
+					point_id: [sequelize.literal(orgSubQuery)],
+					response_by: {[Op.eq]: null}
+				},
+				include: ["Point"]
+			})
+			return res.send(pendingFlagsOfAdmin);
+		} catch(err) {
+			res.status(500).send({err})
+		}
+	},
+
 
 	acceptFlag: async (req, res) => {
 		try {

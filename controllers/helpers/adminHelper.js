@@ -17,6 +17,7 @@ module.exports = class AdminService {
     }
     console.log(str + `\n\n`);
   }
+  
   detail() {
     let str = `Admin: ${this.name} has admin permissions for ${Object.keys(this.org).length
       } organizations.`;
