@@ -1,4 +1,4 @@
-const { addPoint, getAllPoint , deletePoint, updatePoint } = require("../controllers/pointController");
+const { addPoint, getAllPoint , deletePoint, updatePoint, getUserPoints } = require("../controllers/pointController");
 const { requireAuth } = require("../middleware/authMiddleware");
 
 const router = require("express").Router();
@@ -9,6 +9,7 @@ router.post("/", requireAuth, addPoint);
 router.get("/all", requireAuth, getAllPoint);
 
 router.get('/:pointId/fetch',requireAuth,)
+router.get("/user", requireAuth, getUserPoints);
 
 router.post("/:pointId/delete", requireAuth, deletePoint);
 

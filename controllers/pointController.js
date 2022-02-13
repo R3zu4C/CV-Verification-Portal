@@ -120,6 +120,19 @@ module.exports = {
     }
   },
 
+  getUserPoints: async (req, res) => {
+    const user_id = req.session.user.user_id;
+    const points = await Point.findAll({
+      where: {
+        user_id,
+      },
+      include: [
+        Proof, Flag
+      ],
+    });
+    return res.send(points);
+  },
+
   updatePoint: async (req, res) => {
     try {
       const transactionID = await sequelize.transaction();

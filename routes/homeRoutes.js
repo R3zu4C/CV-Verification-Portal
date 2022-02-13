@@ -37,7 +37,10 @@ router.get("/api", async (req, res) => {
       where: {
         response_by: user_id,
       },
-      include: ["Point"],
+      include: [{
+        model: Point,
+        include: [{ model: User, as: "User" }]
+      }],
     })
 
     const adminService = new AdminService(req.session.user, req.session.admin);
@@ -51,7 +54,10 @@ router.get("/api", async (req, res) => {
         point_id: [sequelize.literal(orgSubQuery)],
         response_by: { [Op.eq]: null }
       },
-      include: [{model: Point, include: ["User"]}],
+      include: [{
+        model: Point,
+        include: [{model: User, as: "User"}]
+      }],
     })
 
     return res.send({ user, allPoints, requests, flagsOfUsers, respondedFlagsOfAdmin, pendingFlagsOfAdmin });
