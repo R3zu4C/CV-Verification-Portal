@@ -64,7 +64,6 @@ app.use(cors(
 ));
 app.use(express.static(path.resolve('./public')));
 
-
 // Routes
 app.use("/", homeRoute);
 app.use("/auth", authRoute);

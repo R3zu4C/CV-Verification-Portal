@@ -11,8 +11,6 @@ const multer = require('multer');
 const multi_upload = require("../middleware/proofUpload");
 const { Point, Proof, Flag, sequelize ,User } = require("../models");
 
-const { Point } = require("../models");
-
 module.exports = {
   fetchPointById: async (req,res) => {
     if(req.params['pointId']!=null){
