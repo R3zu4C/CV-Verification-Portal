@@ -1,34 +1,41 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { RoleLog } = require("./log");
 module.exports = (sequelize, DataTypes) => {
   class Role extends Model {
-    static associate({ Admin, Permission, Organization }) {
-      
+    static associate({
+      Admin,
+      Permission,
+      Organization,
+      AdminRole,
+      RolePermission,
+    }) {
       this.belongsTo(Organization, {
-        foreignKey: 'org_id',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        foreignKey: "org_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsToMany(Permission, {
-        through: "role_permission",
+        through: RolePermission,
         foreignKey: "role_id",
         otherKey: "perm_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsToMany(Admin, {
-        through: "role_admin",
+        through: AdminRole,
         foreignKey: "role_id",
         otherKey: "admin_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        targetKey: "admin_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   Role.init(
@@ -48,8 +55,17 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     {
+      hooks: {
+        afterBulkCreate: (roles, options) => RoleLog.bulkCreateFromRole(roles, "C"),
+        beforeBulkDestroy: (roles, options) => RoleLog.bulkCreateFromRole(roles, "D"),
+        afterBulkUpdate: (roles, options) => RoleLog.bulkCreateFromRole(roles, "U"),
+        afterCreate: (role, options) => RoleLog.createFromRole(role, "C"),
+        afterUpdate: (role, options) => RoleLog.createFromRole(role, "U"),
+        beforeDestroy: (role, options) => RoleLog.createFromRole(role, "D"),
+      },
+
       sequelize,
-      modelName: 'Role',
+      modelName: "Role",
       initialAutoIncrement: 100,
       tableName: "roles",
     }

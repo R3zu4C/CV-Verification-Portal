@@ -1,12 +1,71 @@
 const { User, Admin } = require("../models");
+const redirectUrl = 'http://localhost:3006'
 
 module.exports = {
   login: async (req, res) => res.redirect("/auth/azureadoauth2"),
 
   loginCallback: async (req, res) => {
+    console.log(req.user);
     const user_id = req.user.unique_name;
-    req.session.userId = user_id;
-    res.redirect("/");
+    try {
+      var user = await User.findByPk(user_id);
+      if (user) {
+        user = user.dataValues;
+        delete user.mobile_no;
+        delete user.createdAt;
+        delete user.updatedAt;
+        req.session.user = user;
+        var admin = await Admin.findOne({
+          where: {
+            admin_id: user_id,
+          },
+          include: ["Roles", "Permissions"],
+        });
+        if (admin) {
+          let permission = { 0: [] };
+          admin.Permissions.forEach((_permission) => {
+            let temp = {};
+            if (_permission.perm_id > 200) {
+              // permission[_permission.org_id] += _permission.perm_id; //TODO: add org level permissions
+            }
+            else {
+              permission[0].push(_permission.perm_id)
+            }
+          });
+          await Promise.all(
+            admin.Roles.map(async (role) => {
+
+              if (!permission[role.org_id]) {
+                permission[role.org_id] = {};
+                permission[role.org_id]['perm'] = [];
+              }
+
+              let perm = await role.getPermissions();
+
+              perm.forEach((_permission) => {
+                if (_permission.perm_id <= 200) {
+                  if (!permission[0]['perm'].includes(_permission.perm_id))
+                    permission[0]['perm'].push(_permission.perm_id);
+                }
+                else if (!permission[role.org_id]['perm'].includes(_permission.perm_id))
+                  permission[role.org_id]['perm'].push(_permission.perm_id);
+              });
+
+              if (!permission[role.org_id]['role_level'])
+                permission[role.org_id]['role_level'] = role.level;
+              else
+                permission[role.org_id]['role_level'] = Math.min(permission[role.org_id]['role_level'], role.level);
+
+            })
+          );
+          req.session.admin = permission;
+        }
+      }
+      res.redirect(redirectUrl + '/headingPage');
+    } catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
   },
 
   logout: (req, res) => {
@@ -16,43 +75,24 @@ module.exports = {
   },
 
   status: async (req, res) => {
-    let user_id = -1;
-    if(req.session.userId) user_id = req.session.userId;
-    const user = await User.findByPk(user_id, { include: "Flags" });
-    const _admin = await Admin.findOne({
-      where: {
-        admin_id: user_id,
-      },
-      include: ["Roles", "Permissions"],
-    });
-    let permission;
-    if (_admin) {
-      permission = {};
-      permission["admin"] = _admin.Permissions.map((permission) => {
-        let temp = {};
-        temp["name"] = permission.name;
-        temp["id"] = permission.perm_id;
-        return temp;
-      });
-      await Promise.all(
-        _admin.Roles.map(async (role) => {
-          let perm = await role.getPermissions();
-          permission[role.name] = {};
-          permission[role.name]["perm"] = perm.map((permission) => {
-            let temp = {};
-            temp["name"] = permission.name;
-            temp["id"] = permission.perm_id;
-            return temp;
-          });
-          permission[role.name]["role_id"] = role.role_id;
-          permission[role.name]["role_level"] = role.level;
-          permission[role.name]["org_id"] = role.org_id;
-        })
-      )
+    try {
+      let user_id = -1;
+      // console.log(req,"request printed");
+      if (req.session.user) {
+        user_id = req.session.user.user_id;
+      }
+      // console.log("---------------------------------")
+      // console.log("session",req.session);
+      // console.log(user_id);
+      // console.log("---------------------------------")
+      const user = await User.findByPk(user_id, { include: "Flags" });
+      const admin = req.session.admin;
+
+      res.send({ user, admin });
     }
-  
-    const admin = permission;
-  
-    res.send({ user, admin });
+    catch (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
   }
 };

@@ -1,5 +1,5 @@
 const { QueryTypes } = require("sequelize");
-const sequelize = require("../database/connection");
+const {sequelize} = require("../database/connection");
 
 module.exports = {
   searchPoint: async (req, res) => {
@@ -21,7 +21,7 @@ module.exports = {
         AND 
         added_by LIKE :added_byQuery 
         AND 
-        IFNULL(approved_by,1) LIKE :approved_byQuery)`;
+        IFNULL(response_by,1) LIKE :response_byQuery)`;
 
     const result = await sequelize.query(query, {
       replacements: {
@@ -31,7 +31,7 @@ module.exports = {
         org_idQuery: `%${req.body.org_id}%`,
         categoryQuery: `%${req.body.category}%`,
         added_byQuery: `%${req.body.added_by}%`,
-        approved_byQuery: `%${req.body.approved_by}%`,
+        response_byQuery: `%${req.body.response_by}%`,
       },
       type: QueryTypes.SELECT,
     });

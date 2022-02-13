@@ -1,6 +1,9 @@
 module.exports = {
   requireAuth: async (req, res, next) => {
-    if(req.isAuthenticated()) next();
-    else res.send({ redirect: "/auth/login" });
+    // console.log(req.session,"requireAuth");
+    if(req.isAuthenticated()) {
+      console.log("Authentication Successful!!")
+      next();}
+    else res.status(401).send({ redirect: "/auth/login" });
   }
 }

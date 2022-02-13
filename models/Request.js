@@ -1,37 +1,37 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { RequestLog } = require("./log");
 module.exports = (sequelize, DataTypes) => {
   class Request extends Model {
     static associate({ Notification, User, Point, Admin }) {
-
       this.hasMany(Notification, {
-        foreignKey: "request_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        foreignKey: "req_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(User, {
         foreignKey: "req_by",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(Point, {
         foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(Admin, {
         targetKey: "admin_id",
         foreignKey: "req_to",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   Request.init(
@@ -43,15 +43,27 @@ module.exports = (sequelize, DataTypes) => {
       },
       type: {
         type: DataTypes.STRING(50),
-      }, 
-      approved: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
+      },
+      status: {
+        type: DataTypes.STRING(1),
+        defaultValue: 'P',
+      },
+      remark: {
+        type: DataTypes.TEXT,
       },
     },
     {
+      hooks: {
+        afterCreate: (request, options) => RequestLog.createFromRequest(request, "C"),
+        afterUpdate: (request, options) => RequestLog.createFromRequest(request, "U"),
+        beforeDestroy: (request, options) => RequestLog.createFromRequest(request, "D"),
+        afterBulkCreate: (requests, options) => RequestLog.bulkCreateFromRequest(requests, "C"),
+        afterBulkUpdate: (requests, options) => RequestLog.bulkCreateFromRequest(requests, "U"),
+        beforeBulkDestroy: (requests, options) => RequestLog.bulkCreateFromRequest(requests, "D"),
+      },
+
       sequelize,
-      modelName: 'Request',
+      modelName: "Request",
       initialAutoIncrement: 100,
       tableName: "requests",
     }

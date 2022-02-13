@@ -1,50 +1,78 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { PointLog } = require("./log");
 module.exports = (sequelize, DataTypes) => {
   class Point extends Model {
-    static associate({ Flag, Notification, Request, User, Organization, Admin }) {
+    static associate({
+      Flag,
+      Notification,
+      Request,
+      User,
+      Organization,
+      Admin,
+      Proof,
+      Remark
+    }) {
+      this.hasMany(Proof, {
+        foreignKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      });
 
       this.hasMany(Flag, {
         foreignKey: "point_id",
         onDelete: "CASCADE",
-        onUpdate: "CASCADE"
+        onUpdate: "CASCADE",
       });
 
       this.hasMany(Notification, {
         foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.hasMany(Request, {
         foreignKey: "point_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
       this.belongsTo(User, {
         foreignKey: "user_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        as: "User",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
-      this.belongsTo(Organization, {
-        as: 'points',
-        foreignKey: 'org_id',
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+      this.belongsTo(User, {
+        foreignKey: "added_by",
+        as: "AddedBy",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
 
-      this.belongsTo(Admin , {
-        foreignKey: "approved_by",
+      this.belongsTo(Organization, { //! organzition is not taking a null value, self projects exists without an organization
+        foreignKey: "org_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      });
+
+      this.hasMany(Remark, {
+        foreignKey: "point_id",
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
+      })
+
+      this.belongsTo(Admin, {
+        foreignKey: "response_by",
         targetKey: "admin_id",
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE",
       });
     }
 
     toJSON() {
-      return { ...this.get(), id: undefined }
+      return { ...this.get(), id: undefined };
     }
   }
   Point.init(
@@ -80,21 +108,29 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       visibility: {
-        // visibility can be P(Publiv), R(Private)
+        // visibility can be P(Public), R(Private)
         type: DataTypes.CHAR(1),
         defaultValue: "P",
         allowNull: false,
-      },
-      proof_link: {
-        type: DataTypes.STRING(255),
-      },
+      }
     },
     {
+      hooks: {
+        afterCreate: (point, options) => PointLog.createFromPoint(point, "C"),
+        afterUpdate: (point, options) => PointLog.createFromPoint(point, "U"),
+        beforeDestroy: (point, options) => PointLog.createFromPoint(point, "D"),
+        afterBulkCreate: (points, options) => PointLog.bulkCreateFromPoint(points, "C"),
+        afterBulkUpdate: (points, options) => PointLog.bulkCreateFromPoint(points, "U"),
+        beforeBulkDestroy: (points, options) => PointLog.bulkCreateFromPoint(points, "D"),
+      },
+
       sequelize,
-      modelName: 'Point',
+      modelName: "Point",
       initialAutoIncrement: 100,
       tableName: "points",
-      indexes: [{ type: "FULLTEXT", name: "desc_idx", fields: ["description"] }],
+      indexes: [
+        { type: "FULLTEXT", name: "desc_idx", fields: ["description"] },
+      ],
     }
   );
   return Point;
