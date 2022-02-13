@@ -51,7 +51,7 @@ router.get("/api", async (req, res) => {
         point_id: [sequelize.literal(orgSubQuery)],
         response_by: { [Op.eq]: null }
       },
-      include: [{model: Point, include: ["User"]},"User"],
+      include: [{model: Point, include: ["User"]}],
     })
 
     return res.send({ user, allPoints, requests, flagsOfUsers, respondedFlagsOfAdmin, pendingFlagsOfAdmin });

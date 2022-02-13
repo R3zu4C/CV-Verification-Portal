@@ -8,8 +8,6 @@ module.exports = {
     const requests = await admin.getRequests({ where: { status: 'P' },
      include: ["Point", "User"]
     });
-
-    // console.log(requests);
     res.send(requests);
   },
 
